@@ -1,0 +1,26 @@
+{
+  "name": "straycare_project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lokesh172757/straycare_project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lokesh172757/straycare_project/issues"
+  },
+  "homepage": "https://github.com/lokesh172757/straycare_project#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "mongoose": "^8.16.0"
+  }
+}
