@@ -28,6 +28,18 @@ const sample = new collections.User({
     }
 });
 
-sample.save().then((data) => {
+// sample.save().then((data) => {
+//     console.log(data);
+// });
+
+const sampleReport = new collections.Report({
+    user: '685a93c8981621d5ce365f16',
+    description: "cat is injured",
+    photoUrl: "abc",
+    location: { type: "Point", coordinates: [77.1025, 28.7041] },// Delhi [lng, lat]
+    status: "pending"
+
+});
+sampleReport.save().then((data) => {
     console.log(data);
 });
