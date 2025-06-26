@@ -1,0 +1,30 @@
+<%- include("../partials/header") %>
+
+    <h2>Open Animal Reports</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% reports.forEach(r=> { %>
+                <tr>
+                    <td><img src="<%= r.photoUrl %>" width="100" /></td>
+                    <td>
+                        <%= r.description %>
+                    </td>
+                    <td>[<%= r.location.coordinates[1] %>, <%= r.location.coordinates[0] %>]</td>
+                    <td>
+                        <a href="/ngo/treat/<%= r._id %>" class="btn btn-success">Treat</a>
+                    </td>
+                </tr>
+                <% }) %>
+        </tbody>
+    </table>
+
+    <%- include("../partials/footer") %>

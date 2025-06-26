@@ -1,0 +1,27 @@
+<%- include("../partials/header") %>
+
+    <h2>Mark Treated Animal as Adoptable 🐶</h2>
+
+    <form action="/adoption" method="POST" class="row g-3">
+        <div class="col-12">
+            <label for="animalId" class="form-label">Select Treated Animal</label>
+            <select name="animalId" id="animalId" class="form-select" required>
+                <% untreated.forEach(animal=> { %>
+                    <option value="<%= animal._id %>">
+                        <%= animal.healthNotes.substring(0, 50) %>...
+                    </option>
+                    <% }) %>
+            </select>
+        </div>
+
+        <div class="col-12">
+            <label for="adoptionFee" class="form-label">Adoption Fee (₹)</label>
+            <input type="number" name="adoptionFee" id="adoptionFee" class="form-control" value="0" min="0" required>
+        </div>
+
+        <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary">Mark as Adoptable</button>
+        </div>
+    </form>
+
+    <%- include("../partials/footer") %>

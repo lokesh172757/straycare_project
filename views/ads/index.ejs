@@ -1,0 +1,22 @@
+<%- include("../partials/header") %>
+
+    <h2>Pet Shop Sponsors 🐾</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <% ads.forEach(ad=> { %>
+            <div class="col">
+                <div class="card h-100">
+                    <a href="<%= ad.link %>" target="_blank">
+                        <img src="<%= ad.logoUrl %>" class="card-img-top" style="height: 200px; object-fit: cover;">
+                    </a>
+                    <div class="card-body text-center">
+                        <h5>
+                            <%= ad.shopName %>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+    </div>
+
+    <%- include("../partials/footer") %>

@@ -1,0 +1,26 @@
+<%- include("../partials/header") %>
+
+    <h2>Add a Pet Shop Ad 🛍️</h2>
+
+    <form action="/ads" method="POST" class="row g-3">
+        <div class="col-12">
+            <label class="form-label">Shop Name</label>
+            <input type="text" name="shopName" class="form-control" required>
+        </div>
+
+        <div class="col-12">
+            <label class="form-label">Logo Image URL</label>
+            <input type="text" name="logoUrl" class="form-control" required>
+        </div>
+
+        <div class="col-12">
+            <label class="form-label">Shop Website Link</label>
+            <input type="url" name="link" class="form-control" required>
+        </div>
+
+        <div class="col-12 text-center">
+            <button class="btn btn-primary">Add Ad</button>
+        </div>
+    </form>
+
+    <%- include("../partials/footer") %>

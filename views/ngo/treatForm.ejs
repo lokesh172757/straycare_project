@@ -1,0 +1,40 @@
+<%- include("../partials/header") %>
+
+    <h2>Treat Animal</h2>
+
+    <form action="/ngo/treat/<%= report._id %>" method="POST" class="row g-3">
+        <div class="col-12">
+            <label>Report Description</label>
+            <p class="form-control">
+                <%= report.description %>
+            </p>
+        </div>
+
+        <div class="col-12">
+            <label for="afterPhotoUrl">After Treatment Image URL</label>
+            <input type="text" name="afterPhotoUrl" id="afterPhotoUrl" class="form-control" required>
+        </div>
+
+        <div class="col-12">
+            <label for="healthNotes">Health Notes</label>
+            <textarea name="healthNotes" id="healthNotes" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="adoptable" id="adoptable">
+                <label class="form-check-label" for="adoptable">Mark as Adoptable</label>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <label for="adoptionFee">Adoption Fee</label>
+            <input type="number" name="adoptionFee" class="form-control" id="adoptionFee" value="0">
+        </div>
+
+        <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary">Mark as Treated</button>
+        </div>
+    </form>
+
+    <%- include("../partials/footer") %>

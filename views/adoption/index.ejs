@@ -1,0 +1,26 @@
+<%- include("../partials/header") %>
+
+    <h2>Animals Available for Adoption 🐾</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <% animals.forEach(animal=> { %>
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="<%= animal.afterPhotoUrl %>" class="card-img-top"
+                        style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <p>
+                            <%= animal.healthNotes %>
+                        </p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <p><strong>Adoption Fee:</strong> ₹<%= animal.adoptionFee %>
+                        </p>
+                        <button class="btn btn-success disabled">Contact NGO (Coming Soon)</button>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+    </div>
+
+    <%- include("../partials/footer") %>

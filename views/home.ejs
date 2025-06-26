@@ -1,0 +1,52 @@
+<%- include("partials/header") %>
+
+    <h1 class="text-center mb-4">Welcome to StrayCare 🐾</h1>
+
+    <!-- Treated Animals Section -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <% animals.forEach(function(animal) { %>
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="<%= animal.afterPhotoUrl %>" class="card-img-top"
+                        style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <%= animal.adoptable ? "Adopt Me!" : "Treated & Healthy" %>
+                        </h5>
+                        <p class="card-text">
+                            <%= animal.healthNotes %>
+                        </p>
+                    </div>
+                    <% if (animal.adoptable) { %>
+                        <div class="card-footer text-center">
+                            <a href="/adoption" class="btn btn-primary">View for Adoption</a>
+                        </div>
+                        <% } %>
+                </div>
+            </div>
+            <% }); %>
+    </div>
+
+    <!-- Ads Section -->
+    <hr class="my-5">
+
+    <h2 class="text-center mb-4">Sponsored Pet Shops 🛍️</h2>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <% ads.forEach(function(ad) { %>
+            <div class="col">
+                <div class="card h-100">
+                    <a href="<%= ad.link %>" target="_blank">
+                        <img src="<%= ad.logoUrl %>" class="card-img-top" style="height: 200px; object-fit: cover;">
+                    </a>
+                    <div class="card-body text-center">
+                        <h5>
+                            <%= ad.shopName %>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+    </div>
+
+    <%- include("partials/footer") %>

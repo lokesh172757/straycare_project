@@ -1,0 +1,41 @@
+<%- include("partials/header") %>
+
+    <h2 class="mb-4">Report a Street Animal</h2>
+
+    <form action="/report" method="POST" class="row g-3">
+        <div class="col-md-6">
+            <label for="photoUrl" class="form-label">Image URL</label>
+            <input type="text" class="form-control" id="photoUrl" name="photoUrl" required>
+        </div>
+
+        <div class="col-md-3">
+            <label for="lat" class="form-label">Latitude</label>
+            <input type="text" class="form-control" id="lat" name="lat" required>
+        </div>
+
+        <div class="col-md-3">
+            <label for="lng" class="form-label">Longitude</label>
+            <input type="text" class="form-control" id="lng" name="lng" required>
+        </div>
+
+        <div class="col-12">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        </div>
+
+        <div class="col-6">
+            <label for="donationIntent" class="form-label">Donation Intent (₹)</label>
+            <input type="number" class="form-control" id="donationIntent" name="donationIntent">
+        </div>
+
+        <div class="col-6">
+            <label for="userId" class="form-label">Reporter User ID</label>
+            <input type="text" class="form-control" id="userId" name="userId" placeholder="Paste LocalUser _id">
+        </div>
+
+        <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary">Submit Report</button>
+        </div>
+    </form>
+
+    <%- include("partials/footer") %>
