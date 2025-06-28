@@ -1,0 +1,26 @@
+<%- include("../partials/header") %>
+
+    <div class="container mt-4">
+        <h2>Adopt Me!</h2>
+
+        <img src="<%= animal.afterPhotoUrl %>" class="img-fluid mb-3" style="max-height:300px;">
+
+        <p><strong>Health Notes:</strong>
+            <%= animal.healthNotes %>
+        </p>
+        <p><strong>Adoption Fee:</strong> ₹<%= animal.adoptionFee %>
+        </p>
+
+        <hr>
+        <h4>Rescue Report Info</h4>
+        <p><strong>Found at:</strong> [<%= animal.beforeReportId.location.coordinates[1] %>, <%=
+                    animal.beforeReportId.location.coordinates[0] %>]</p>
+        <p>
+            <%= animal.beforeReportId.description %>
+        </p>
+
+        <!-- (Optional) Contact NGO / Adopt button -->
+        <a href="/adopt/<%= animal._id %>/contact" class="btn btn-success">I'm Interested</a>
+    </div>
+
+    <%- include("../partials/footer") %>

@@ -1,0 +1,42 @@
+<%- include('../partials/header') %>
+
+    <div class="container mt-4">
+        <h2>👤 Local User Dashboard</h2>
+
+        <hr>
+        <h4>🐾 Your Reported Animals</h4>
+        <% if (myReports.length===0) { %>
+            <p>No reports found.</p>
+            <% } else { %>
+                <ul class="list-group">
+                    <% myReports.forEach(report=> { %>
+                        <li class="list-group-item">
+                            <strong>Status:</strong>
+                            <%= report.status %><br>
+                                <strong>Description:</strong>
+                                <%= report.description || "N/A" %><br>
+                                    <img src="<%= report.photoUrl %>" alt="Animal" height="120">
+                        </li>
+                        <% }) %>
+                </ul>
+                <% } %>
+
+                    <hr>
+                    <h4>🏠 Your Adoption Requests</h4>
+                    <% if (myAdoptionRequests.length===0) { %>
+                        <p>No adoption requests found.</p>
+                        <% } else { %>
+                            <ul class="list-group">
+                                <% myAdoptionRequests.forEach(req=> { %>
+                                    <li class="list-group-item">
+                                        <strong>Message:</strong>
+                                        <%= req.message %><br>
+                                            <strong>Request Date:</strong>
+                                            <%= req.createdAt.toDateString() %>
+                                    </li>
+                                    <% }) %>
+                            </ul>
+                            <% } %>
+    </div>
+
+    <%- include('../partials/footer') %>

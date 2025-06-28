@@ -1,0 +1,12 @@
+<%- include("../partials/header") %>
+    <div class="container mt-4">
+        <h2>Register (Public User)</h2>
+        <form action="/auth/register/local" method="POST">
+            <input name="name" class="form-control mb-2" placeholder="Name" required>
+            <input name="email" class="form-control mb-2" placeholder="Email" required>
+            <input name="phone" class="form-control mb-2" placeholder="Phone" required>
+            <input name="password" type="password" class="form-control mb-3" placeholder="Password" required>
+            <button class="btn btn-primary">Register</button>
+        </form>
+    </div>
+    <%- include("../partials/footer") %>

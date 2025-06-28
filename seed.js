@@ -52,7 +52,8 @@ async function seedDatabase() {
         photoUrl: "https://placekitten.com/401/301",
         location: { coordinates: [77.209021, 28.613939] },
         description: "Sick cat near market",
-        userId: user2._id
+        userId: user2._id,
+        status: "OPEN"  // 👈 keep this one open
     });
 
     const treatedAnimal1 = await TreatedAnimal.create({
@@ -63,15 +64,10 @@ async function seedDatabase() {
         adoptionFee: 500
     });
 
-    const treatedAnimal2 = await TreatedAnimal.create({
-        beforeReportId: report2._id,
-        afterPhotoUrl: "https://placekitten.com/403/303",
-        healthNotes: "Recovered from fever. Now active.",
-        adoptable: false
+    await Report.findByIdAndUpdate(report1._id, {
+        status: "TREATED",
+        treatedAnimalId: treatedAnimal1._id
     });
-
-    await Report.findByIdAndUpdate(report1._id, { status: "TREATED", treatedAnimalId: treatedAnimal1._id });
-    await Report.findByIdAndUpdate(report2._id, { status: "TREATED", treatedAnimalId: treatedAnimal2._id });
 
     await Ad.insertMany([
         {
@@ -90,7 +86,7 @@ async function seedDatabase() {
         }
     ]);
 
-    console.log("Seed data inserted successfully!");
+    console.log("✅ Seed data inserted successfully!");
     mongoose.connection.close();
 }
 

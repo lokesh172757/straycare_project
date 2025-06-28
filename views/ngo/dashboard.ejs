@@ -1,0 +1,57 @@
+<%- include("../partials/header") %>
+
+    <div class="container mt-4">
+        <h2>NGO Dashboard</h2>
+
+        <div class="row mt-4">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white text-center">
+                    <div class="card-body">
+                        <h4>
+                            <%= totalReports %>
+                        </h4>
+                        <p>Total Reports</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-dark text-center">
+                    <div class="card-body">
+                        <h4>
+                            <%= openReports %>
+                        </h4>
+                        <p>Open Reports</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white text-center">
+                    <div class="card-body">
+                        <h4>
+                            <%= treatedAnimals %>
+                        </h4>
+                        <p>Treated Animals</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white text-center">
+                    <div class="card-body">
+                        <h4>
+                            <%= adoptionRequests %>
+                        </h4>
+                        <p>Adoption Requests</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-3">
+            <a href="/ngo/reports" class="btn btn-outline-primary">Open Reports</a>
+            <a href="/adoption/new" class="btn btn-outline-success">Mark Adoptable</a>
+            <a href="/ngo/adoptions" class="btn btn-outline-info">View Adoption Requests</a>
+            <a href="/ads" class="btn btn-outline-dark">Manage Ads</a>
+        </div>
+    </div>
+
+    <%- include("../partials/footer") %>

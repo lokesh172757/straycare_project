@@ -1,0 +1,42 @@
+<%- include("../partials/header") %>
+
+    <div class="container mt-4">
+        <h2>🐾 My Reported Animals</h2>
+
+        <% if (reports.length===0) { %>
+            <div class="alert alert-warning">You haven't reported any animals yet.</div>
+            <a href="/report/new" class="btn btn-primary">Report One Now</a>
+            <% } else { %>
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    <% reports.forEach(report=> { %>
+                        <div class="col">
+                            <div class="card">
+                                <img src="<%= report.photoUrl %>" class="card-img-top"
+                                    style="height: 200px; object-fit: cover;" alt="Animal Report Photo">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        Status:
+                                        <span class="badge
+                                    <% if (report.status === 'OPEN') { %> bg-warning
+                                    <% } else if (report.status === 'IN_PROGRESS') { %> bg-info
+                                    <% } else if (report.status === 'TREATED') { %> bg-success
+                                    <% } %>">
+                                            <%= report.status %>
+                                        </span>
+                                    </h5>
+                                    <% if (report.description) { %>
+                                        <p class="card-text">
+                                            <%= report.description %>
+                                        </p>
+                                        <% } %>
+                                            <p class="text-muted"><small>Reported on <%= new
+                                                        Date(report.createdAt).toLocaleDateString() %></small></p>
+                                </div>
+                            </div>
+                        </div>
+                        <% }) %>
+                </div>
+                <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>

@@ -1,0 +1,19 @@
+<%- include("../partials/header") %>
+
+    <div class="container mt-5">
+        <h2>Register (NGO)</h2>
+        <form action="/auth/register/ngo" method="POST">
+            <div class="mb-3">
+                <input name="name" class="form-control" placeholder="NGO Name" required>
+            </div>
+            <div class="mb-3">
+                <input name="email" type="email" class="form-control" placeholder="Email" required>
+            </div>
+            <div class="mb-3">
+                <input name="password" type="password" class="form-control" placeholder="Password" required>
+            </div>
+            <button class="btn btn-primary">Register NGO</button>
+        </form>
+    </div>
+
+    <%- include("../partials/footer") %>

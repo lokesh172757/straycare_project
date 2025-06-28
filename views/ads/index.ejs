@@ -1,22 +1,70 @@
 <%- include("../partials/header") %>
 
-    <h2>Pet Shop Sponsors 🐾</h2>
+    <div class="container mt-4">
+        <h2>📢 Manage Ads (Pet‑Shop Sponsors)</h2>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <% ads.forEach(ad=> { %>
-            <div class="col">
-                <div class="card h-100">
-                    <a href="<%= ad.link %>" target="_blank">
-                        <img src="<%= ad.logoUrl %>" class="card-img-top" style="height: 200px; object-fit: cover;">
-                    </a>
-                    <div class="card-body text-center">
-                        <h5>
-                            <%= ad.shopName %>
-                        </h5>
-                    </div>
+        <!-- ── Add‑Ad Form ─────────────────────────────────────────── -->
+        <form action="/ads" method="POST" class="mb-4">
+            <div class="row g-2">
+                <div class="col-md-3">
+                    <input type="text" name="shopName" class="form-control" placeholder="Shop Name" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="logoUrl" class="form-control" placeholder="Logo URL" required>
+                </div>
+                <div class="col-md-3">
+                    <input type="text" name="link" class="form-control" placeholder="Destination Link" required>
+                </div>
+                <div class="col-md-3 d-flex gap-2">
+                    <input type="date" name="startsOn" class="form-control" required>
+                    <input type="date" name="endsOn" class="form-control" required>
+                    <button class="btn btn-success">Add Ad</button>
                 </div>
             </div>
-            <% }); %>
+        </form>
+
+        <!-- ── Existing Ads Table ──────────────────────────────────── -->
+        <% if (ads.length===0) { %>
+            <p>No ads yet.</p>
+            <% } else { %>
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Shop</th>
+                            <th>Logo</th>
+                            <th>Link</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% ads.forEach(ad=> { %>
+                            <tr>
+                                <td>
+                                    <%= ad.shopName %>
+                                </td>
+                                <td><img src="<%= ad.logoUrl %>" height="50"></td>
+                                <td><a href="<%= ad.link %>" target="_blank">Visit</a></td>
+
+                                <!-- ― safe date rendering ― -->
+                                <td>
+                                    <%= ad.startsOn ? ad.startsOn.toDateString() : "N/A" %>
+                                </td>
+                                <td>
+                                    <%= ad.endsOn ? ad.endsOn.toDateString() : "N/A" %>
+                                </td>
+
+                                <td>
+                                    <form action="/ads/<%= ad._id %>?_method=DELETE" method="POST">
+                                        <button class="btn btn-sm btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
     </div>
 
     <%- include("../partials/footer") %>

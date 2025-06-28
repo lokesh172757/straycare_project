@@ -1,0 +1,57 @@
+<%- include("../partials/header") %>
+
+    <div class="container mt-4">
+        <h2>Adoption Requests</h2>
+
+        <% if (requests.length===0) { %>
+            <p>No adoption requests yet.</p>
+            <% } else { %>
+                <table class="table table-bordered mt-3">
+                    <thead>
+                        <tr>
+                            <th>Animal</th>
+                            <th>Adopter Name</th>
+                            <th>Phone</th>
+                            <th>Message</th>
+                            <th>Submitted At</th>
+                            <th>Action</th> <!-- New column -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% requests.forEach(r=> { %>
+                            <tr>
+                                <td>
+                                    <% if (r.animalId) { %>
+                                        <img src="<%= r.animalId.afterPhotoUrl %>" width="100">
+                                        <br>₹<%= r.animalId.adoptionFee %>
+                                            <% } else { %>
+                                                <em>Animal deleted</em>
+                                                <% } %>
+                                </td>
+                                <td>
+                                    <%= r.name %>
+                                </td>
+                                <td>
+                                    <%= r.phone %>
+                                </td>
+                                <td>
+                                    <%= r.message %>
+                                </td>
+                                <td>
+                                    <%= r.createdAt.toLocaleString("en-IN") %>
+                                </td>
+                                <td>
+                                    <!-- 🗑 Delete form -->
+                                    <form action="/ngo/adoptions/<%= r._id %>?_method=DELETE" method="POST"
+                                        onsubmit="return confirm('Are you sure you want to delete this request?');">
+                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+                <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>

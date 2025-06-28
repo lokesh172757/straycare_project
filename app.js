@@ -3,46 +3,78 @@ const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
 require("dotenv").config();
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const flash = require("connect-flash");
+
+const reportRoutes = require("./routes/report");
+const adoptionRoutes = require("./routes/adoption");
+const adoptRoutes = require("./routes/adopt");
+const ngoRoutes = require("./routes/ngo");
+const adRoutes = require("./routes/ads");
+const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
+const dashboardRoutes = require("./routes/dashboard");
+
+const { TreatedAnimal, Ad } = require("./models");
+const { isLoggedIn, isNGO } = require("./middleware/auth");
 
 const app = express();
 
-// Connect to MongoDB
+// ===== DB Connect =====
 mongoose.connect(process.env.MONGO_URL || "mongodb://127.0.0.1:27017/straycare")
     .then(() => console.log("✅ MongoDB connected"))
-    .catch((err) => console.error("MongoDB connection error:", err));
+    .catch((err) => console.error("❌ MongoDB error:", err));
 
-// Middleware
+// ===== View Engine & Static =====
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-
-app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
+
+// ===== Middleware =====
+app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
 
-// Routes
-const reportRoutes = require("./routes/report");
-const adoptionRoutes = require("./routes/adoption");
-const ngoRoutes = require("./routes/ngo");
-const adRoutes = require("./routes/ads");
+// ===== Session & Flash =====
+app.use(session({
+    secret: "straycareSecret@123",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URL || "mongodb://127.0.0.1:27017/straycare"
+    }),
+    cookie: { maxAge: 1000 * 60 * 60 * 24 } // 1 day
+}));
+app.use(flash());
 
-app.use("/report", reportRoutes);
-app.use("/adoption", adoptionRoutes);
-app.use("/ngo", ngoRoutes);
-app.use("/ads", adRoutes);
-
-// Homepage route
-const { TreatedAnimal, Ad } = require("./models");   // ⬅️  add Ad here
-
-app.get("/", async (req, res) => {
-    const animals = await TreatedAnimal.find({}).limit(6);      // still show 6 animals
-    const ads = await Ad.find({});                         // fetch all ads (or use .limit / aggregate)
-
-    res.render("home", { animals, ads });                       // ⬅️  pass ads too
+// ===== Global Template Variables =====
+app.use((req, res, next) => {
+    res.locals.currentUserId = req.session.userId;
+    res.locals.currentUserKind = req.session.userKind;
+    res.locals.userName = req.session.userName;
+    res.locals.success = req.flash("success");
+    res.locals.error = req.flash("error");
+    next();
 });
 
+// ===== Routes =====
+app.use("/user", userRoutes);
+app.use("/report", reportRoutes);
+app.use("/adoption", adoptionRoutes);
+app.use("/adopt", adoptRoutes);
+app.use("/ads", adRoutes);
+app.use("/auth", authRoutes);
+app.use("/ngo", isLoggedIn, isNGO, ngoRoutes);
+app.use(dashboardRoutes);
 
-// Start server
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+// ===== Home Route =====
+app.get("/", async (req, res) => {
+    const treatedAnimals = await TreatedAnimal.find({});
+    const ads = await Ad.find({});
+    res.render("home", { animals: treatedAnimals, ads });
+});
+
+// ===== Server Start =====
+app.listen(8080, () => {
+    console.log("🚀 Server running at http://localhost:8080");
 });

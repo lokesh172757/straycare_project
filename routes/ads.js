@@ -1,22 +1,35 @@
+// routes/ads.js
 const express = require("express");
 const router = express.Router();
 const { Ad } = require("../models");
 
-// GET: show all ads
+// ====== List / Manage Ads (GET /ads) ======
 router.get("/", async (req, res) => {
-    const ads = await Ad.find({});
+    const ads = await Ad.find({}).sort({ startsOn: -1 });
     res.render("ads/index", { ads });
 });
 
-// GET: show form to add new ad
-router.get("/new", (req, res) => {
-    res.render("ads/new");
+// ====== Create Ad (POST /ads) ======
+router.post("/", async (req, res) => {
+    const { shopName, logoUrl, link, startsOn, endsOn } = req.body;
+
+    // Convert to Date objects so EJS date formatting never fails
+    await Ad.create({
+        shopName,
+        logoUrl,
+        link,
+        startsOn: new Date(startsOn),
+        endsOn: new Date(endsOn)
+    });
+
+    req.flash("success", "Ad created!");
+    res.redirect("/ads");
 });
 
-// POST: create a new ad
-router.post("/", async (req, res) => {
-    const { shopName, logoUrl, link } = req.body;
-    await Ad.create({ shopName, logoUrl, link });
+// ====== Delete Ad (DELETE /ads/:id) ======
+router.delete("/:id", async (req, res) => {
+    await Ad.findByIdAndDelete(req.params.id);
+    req.flash("success", "Ad deleted.");
     res.redirect("/ads");
 });
 

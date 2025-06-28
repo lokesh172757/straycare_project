@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// Local Users (public who report animals or adopt)
+// ===== Local Users =====
 const localUserSchema = new mongoose.Schema({
     name: String,
     email: { type: String, unique: true },
@@ -9,15 +9,20 @@ const localUserSchema = new mongoose.Schema({
     joinedOn: { type: Date, default: Date.now },
 });
 
-// NGO Users (admins or volunteers)
+// ===== NGO Users =====
 const ngoUserSchema = new mongoose.Schema({
     name: String,
     email: { type: String, unique: true },
     passwordHash: String,
-    role: { type: String, enum: ["NGO_ADMIN", "VOLUNTEER"], default: "VOLUNTEER" },
+    role: {
+        type: String,
+        enum: ["NGO_ADMIN", "VOLUNTEER"],
+        default: "VOLUNTEER",
+        uppercase: true
+    },
 });
 
-// Reports (animal sightings)
+// ===== Reports =====
 const reportSchema = new mongoose.Schema({
     photoUrl: { type: String, required: true },
     location: {
@@ -37,7 +42,7 @@ const reportSchema = new mongoose.Schema({
 });
 reportSchema.index({ location: "2dsphere" });
 
-// Treated Animals
+// ===== Treated Animals =====
 const treatedAnimalSchema = new mongoose.Schema({
     beforeReportId: { type: mongoose.Schema.Types.ObjectId, ref: "Report", required: true },
     afterPhotoUrl: { type: String, required: true },
@@ -47,7 +52,7 @@ const treatedAnimalSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
 });
 
-// Ads (local pet shops)
+// ===== Ads =====
 const adSchema = new mongoose.Schema({
     shopName: String,
     logoUrl: String,
@@ -56,10 +61,21 @@ const adSchema = new mongoose.Schema({
     endsOn: Date,
 });
 
+// ===== Adoption Requests =====
+const adoptionRequestSchema = new mongoose.Schema({
+    animalId: { type: mongoose.Schema.Types.ObjectId, ref: "TreatedAnimal" },
+    name: String,
+    phone: String,
+    message: String,
+    createdAt: { type: Date, default: Date.now }
+});
+
+// ===== Model Export =====
 module.exports = {
     LocalUser: mongoose.model("LocalUser", localUserSchema),
     NgoUser: mongoose.model("NgoUser", ngoUserSchema),
     Report: mongoose.model("Report", reportSchema),
     TreatedAnimal: mongoose.model("TreatedAnimal", treatedAnimalSchema),
     Ad: mongoose.model("Ad", adSchema),
+    AdoptionRequest: mongoose.model("AdoptionRequest", adoptionRequestSchema),
 };

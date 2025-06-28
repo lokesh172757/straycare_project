@@ -1,0 +1,45 @@
+<%- include("../partials/header") %>
+
+    <div class="container mt-4">
+        <h2>Animal Report Details</h2>
+
+        <img src="<%= report.photoUrl %>" class="img-fluid mb-3" style="max-height:300px;">
+
+        <p><strong>Description:</strong>
+            <%= report.description %>
+        </p>
+        <p><strong>Status:</strong>
+            <%= report.status %>
+        </p>
+        <p><strong>Reported by:</strong>
+            <%= report.userId?.name || "Unknown" %>
+        </p>
+        <p><strong>Location:</strong>
+            Lat: <%= report.location.coordinates[1] %>,
+                Lng: <%= report.location.coordinates[0] %>
+        </p>
+
+        <% if (report.donationIntent && report.donationIntent> 0) { %>
+            <p><strong>Donation Pledged:</strong> ₹<%= report.donationIntent %>
+            </p>
+            <% } %>
+
+                <% if (report.treatedAnimalId) { %>
+                    <hr>
+                    <h4>After Treatment</h4>
+                    <img src="<%= report.treatedAnimalId.afterPhotoUrl %>" class="img-fluid mb-3"
+                        style="max-height:300px;">
+                    <p><strong>Health Notes:</strong>
+                        <%= report.treatedAnimalId.healthNotes %>
+                    </p>
+                    <p><strong>Adoptable:</strong>
+                        <%= report.treatedAnimalId.adoptable ? "Yes" : "No" %>
+                    </p>
+                    <% if (report.treatedAnimalId.adoptable) { %>
+                        <p><strong>Adoption Fee:</strong> ₹<%= report.treatedAnimalId.adoptionFee %>
+                        </p>
+                        <% } %>
+                            <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>

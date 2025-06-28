@@ -1,0 +1,30 @@
+<%- include("../partials/header") %>
+
+    <div class="container mt-4">
+        <h2>Interested in Adopting?</h2>
+
+        <img src="<%= animal.afterPhotoUrl %>" class="img-fluid mb-3" style="max-height:300px;">
+        <p><strong>Health Notes:</strong>
+            <%= animal.healthNotes %>
+        </p>
+        <p><strong>Adoption Fee:</strong> ₹<%= animal.adoptionFee %>
+        </p>
+
+        <form action="/adopt/<%= animal._id %>/contact" method="POST">
+            <div class="mb-3">
+                <label>Name</label>
+                <input name="name" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label>Phone</label>
+                <input name="phone" class="form-control" required />
+            </div>
+            <div class="mb-3">
+                <label>Message</label>
+                <textarea name="message" class="form-control"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success">Submit Interest</button>
+        </form>
+    </div>
+
+    <%- include("../partials/footer") %>
