@@ -1,0 +1,35 @@
+<%- include("../partials/header") %>
+
+    <div class="container mt-4">
+        <h2 class="mb-4">Treated Animals</h2>
+
+        <% if (treatedAnimals.length===0) { %>
+            <p>No treated animals yet.</p>
+            <% } else { %>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <% treatedAnimals.forEach(animal=> { %>
+                        <div class="col">
+                            <div class="card h-100 shadow">
+                                <img src="<%= animal.afterPhotoUrl %>" class="card-img-top" alt="Treated Animal"
+                                    style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title">Treated Animal</h5>
+                                    <p><strong>Health Notes:</strong>
+                                        <%= animal.healthNotes || "N/A" %>
+                                    </p>
+                                    <p><strong>Adoptable:</strong>
+                                        <%= animal.adoptable ? "Yes" : "No" %>
+                                    </p>
+                                    <% if (animal.adoptable) { %>
+                                        <p><strong>Adoption Fee:</strong> ₹<%= animal.adoptionFee || 0 %>
+                                        </p>
+                                        <% } %>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                </div>
+                <% } %>
+    </div>
+
+    <%- include("../partials/footer") %>

@@ -2,26 +2,19 @@ const express = require("express");
 const router = express.Router();
 const { Report, TreatedAnimal, AdoptionRequest } = require("../models");
 
-// ✅ NGO Dashboard (Overview + Open Reports)
+// ✅ NGO Dashboard (Overview)
 router.get("/dashboard", async (req, res) => {
-    try {
-        const totalReports = await Report.countDocuments({});
-        const openReports = await Report.countDocuments({ status: "OPEN" });
-        const treatedAnimals = await TreatedAnimal.countDocuments({});
-        const adoptionRequests = await AdoptionRequest.countDocuments({});
-        const reports = await Report.find({ status: "OPEN" }); // ⬅ Needed for EJS
+    const totalReports = await Report.countDocuments({});
+    const openReports = await Report.countDocuments({ status: "OPEN" });
+    const treatedAnimals = await TreatedAnimal.countDocuments({});
+    const adoptionRequests = await AdoptionRequest.countDocuments({});
 
-        res.render("ngo/dashboard", {
-            totalReports,
-            openReports,
-            treatedAnimals,
-            adoptionRequests,
-            reports // ⬅ Pass reports here
-        });
-    } catch (err) {
-        console.error("Error loading dashboard:", err);
-        res.status(500).send("Server Error");
-    }
+    res.render("ngo/dashboard", {
+        totalReports,
+        openReports,
+        treatedAnimals,
+        adoptionRequests
+    });
 });
 
 // ✅ GET all open reports
@@ -57,7 +50,7 @@ router.post("/treat/:id", async (req, res) => {
     res.redirect("/ngo/reports");
 });
 
-// ✅ View all adoption requests
+// ✅ NEW: View all adoption requests
 router.get("/adoptions", async (req, res) => {
     const requests = await AdoptionRequest.find({})
         .populate("animalId")
@@ -70,6 +63,17 @@ router.get("/adoptions", async (req, res) => {
 router.delete("/adoptions/:id", async (req, res) => {
     await AdoptionRequest.findByIdAndDelete(req.params.id);
     res.redirect("/ngo/adoptions");
+});
+
+// ✅ View all treated animals
+router.get("/treated", async (req, res) => {
+    try {
+        const treatedAnimals = await TreatedAnimal.find().sort({ createdAt: -1 });
+        res.render("ngo/treatedAnimals", { treatedAnimals });
+    } catch (err) {
+        console.error("❌ Treated route error:", err);
+        res.status(500).send("Internal Server Error");
+    }
 });
 
 module.exports = router;
