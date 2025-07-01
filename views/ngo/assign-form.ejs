@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Assign Volunteer</title>
+</head>
+
+<body>
+    <h1>Assign Volunteer to Report</h1>
+
+    <form action="/volunteers/assign" method="POST">
+        <label for="reportId">Select Report:</label>
+        <select name="reportId" required>
+            <% reports.forEach(r=> { %>
+                <option value="<%= r._id %>">
+                    <%= r.description %> | <%= r.status %> | <%= r.createdAt.toDateString() %>
+                </option>
+                <% }) %>
+        </select>
+
+        <br><br>
+
+        <label for="volunteerName">Volunteer Name:</label>
+        <input type="text" name="volunteerName" required>
+
+        <br><br>
+
+        <label for="volunteerPhone">Volunteer Phone:</label>
+        <input type="text" name="volunteerPhone" required>
+
+        <br><br>
+
+        <label for="notes">Notes:</label>
+        <textarea name="notes"></textarea>
+
+        <br><br>
+
+        <button type="submit">Assign Volunteer</button>
+    </form>
+</body>
+
+</html>

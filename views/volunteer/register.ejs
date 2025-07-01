@@ -1,0 +1,14 @@
+<%- include("../partials/header") %>
+
+    <div class="container mt-5">
+        <h2>Volunteer Registration</h2>
+        <form action="/volunteer/register" method="POST">
+            <input class="form-control" name="name" placeholder="Name" required />
+            <input class="form-control mt-2" name="email" type="email" placeholder="Email" required />
+            <input class="form-control mt-2" name="phone" placeholder="Phone" required />
+            <input class="form-control mt-2" name="password" type="password" placeholder="Password" required />
+            <button class="btn btn-primary mt-3">Register</button>
+        </form>
+    </div>
+
+    <%- include("../partials/footer") %>

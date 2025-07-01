@@ -1,57 +1,35 @@
 <%- include("../partials/header") %>
 
     <div class="container mt-4">
-        <h2>NGO Dashboard</h2>
+        <h2>Open Reports</h2>
 
-        <div class="row mt-4">
-            <div class="col-md-3">
-                <div class="card bg-primary text-white text-center">
-                    <div class="card-body">
-                        <h4>
-                            <%= totalReports %>
-                        </h4>
-                        <p>Total Reports</p>
-                    </div>
+        <% if (reports.length===0) { %>
+            <p>No open reports at the moment.</p>
+            <% } else { %>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <% reports.forEach(report=> { %>
+                        <div class="col">
+                            <div class="card h-100 shadow">
+                                <img src="<%= report.photoUrl %>" class="card-img-top"
+                                    style="height: 200px; object-fit: cover;" alt="Report Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <%= report.status %>
+                                    </h5>
+                                    <p class="card-text"><strong>Description:</strong>
+                                        <%= report.description || "No description" %>
+                                    </p>
+                                    <p class="card-text"><strong>Donation Intent:</strong> ₹<%= report.donationIntent ||
+                                            0 %>
+                                    </p>
+                                    <a href="/report/<%= report._id %>" class="btn btn-primary btn-sm mt-2">View
+                                        Details</a>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card bg-warning text-dark text-center">
-                    <div class="card-body">
-                        <h4>
-                            <%= openReports %>
-                        </h4>
-                        <p>Open Reports</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card bg-success text-white text-center">
-                    <div class="card-body">
-                        <h4>
-                            <%= treatedAnimals %>
-                        </h4>
-                        <p>Treated Animals</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card bg-info text-white text-center">
-                    <div class="card-body">
-                        <h4>
-                            <%= adoptionRequests %>
-                        </h4>
-                        <p>Adoption Requests</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-4 d-flex gap-3">
-            <a href="/ngo/reports" class="btn btn-outline-primary">Open Reports</a>
-            <a href="/adoption/new" class="btn btn-outline-success">Mark Adoptable</a>
-            <a href="/ngo/adoptions" class="btn btn-outline-info">View Adoption Requests</a>
-            <a href="/ads" class="btn btn-outline-dark">Manage Ads</a>
-        </div>
+                <% } %>
     </div>
 
     <%- include("../partials/footer") %>

@@ -1,41 +1,59 @@
 <%- include("partials/header") %>
 
-    <h2 class="mb-4">Report a Street Animal</h2>
+    <div class="container mt-4">
+        <h2>Report a Street Animal</h2>
 
-    <form action="/report" method="POST" class="row g-3">
-        <div class="col-md-6">
-            <label for="photoUrl" class="form-label">Image URL</label>
-            <input type="text" class="form-control" id="photoUrl" name="photoUrl" required>
-        </div>
+        <form action="/report" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="photo" class="form-label">Photo</label>
+                <input type="file" class="form-control" name="photo" required>
+            </div>
 
-        <div class="col-md-3">
-            <label for="lat" class="form-label">Latitude</label>
-            <input type="text" class="form-control" id="lat" name="lat" required>
-        </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" name="description" rows="3"></textarea>
+            </div>
 
-        <div class="col-md-3">
-            <label for="lng" class="form-label">Longitude</label>
-            <input type="text" class="form-control" id="lng" name="lng" required>
-        </div>
+            <div class="mb-3">
+                <label for="donationIntent" class="form-label">Donation Intent (₹)</label>
+                <input type="number" class="form-control" name="donationIntent" min="0">
+            </div>
 
-        <div class="col-12">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-        </div>
+            <!-- Hidden inputs populated via JS -->
+            <input type="hidden" name="lat" id="lat">
+            <input type="hidden" name="lng" id="lng">
 
-        <div class="col-6">
-            <label for="donationIntent" class="form-label">Donation Intent (₹)</label>
-            <input type="number" class="form-control" id="donationIntent" name="donationIntent">
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Pick Location</label>
+                <div id="map" style="height: 300px;"></div>
+            </div>
 
-        <div class="col-6">
-            <label for="userId" class="form-label">Reporter User ID</label>
-            <input type="text" class="form-control" id="userId" name="userId" placeholder="Paste LocalUser _id">
-        </div>
-
-        <div class="col-12 text-center">
             <button type="submit" class="btn btn-primary">Submit Report</button>
-        </div>
-    </form>
+        </form>
+    </div>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map').setView([28.6139, 77.2090], 13); // Example: Delhi
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        let marker;
+
+        map.on('click', function (e) {
+            const { lat, lng } = e.latlng;
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lng;
+
+            if (marker) {
+                marker.setLatLng(e.latlng);
+            } else {
+                marker = L.marker(e.latlng).addTo(map);
+            }
+        });
+    </script>
 
     <%- include("partials/footer") %>

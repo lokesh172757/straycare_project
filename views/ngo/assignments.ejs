@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Volunteer Assignments</title>
+    <link rel="stylesheet" href="/css/style.css"> <!-- optional if using CSS -->
+</head>
+
+<body>
+    <h1>Volunteer Assignments</h1>
+
+    <% if (assignments.length===0) { %>
+        <p>No volunteers have been assigned yet.</p>
+        <% } else { %>
+            <table border="1" cellpadding="8" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Volunteer Name</th>
+                        <th>Phone</th>
+                        <th>Assigned Report</th>
+                        <th>Status</th>
+                        <th>Notes</th>
+                        <th>Assigned At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% assignments.forEach(a=> { %>
+                        <tr>
+                            <td>
+                                <%= a.volunteerName %>
+                            </td>
+                            <td>
+                                <%= a.volunteerPhone %>
+                            </td>
+                            <td>
+                                <%= a.reportId?.description || "N/A" %>
+                            </td>
+                            <td>
+                                <%= a.reportId?.status || "N/A" %>
+                            </td>
+                            <td>
+                                <%= a.notes || "—" %>
+                            </td>
+                            <td>
+                                <%= a.assignedAt.toDateString() %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+            <% } %>
+
+                <br>
+                <a href="/volunteers/assign">➕ Assign Another Volunteer</a>
+</body>
+
+</html>

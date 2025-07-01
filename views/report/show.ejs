@@ -1,0 +1,42 @@
+<%- include("../partials/header") %>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <div class="container mt-4">
+        <h2>Report Details</h2>
+
+        <div class="card mb-4">
+            <img src="<%= report.photoUrl %>" class="card-img-top" style="height: 300px; object-fit: cover;" />
+            <div class="card-body">
+                <p><strong>Description:</strong>
+                    <%= report.description || "No description" %>
+                </p>
+                <p><strong>Status:</strong>
+                    <%= report.status %>
+                </p>
+                <p><strong>Donation Intent:</strong> ₹<%= report.donationIntent || 0 %>
+                </p>
+            </div>
+        </div>
+
+        <h5>Reported Location</h5>
+        <div id="map" style="height: 300px; width: 100%;"></div>
+
+        <a href="/ngo/reports" class="btn btn-secondary mt-4">Back to Reports</a>
+    </div>
+
+    <script>
+        const lat = <%= report.location.coordinates[1] %>;
+        const lng = <%= report.location.coordinates[0] %>;
+
+        const map = L.map('map').setView([lat, lng], 14);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        L.marker([lat, lng]).addTo(map).bindPopup('Reported location').openPopup();
+    </script>
+
+    <%- include("../partials/footer") %>
