@@ -17,6 +17,7 @@ const adRoutes = require('./routes/ads');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
 const dashboardRoutes = require('./routes/dashboard');
+const generalRoutes = require("./routes/general");
 
 // Models
 const { TreatedAnimal, Ad } = require('./models');
