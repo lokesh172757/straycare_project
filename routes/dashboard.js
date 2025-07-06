@@ -9,21 +9,21 @@ const {
 } = require("../models/index.js");
 
 // Middleware (placeholder — replace with your real auth system)
-function isLoggedIn(req, res, next) {
+function isLoggedIn(req, res, next){
     if (!req.session.userId) {
         return res.redirect("/login");
     }
     next();
 }
 
-function isLocalUser(req, res, next){
+function isLocalUser(req, res, next) {
     if (req.session.userType !== "local") {
         return res.status(403).send("Access Denied: Local Users Only");
     }
     next();
 }
 
-function isNgoUser(req, res, next){
+function isNgoUser(req, res, next) {
     if (req.session.userType !== "ngo"){
         return res.status(403).send("Access Denied: NGO Users Only");
     }

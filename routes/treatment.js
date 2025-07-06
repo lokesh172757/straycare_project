@@ -5,13 +5,13 @@ const { Report, TreatedAnimal } = require("../models");
 const { isLoggedIn } = require("../middleware/auth");
 
 // Check NGO Role
-const isNGO = (req, res, next) => {
+const isNGO = (req, res, next) =>{
     if (req.user?.role === "NGO_ADMIN" || req.user?.role === "VOLUNTEER") return next();
     return res.status(403).send("Access denied: NGO only");
 };
 
 // POST /treatment/:reportId - mark report as treated
-router.post("/:reportId", isLoggedIn, isNGO, async (req, res) => {
+router.post("/:reportId", isLoggedIn, isNGO, async (req, res) =>{
     try {
         const { reportId } = req.params;
         const { afterPhotoUrl, healthNotes, adoptable, adoptionFee } = req.body;
@@ -19,7 +19,7 @@ router.post("/:reportId", isLoggedIn, isNGO, async (req, res) => {
         const report = await Report.findById(reportId);
         if (!report) return res.status(404).send("Report not found");
 
-        if (report.status === "TREATED") {
+        if (report.status === "TREATED"){
             return res.status(400).send("This report is already marked as treated.");
         }
 
