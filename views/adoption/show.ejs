@@ -1,26 +1,41 @@
 <%- include("../partials/header") %>
 
-    <div class="container mt-4">
-        <h2>Adopt Me!</h2>
+    <div class="container py-5">
 
-        <img src="<%= animal.afterPhotoUrl %>" class="img-fluid mb-3" style="max-height:300px;">
+        <!-- Title -->
+        <h2 class="mb-4 text-center text-primary fw-bold">Adopt Me! 🐾</h2>
 
-        <p><strong>Health Notes:</strong>
-            <%= animal.healthNotes %>
-        </p>
-        <p><strong>Adoption Fee:</strong> ₹<%= animal.adoptionFee %>
-        </p>
+        <!-- Animal Image -->
+        <div class="text-center mb-4">
+            <img src="<%= animal.afterPhotoUrl %>" class="img-fluid rounded shadow" style="max-height: 300px;"
+                alt="Animal Image">
+        </div>
 
+        <!-- Health & Fee Info -->
+        <div class="mb-4">
+            <p><strong class="text-success">Health Notes:</strong>
+                <%= animal.healthNotes %>
+            </p>
+            <p><strong class="text-success">Adoption Fee:</strong> ₹<%= animal.adoptionFee %>
+            </p>
+        </div>
+
+        <!-- Rescue Info -->
         <hr>
-        <h4>Rescue Report Info</h4>
-        <p><strong>Found at:</strong> [<%= animal.beforeReportId.location.coordinates[1] %>, <%=
-                    animal.beforeReportId.location.coordinates[0] %>]</p>
-        <p>
+        <h4 class="text-secondary fw-semibold mb-3">Rescue Report Info</h4>
+        <p><strong class="text-muted">Found at:</strong>
+            [<%= animal.beforeReportId.location.coordinates[1] %>,
+                <%= animal.beforeReportId.location.coordinates[0] %>]
+        </p>
+        <p class="text-muted">
             <%= animal.beforeReportId.description %>
         </p>
 
-        <!-- (Optional) Contact NGO / Adopt button -->
-        <a href="/adopt/<%= animal._id %>/contact" class="btn btn-success">I'm Interested</a>
+        <!-- Contact/Adopt Button -->
+        <div class="text-center mt-4">
+            <a href="/adopt/<%= animal._id %>/contact" class="btn btn-lg btn-success shadow-sm">I'm Interested 💚</a>
+        </div>
+
     </div>
 
     <%- include("../partials/footer") %>

@@ -1,27 +1,41 @@
 <%- include("../partials/header") %>
 
-    <h2>Mark Treated Animal as Adoptable 🐶</h2>
+    <div class="container py-5">
 
-    <form action="/adoption" method="POST" class="row g-3">
-        <div class="col-12">
-            <label for="animalId" class="form-label">Select Treated Animal</label>
-            <select name="animalId" id="animalId" class="form-select" required>
-                <% untreated.forEach(animal=> { %>
-                    <option value="<%= animal._id %>">
-                        <%= animal.healthNotes.substring(0, 50) %>...
-                    </option>
-                    <% }) %>
-            </select>
-        </div>
+        <!-- Title -->
+        <h2 class="text-center mb-4 text-primary fw-bold">Mark Treated Animal as Adoptable 🐶</h2>
 
-        <div class="col-12">
-            <label for="adoptionFee" class="form-label">Adoption Fee (₹)</label>
-            <input type="number" name="adoptionFee" id="adoptionFee" class="form-control" value="0" min="0" required>
-        </div>
+        <!-- Form -->
+        <form action="/adoption" method="POST" class="row g-4 mx-auto" style="max-width: 600px;">
 
-        <div class="col-12 text-center">
-            <button type="submit" class="btn btn-primary">Mark as Adoptable</button>
-        </div>
-    </form>
+            <!-- Animal Selection -->
+            <div class="col-12">
+                <label for="animalId" class="form-label fw-semibold">Select Treated Animal</label>
+                <select name="animalId" id="animalId" class="form-select" required>
+                    <% untreated.forEach(animal=> { %>
+                        <option value="<%= animal._id %>">
+                            <%= animal.healthNotes.substring(0, 50) %>...
+                        </option>
+                        <% }) %>
+                </select>
+            </div>
+
+            <!-- Fee Input -->
+            <div class="col-12">
+                <label for="adoptionFee" class="form-label fw-semibold">Adoption Fee (₹)</label>
+                <input type="number" name="adoptionFee" id="adoptionFee" class="form-control" value="0" min="0"
+                    required>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-success px-4 py-2 shadow-sm">
+                    Mark as Adoptable
+                </button>
+            </div>
+
+        </form>
+
+    </div>
 
     <%- include("../partials/footer") %>

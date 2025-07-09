@@ -1,27 +1,36 @@
 <%- include("../partials/header") %>
 
-    <div class="container mt-4">
-        <h2 class="mb-4">Animals Available for Adoption</h2>
+    <div class="container py-5">
 
-        <div class="row">
-            <% animals.forEach(animal=> { %>
-                <div class="col-md-4 mb-4">
-                    <div class="card h-100">
-                        <img src="<%= animal.afterPhotoUrl %>" class="card-img-top"
-                            style="height: 250px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title">Fee: ₹<%= animal.adoptionFee %>
-                            </h5>
-                            <p class="card-text">
-                                <%= animal.healthNotes.substring(0, 100) %>...
-                            </p>
-                            <!-- 🔗 Link to detailed view -->
-                            <a href="/adoption/<%= animal._id %>" class="btn btn-primary">View Details</a>
+        <!-- Section Title -->
+        <h2 class="mb-5 text-center text-success fw-bold">Animals Available for Adoption 🐶🐱</h2>
+
+        <% if (animals.length===0) { %>
+            <p class="text-center text-muted">No animals are currently available for adoption.</p>
+            <% } else { %>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <% animals.forEach(animal=> { %>
+                        <div class="col">
+                            <div class="card h-100 shadow-sm border-primary">
+                                <img src="<%= animal.afterPhotoUrl %>" class="card-img-top" alt="Adoptable Animal"
+                                    style="height: 250px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Fee: ₹<%= animal.adoptionFee %>
+                                    </h5>
+                                    <p class="card-text text-muted">
+                                        <%= animal.healthNotes.substring(0, 100) %>...
+                                    </p>
+                                </div>
+                                <div class="card-footer bg-white text-center">
+                                    <a href="/adoption/<%= animal._id %>" class="btn btn-outline-success">View
+                                        Details</a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <% }) %>
                 </div>
-                <% }) %>
-        </div>
+                <% } %>
+
     </div>
 
     <%- include("../partials/footer") %>

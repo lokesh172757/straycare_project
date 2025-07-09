@@ -1,26 +1,90 @@
 <%- include("../partials/header") %>
 
-    <h2>Add a Pet Shop Ad 🛍️</h2>
+    <div class="container py-5">
 
-    <form action="/ads" method="POST" class="row g-3">
-        <div class="col-12">
-            <label class="form-label">Shop Name</label>
-            <input type="text" name="shopName" class="form-control" required>
-        </div>
+        <!-- Page Title -->
+        <h2 class="mb-4 text-center text-warning fw-bold">
+            📢 Manage Ads&nbsp;<small class="text-muted">(Pet‑Shop Sponsors)</small>
+        </h2>
 
-        <div class="col-12">
-            <label class="form-label">Logo Image URL</label>
-            <input type="text" name="logoUrl" class="form-control" required>
-        </div>
+        <!-- Add‑Ad Form -->
+        <form action="/ads" method="POST" class="mb-5">
+            <div class="row gy-3 gx-3 align-items-end">
 
-        <div class="col-12">
-            <label class="form-label">Shop Website Link</label>
-            <input type="url" name="link" class="form-control" required>
-        </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Shop Name</label>
+                    <input type="text" name="shopName" class="form-control" placeholder="Shop Name" required>
+                </div>
 
-        <div class="col-12 text-center">
-            <button class="btn btn-primary">Add Ad</button>
-        </div>
-    </form>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Logo URL</label>
+                    <input type="text" name="logoUrl" class="form-control" placeholder="Logo URL" required>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Destination Link</label>
+                    <input type="text" name="link" class="form-control" placeholder="https://example.com" required>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Ad&nbsp;Duration</label>
+                    <div class="d-flex gap-2">
+                        <input type="date" name="startsOn" class="form-control" required>
+                        <input type="date" name="endsOn" class="form-control" required>
+                        <button class="btn btn-success">Add</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+
+        <!-- Existing Ads Table -->
+        <% if (ads.length===0) { %>
+            <p class="text-center text-muted">No ads available yet.</p>
+            <% } else { %>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped align-middle shadow-sm">
+                        <thead class="table-warning text-center">
+                            <tr>
+                                <th>Shop</th>
+                                <th>Logo</th>
+                                <th>Link</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% ads.forEach(ad=> { %>
+                                <tr>
+                                    <td>
+                                        <%= ad.shopName %>
+                                    </td>
+                                    <td class="text-center">
+                                        <img src="<%= ad.logoUrl %>" height="50" class="rounded shadow-sm" alt="Logo">
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="<%= ad.link %>" target="_blank"
+                                            class="btn btn-sm btn-outline-primary">Visit</a>
+                                    </td>
+                                    <td class="text-center">
+                                        <%= ad.startsOn ? ad.startsOn.toDateString() : "N/A" %>
+                                    </td>
+                                    <td class="text-center">
+                                        <%= ad.endsOn ? ad.endsOn.toDateString() : "N/A" %>
+                                    </td>
+                                    <td class="text-center">
+                                        <form action="/ads/<%= ad._id %>?_method=DELETE" method="POST" class="d-inline">
+                                            <button class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } %>
+
+    </div>
 
     <%- include("../partials/footer") %>
