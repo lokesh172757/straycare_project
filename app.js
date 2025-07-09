@@ -25,10 +25,12 @@ const { isLoggedIn, isNGO } = require('./middleware/auth');
 
 const app = express();
 
-// MongoDB connection
-const mongoURI = process.env.MONGO_URI;
+// MongoDB connection setup
+const useAtlas = process.env.USE_ATLAS === "true";
+const mongoURI = useAtlas ? process.env.MONGO_ATLAS : process.env.MONGO_LOCAL;
+
 if (!mongoURI) {
-    console.error('❌ MONGO_URI not found in environment variables');
+    console.error('❌ MongoDB URI not set. Check USE_ATLAS and .env variables.');
     process.exit(1);
 }
 
@@ -67,7 +69,7 @@ app.use(session({
 // Flash messages
 app.use(flash());
 
-// Locals for EJS
+// Locals for EJS templates
 app.use((req, res, next) => {
     res.locals.currentUserId = req.session.userId;
     res.locals.currentUserKind = req.session.userKind;
