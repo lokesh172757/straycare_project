@@ -1,24 +1,31 @@
 <%- include("../partials/header") %>
 
-    <div class="container mt-4">
-        <h2 class="mb-4">Treated Animals</h2>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h2>💉 Treated Animals</h2>
+        </div>
 
         <% if (treatedAnimals.length===0) { %>
-            <p>No treated animals yet.</p>
+            <div class="alert alert-info text-center">
+                No treated animals yet.
+            </div>
             <% } else { %>
-                <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                     <% treatedAnimals.forEach(animal=> { %>
                         <div class="col">
-                            <div class="card h-100 shadow">
-                                <img src="<%= animal.afterPhotoUrl %>" class="card-img-top" alt="Treated Animal"
-                                    style="height: 200px; object-fit: cover;">
+                            <div class="card h-100 shadow-sm border-0">
+                                <img src="<%= animal.afterPhotoUrl %>" alt="Treated Animal"
+                                    class="card-img-top rounded-top" style="height: 220px; object-fit: cover;">
                                 <div class="card-body">
-                                    <h5 class="card-title">Treated Animal</h5>
+                                    <h5 class="card-title">🐾 Treated Animal</h5>
                                     <p><strong>Health Notes:</strong>
                                         <%= animal.healthNotes || "N/A" %>
                                     </p>
                                     <p><strong>Adoptable:</strong>
-                                        <%= animal.adoptable ? "Yes" : "No" %>
+                                        <span
+                                            class="<%= animal.adoptable ? 'text-success' : 'text-danger' %> fw-semibold">
+                                            <%= animal.adoptable ? "Yes" : "No" %>
+                                        </span>
                                     </p>
                                     <% if (animal.adoptable) { %>
                                         <p><strong>Adoption Fee:</strong> ₹<%= animal.adoptionFee || 0 %>
@@ -27,7 +34,7 @@
                                 </div>
                             </div>
                         </div>
-                        <% }); %>
+                        <% }) %>
                 </div>
                 <% } %>
     </div>

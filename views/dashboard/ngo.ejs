@@ -1,137 +1,163 @@
 <%- include('../partials/header') %>
 
-    <div class="container mt-4">
-        <h2>🏥 NGO Dashboard</h2>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h2>🏥 NGO Dashboard</h2>
+        </div>
 
-        <!-- ====================== Reports ====================== -->
-        <hr>
-        <h4>📋 All Reports</h4>
-        <% if (allReports.length===0) { %>
-            <p>No reports available.</p>
-            <% } else { %>
-                <ul class="list-group">
-                    <% allReports.forEach(report=> { %>
-                        <li class="list-group-item">
-                            <strong>Reported By:</strong>
-                            <%= report.userId?.name || "Unknown" %><br>
-                                <strong>Status:</strong>
-                                <%= report.status %><br>
-                                    <img src="<%= report.photoUrl %>" alt="Report Photo" height="120">
-                        </li>
-                        <% }) %>
-                </ul>
-                <% } %>
-
-                    <!-- =================== Treated Animals ================== -->
-                    <hr>
-                    <h4>💉 Treated Animals</h4>
-                    <% if (treatedAnimals.length===0) { %>
-                        <p>No treated animals.</p>
-                        <% } else { %>
-                            <ul class="list-group">
-                                <% treatedAnimals.forEach(animal=> { %>
-                                    <li class="list-group-item">
-                                        <strong>From Report:</strong>
-                                        <%= animal.beforeReportId.description || "N/A" %><br>
-                                            <strong>Health Notes:</strong>
-                                            <%= animal.healthNotes || "N/A" %><br>
-                                                <img src="<%= animal.afterPhotoUrl %>" alt="After Treatment"
-                                                    height="120">
-                                    </li>
-                                    <% }) %>
-                            </ul>
-                            <% } %>
-
-                                <!-- ================= Adoption Requests ================== -->
-                                <hr>
-                                <h4>📬 Adoption Requests</h4>
-                                <% if (adoptionRequests.length===0) { %>
-                                    <p>No requests received.</p>
-                                    <% } else { %>
-                                        <ul class="list-group">
-                                            <% adoptionRequests.forEach(req=> { %>
-                                                <li class="list-group-item">
-                                                    <strong>From:</strong>
-                                                    <%= req.name %> (<%= req.phone %>)<br>
-                                                            <strong>Message:</strong>
-                                                            <%= req.message %><br>
-                                                                <strong>Animal ID:</strong>
-                                                                <%= req.animalId?._id || "N/A" %>
-                                                </li>
-                                                <% }) %>
-                                        </ul>
+        <!-- =================== All Reports =================== -->
+        <div class="card mb-5 shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">📋 All Reports</h4>
+            </div>
+            <div class="card-body">
+                <% if (allReports.length===0) { %>
+                    <p class="text-muted">No reports available.</p>
+                    <% } else { %>
+                        <div class="list-group">
+                            <% allReports.forEach(report=> { %>
+                                <div class="list-group-item mb-3 rounded shadow-sm">
+                                    <p><strong>Reported By:</strong>
+                                        <%= report.userId?.name || "Unknown" %>
+                                    </p>
+                                    <p><strong>Status:</strong>
+                                        <%= report.status %>
+                                    </p>
+                                    <% if (report.photoUrl) { %>
+                                        <img src="<%= report.photoUrl %>" alt="Report Photo" class="img-fluid rounded"
+                                            style="max-height: 200px;">
                                         <% } %>
+                                </div>
+                                <% }) %>
+                        </div>
+                        <% } %>
+            </div>
+        </div>
 
-                                            <!-- ===================== Ad Management ================== -->
-                                            <hr>
-                                            <h4>📢 Manage Ads</h4>
+        <!-- =================== Treated Animals =================== -->
+        <div class="card mb-5 shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">💉 Treated Animals</h4>
+            </div>
+            <div class="card-body">
+                <% if (treatedAnimals.length===0) { %>
+                    <p class="text-muted">No treated animals.</p>
+                    <% } else { %>
+                        <div class="list-group">
+                            <% treatedAnimals.forEach(animal=> { %>
+                                <div class="list-group-item mb-3 rounded shadow-sm">
+                                    <p><strong>From Report:</strong>
+                                        <%= animal.beforeReportId.description || "N/A" %>
+                                    </p>
+                                    <p><strong>Health Notes:</strong>
+                                        <%= animal.healthNotes || "N/A" %>
+                                    </p>
+                                    <% if (animal.afterPhotoUrl) { %>
+                                        <img src="<%= animal.afterPhotoUrl %>" alt="After Treatment Photo"
+                                            class="img-fluid rounded" style="max-height: 200px;">
+                                        <% } %>
+                                </div>
+                                <% }) %>
+                        </div>
+                        <% } %>
+            </div>
+        </div>
 
-                                            <!-- Add Ad Form -->
-                                            <form action="/ads" method="POST" class="mb-4">
-                                                <div class="row g-2">
-                                                    <div class="col-md-3">
-                                                        <input type="text" name="shopName" class="form-control"
-                                                            placeholder="Shop Name" required>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <input type="text" name="logoUrl" class="form-control"
-                                                            placeholder="Logo URL" required>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <input type="text" name="link" class="form-control"
-                                                            placeholder="Ad Link" required>
-                                                    </div>
-                                                    <div class="col-md-3 d-flex gap-2">
-                                                        <input type="date" name="startsOn" class="form-control"
-                                                            required>
-                                                        <input type="date" name="endsOn" class="form-control" required>
-                                                        <button class="btn btn-success">Add Ad</button>
-                                                    </div>
-                                                </div>
+        <!-- =================== Adoption Requests =================== -->
+        <div class="card mb-5 shadow-sm">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">📬 Adoption Requests</h4>
+            </div>
+            <div class="card-body">
+                <% if (adoptionRequests.length===0) { %>
+                    <p class="text-muted">No requests received.</p>
+                    <% } else { %>
+                        <div class="list-group">
+                            <% adoptionRequests.forEach(req=> { %>
+                                <div class="list-group-item mb-3 rounded shadow-sm">
+                                    <p><strong>From:</strong>
+                                        <%= req.name %> (<%= req.phone %>)
+                                    </p>
+                                    <p><strong>Message:</strong>
+                                        <%= req.message %>
+                                    </p>
+                                    <p><strong>Animal ID:</strong>
+                                        <%= req.animalId?._id || "N/A" %>
+                                    </p>
+                                </div>
+                                <% }) %>
+                        </div>
+                        <% } %>
+            </div>
+        </div>
+
+        <!-- =================== Manage Ads =================== -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">📢 Manage Ads</h4>
+            </div>
+            <div class="card-body">
+                <form action="/ads" method="POST" class="mb-4">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <input type="text" name="shopName" class="form-control" placeholder="Shop Name" required>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="logoUrl" class="form-control" placeholder="Logo URL" required>
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" name="link" class="form-control" placeholder="Ad Link" required>
+                        </div>
+                        <div class="col-md-3 d-flex gap-2">
+                            <input type="date" name="startsOn" class="form-control" required>
+                            <input type="date" name="endsOn" class="form-control" required>
+                            <button class="btn btn-success">Add Ad</button>
+                        </div>
+                    </div>
+                </form>
+
+                <% if (ads && ads.length> 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Shop</th>
+                                    <th>Logo</th>
+                                    <th>Link</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% ads.forEach(ad=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= ad.shopName %>
+                                        </td>
+                                        <td><img src="<%= ad.logoUrl %>" alt="Ad Logo" height="50" class="rounded"></td>
+                                        <td><a href="<%= ad.link %>" target="_blank">Visit</a></td>
+                                        <td>
+                                            <%= ad.startsOn.toDateString() %>
+                                        </td>
+                                        <td>
+                                            <%= ad.endsOn.toDateString() %>
+                                        </td>
+                                        <td>
+                                            <form action="/ads/<%= ad._id %>?_method=DELETE" method="POST">
+                                                <button class="btn btn-sm btn-danger">Delete</button>
                                             </form>
-
-                                            <!-- Show Existing Ads -->
-                                            <% if (ads && ads.length> 0) { %>
-                                                <table class="table table-bordered table-hover">
-                                                    <thead class="table-light">
-                                                        <tr>
-                                                            <th>Shop</th>
-                                                            <th>Logo</th>
-                                                            <th>Link</th>
-                                                            <th>Start</th>
-                                                            <th>End</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <% ads.forEach(ad=> { %>
-                                                            <tr>
-                                                                <td>
-                                                                    <%= ad.shopName %>
-                                                                </td>
-                                                                <td><img src="<%= ad.logoUrl %>" height="50"></td>
-                                                                <td><a href="<%= ad.link %>" target="_blank">Visit</a>
-                                                                </td>
-                                                                <td>
-                                                                    <%= ad.startsOn.toDateString() %>
-                                                                </td>
-                                                                <td>
-                                                                    <%= ad.endsOn.toDateString() %>
-                                                                </td>
-                                                                <td>
-                                                                    <form action="/ads/<%= ad._id %>?_method=DELETE"
-                                                                        method="POST">
-                                                                        <button
-                                                                            class="btn btn-sm btn-danger">Delete</button>
-                                                                    </form>
-                                                                </td>
-                                                            </tr>
-                                                            <% }) %>
-                                                    </tbody>
-                                                </table>
-                                                <% } else { %>
-                                                    <p>No ads found.</p>
-                                                    <% } %>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <% } else { %>
+                        <p class="text-muted">No ads found.</p>
+                        <% } %>
+            </div>
+        </div>
     </div>
 
     <%- include('../partials/footer') %>

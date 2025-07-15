@@ -1,15 +1,17 @@
 <%- include("../partials/header") %>
 
-    <div class="container mt-4">
-        <h2 class="mb-4">NGO Dashboard</h2>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h2>🏥 NGO Dashboard</h2>
+        </div>
 
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
             <!-- Total Reports -->
-            <div class="col-md-3">
-                <div class="card text-white bg-primary shadow-sm">
+            <div class="col">
+                <div class="card bg-primary text-white shadow-sm">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Total Reports</h5>
-                        <p class="fs-4">
+                        <h5 class="card-title">📋 Total Reports</h5>
+                        <p class="fs-3 fw-bold">
                             <%= totalReports %>
                         </p>
                         <a href="/ngo/reports" class="btn btn-light btn-sm">View Reports</a>
@@ -18,11 +20,11 @@
             </div>
 
             <!-- Open Reports -->
-            <div class="col-md-3">
-                <div class="card text-white bg-success shadow-sm">
+            <div class="col">
+                <div class="card bg-success text-white shadow-sm">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Open Reports</h5>
-                        <p class="fs-4">
+                        <h5 class="card-title">🟢 Open Reports</h5>
+                        <p class="fs-3 fw-bold">
                             <%= openReports %>
                         </p>
                         <a href="/ngo/reports" class="btn btn-light btn-sm">Open Reports</a>
@@ -31,11 +33,11 @@
             </div>
 
             <!-- Treated Animals -->
-            <div class="col-md-3">
-                <div class="card text-white bg-info shadow-sm">
+            <div class="col">
+                <div class="card bg-info text-white shadow-sm">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Treated Animals</h5>
-                        <p class="fs-4">
+                        <h5 class="card-title">💉 Treated Animals</h5>
+                        <p class="fs-3 fw-bold">
                             <%= treatedAnimals %>
                         </p>
                         <a href="/ngo/treated" class="btn btn-light btn-sm">View Treated</a>
@@ -44,11 +46,11 @@
             </div>
 
             <!-- Adoption Requests -->
-            <div class="col-md-3">
-                <div class="card text-white bg-warning shadow-sm">
+            <div class="col">
+                <div class="card bg-warning text-dark shadow-sm">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Adoption Requests</h5>
-                        <p class="fs-4">
+                        <h5 class="card-title">📬 Adoption Requests</h5>
+                        <p class="fs-3 fw-bold">
                             <%= adoptionRequests %>
                         </p>
                         <a href="/ngo/adoptions" class="btn btn-dark btn-sm">View Requests</a>
@@ -57,10 +59,10 @@
             </div>
 
             <!-- Manage Ads -->
-            <div class="col-md-3">
-                <div class="card text-white bg-dark shadow-sm">
+            <div class="col">
+                <div class="card bg-dark text-white shadow-sm">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Manage Ads</h5>
+                        <h5 class="card-title">📢 Manage Ads</h5>
                         <a href="/ads" class="btn btn-light btn-sm">View Ads</a>
                     </div>
                 </div>

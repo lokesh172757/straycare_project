@@ -1,56 +1,66 @@
 <%- include("../partials/header") %>
 
-    <div class="container mt-4">
-        <h2>Adoption Requests</h2>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h2>📬 Adoption Requests</h2>
+        </div>
 
         <% if (requests.length===0) { %>
-            <p>No adoption requests yet.</p>
+            <div class="alert alert-info text-center">
+                No adoption requests yet.
+            </div>
             <% } else { %>
-                <table class="table table-bordered mt-3">
-                    <thead>
-                        <tr>
-                            <th>Animal</th>
-                            <th>Adopter Name</th>
-                            <th>Phone</th>
-                            <th>Message</th>
-                            <th>Submitted At</th>
-                            <th>Action</th> <!-- New column -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% requests.forEach(r=> { %>
-                            <tr>
-                                <td>
-                                    <% if (r.animalId) { %>
-                                        <img src="<%= r.animalId.afterPhotoUrl %>" width="100">
-                                        <br>₹<%= r.animalId.adoptionFee %>
-                                            <% } else { %>
-                                                <em>Animal deleted</em>
-                                                <% } %>
-                                </td>
-                                <td>
-                                    <%= r.name %>
-                                </td>
-                                <td>
-                                    <%= r.phone %>
-                                </td>
-                                <td>
-                                    <%= r.message %>
-                                </td>
-                                <td>
-                                    <%= r.createdAt.toLocaleString("en-IN") %>
-                                </td>
-                                <td>
-                                    <!-- 🗑 Delete form -->
-                                    <form action="/ngo/adoptions/<%= r._id %>?_method=DELETE" method="POST"
-                                        onsubmit="return confirm('Are you sure you want to delete this request?');">
-                                        <button class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <% }) %>
-                    </tbody>
-                </table>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Animal</th>
+                                        <th>Adopter Name</th>
+                                        <th>Phone</th>
+                                        <th>Message</th>
+                                        <th>Submitted At</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% requests.forEach(r=> { %>
+                                        <tr>
+                                            <td>
+                                                <% if (r.animalId) { %>
+                                                    <img src="<%= r.animalId.afterPhotoUrl %>"
+                                                        class="img-thumbnail mb-1" style="width: 100px; height: auto;">
+                                                    <br><span class="text-muted">₹<%= r.animalId.adoptionFee %></span>
+                                                    <% } else { %>
+                                                        <em class="text-danger">Animal deleted</em>
+                                                        <% } %>
+                                            </td>
+                                            <td>
+                                                <%= r.name %>
+                                            </td>
+                                            <td>
+                                                <%= r.phone %>
+                                            </td>
+                                            <td>
+                                                <%= r.message %>
+                                            </td>
+                                            <td>
+                                                <%= r.createdAt.toLocaleString("en-IN") %>
+                                            </td>
+                                            <td>
+                                                <form action="/ngo/adoptions/<%= r._id %>?_method=DELETE" method="POST"
+                                                    onsubmit="return confirm('Are you sure you want to delete this request?');">
+                                                    <button class="btn btn-danger btn-sm">Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
                 <% } %>
     </div>
 

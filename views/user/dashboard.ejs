@@ -1,27 +1,32 @@
 <%- include("../partials/header") %>
 
-    <div class="container mt-4">
-        <h2>🐾 My Reported Animals</h2>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h2>🐾 My Reported Animals</h2>
+        </div>
 
         <% if (reports.length===0) { %>
-            <div class="alert alert-warning">You haven't reported any animals yet.</div>
-            <a href="/report/new" class="btn btn-primary">Report One Now</a>
+            <div class="alert alert-warning text-center">
+                You haven't reported any animals yet.
+            </div>
+            <div class="text-center">
+                <a href="/report/new" class="btn btn-primary">📤 Report One Now</a>
+            </div>
             <% } else { %>
-                <div class="row row-cols-1 row-cols-md-2 g-4">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                     <% reports.forEach(report=> { %>
                         <div class="col">
-                            <div class="card">
-                                <img src="<%= report.photoUrl %>" class="card-img-top"
+                            <div class="card shadow-sm h-100">
+                                <img src="<%= report.photoUrl %>" class="card-img-top rounded-top"
                                     style="height: 200px; object-fit: cover;" alt="Animal Report Photo">
                                 <div class="card-body">
                                     <h5 class="card-title">
                                         Status:
-                                        <span class="badge
-                                    <% if (report.status === 'OPEN') { %> bg-warning
-                                    <% } else if (report.status === 'IN_PROGRESS') { %> bg-info
-                                    <% } else if (report.status === 'TREATED') { %> bg-success
-                                    <% } %>">
-                                            <%= report.status %>
+                                        <span class="badge 
+                                    <%= report.status === 'OPEN' ? 'bg-warning text-dark' : 
+                                        report.status === 'IN_PROGRESS' ? 'bg-info text-dark' : 
+                                        report.status === 'TREATED' ? 'bg-success' : 'bg-secondary' %>">
+                                            <%= report.status.replace("_", " " ) %>
                                         </span>
                                     </h5>
                                     <% if (report.description) { %>
@@ -29,7 +34,7 @@
                                             <%= report.description %>
                                         </p>
                                         <% } %>
-                                            <p class="text-muted"><small>Reported on <%= new
+                                            <p class="text-muted mb-0"><small>📅 Reported on <%= new
                                                         Date(report.createdAt).toLocaleDateString() %></small></p>
                                 </div>
                             </div>
