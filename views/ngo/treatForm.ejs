@@ -5,7 +5,8 @@
             <h2>💊 Treat Animal</h2>
         </div>
 
-        <form action="/ngo/treat/<%= report._id %>" method="POST" class="row g-4 shadow p-4 rounded bg-light">
+        <form action="/ngo/treat/<%= report._id %>" method="POST" enctype="multipart/form-data"
+            class="row g-4 shadow p-4 rounded bg-light">
             <!-- Report Description (Read-only) -->
             <div class="col-12">
                 <label class="form-label fw-bold">Report Description</label>
@@ -14,11 +15,10 @@
                 </div>
             </div>
 
-            <!-- After Treatment Photo URL -->
+            <!-- After Treatment Photo Upload -->
             <div class="col-12">
-                <label for="afterPhotoUrl" class="form-label">After Treatment Image URL</label>
-                <input type="text" name="afterPhotoUrl" id="afterPhotoUrl" class="form-control" required
-                    placeholder="Enter image URL">
+                <label for="afterPhoto" class="form-label">Upload After Treatment Image</label>
+                <input type="file" name="afterPhoto" id="afterPhoto" class="form-control" accept="image/*" required>
             </div>
 
             <!-- Health Notes -->
