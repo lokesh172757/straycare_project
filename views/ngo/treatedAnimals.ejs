@@ -1,42 +1,87 @@
 <%- include("../partials/header") %>
 
-    <div class="container mt-5">
-        <div class="text-center mb-4">
-            <h2>💉 Treated Animals</h2>
-        </div>
-
-        <% if (treatedAnimals.length===0) { %>
-            <div class="alert alert-info text-center">
-                No treated animals yet.
+    <div class="bg-light treated-page">
+        <div class="container py-5">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-primary-emphasis display-5">💉 Treated Animals</h2>
+                <div class="highlight-box mt-3 px-4 py-2 d-inline-block">
+                    <span class="fw-semibold fs-5 text-dark-emphasis">
+                        Rescued, healed, and full of hope — these animals are living proof of compassion in action.
+                    </span>
+                </div>
             </div>
-            <% } else { %>
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                    <% treatedAnimals.forEach(animal=> { %>
-                        <div class="col">
-                            <div class="card h-100 shadow-sm border-0">
-                                <img src="<%= animal.afterPhotoUrl %>" alt="Treated Animal"
-                                    class="card-img-top rounded-top" style="height: 220px; object-fit: cover;">
-                                <div class="card-body">
-                                    <h5 class="card-title">🐾 Treated Animal</h5>
-                                    <p><strong>Health Notes:</strong>
-                                        <%= animal.healthNotes || "N/A" %>
-                                    </p>
-                                    <p><strong>Adoptable:</strong>
-                                        <span
-                                            class="<%= animal.adoptable ? 'text-success' : 'text-danger' %> fw-semibold">
-                                            <%= animal.adoptable ? "Yes" : "No" %>
-                                        </span>
-                                    </p>
+
+            <% if (treatedAnimals.length===0) { %>
+                <div class="alert alert-warning text-center fs-5">
+                    No treated animals added yet.
+                </div>
+                <% } else { %>
+                    <div class="row g-4">
+                        <% treatedAnimals.forEach(animal=> { %>
+                            <div class="col-sm-6 col-md-4">
+                                <div class="card treated-card h-100 position-relative shadow-sm">
                                     <% if (animal.adoptable) { %>
-                                        <p><strong>Adoption Fee:</strong> ₹<%= animal.adoptionFee || 0 %>
-                                        </p>
-                                        <% } %>
+                                        <div class="ribbon bg-success">Adoptable</div>
+                                        <% } else { %>
+                                            <div class="ribbon bg-danger">Not Adoptable</div>
+                                            <% } %>
+
+                                                <img src="<%= animal.afterPhotoUrl %>" class="card-img-top"
+                                                    style="height: 220px; object-fit: cover; border-top-left-radius: 0.75rem; border-top-right-radius: 0.75rem;">
+                                                <div class="card-body text-dark">
+                                                    <h5 class="card-title text-primary fw-bold">🐾 Treated Animal</h5>
+                                                    <p><strong>Health Notes:</strong>
+                                                        <%= animal.healthNotes || "N/A" %>
+                                                    </p>
+                                                    <% if (animal.adoptable) { %>
+                                                        <p><strong>Adoption Fee:</strong> ₹<%= animal.adoptionFee || 0
+                                                                %>
+                                                        </p>
+                                                        <% } %>
+                                                </div>
                                 </div>
                             </div>
-                        </div>
-                        <% }) %>
-                </div>
-                <% } %>
+                            <% }); %>
+                    </div>
+                    <% } %>
+        </div>
     </div>
+
+    <style>
+        .treated-page {
+            background: linear-gradient(to right, #fef9f9, #e6f7ff);
+            min-height: 100vh;
+        }
+
+        .highlight-box {
+            background: #fce4ec;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .treated-card {
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: #fff;
+        }
+
+        .treated-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .ribbon {
+            position: absolute;
+            top: 12px;
+            right: -18px;
+            transform: rotate(45deg);
+            color: white;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 10;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+    </style>
 
     <%- include("../partials/footer") %>

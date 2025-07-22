@@ -1,0 +1,40 @@
+body {
+    background: #f9f5ec url("https://www.transparenttextures.com/patterns/paw-print.png") repeat;
+    background-attachment: fixed;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.card {
+    border-radius: 15px !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-control,
+.btn {
+    border-radius: 8px;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: 700;
+}
+
+.btn-primary {
+    background-color: #198754;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #145c32;
+}
+
+.section-hero {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+        url("https://images.unsplash.com/photo-1601758123927-196d5c16ba69?auto=format&fit=crop&w=1470&q=80") center/cover no-repeat;
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+    border-radius: 20px;
+    margin-bottom: 40px;
+}

@@ -1,33 +1,100 @@
 <%- include("partials/header") %>
 
-    <div class="container py-5">
+    <style>
+        body {
+            background: linear-gradient(to bottom right, #e6f5e9, #fffbe7);
+            background-attachment: fixed;
+            font-family: 'Segoe UI', sans-serif;
+        }
 
-        <!-- Welcome Message -->
-        <h1 class="text-center mb-5 display-5 fw-bold text-primary">Welcome to StrayCare 🐾</h1>
+        .hero-section {
+            background: url("https://images.unsplash.com/photo-1583337130417-3346a1f6a5f4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80") center/cover no-repeat;
+            padding: 120px 20px;
+            color: white;
+            border-radius: 20px;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .hero-section::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 20px;
+        }
+
+        .hero-section .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-heading {
+            font-weight: 700;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+        }
+
+        .card:hover {
+            transform: scale(1.02);
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-weight: 600;
+            color: #1b4332;
+        }
+
+        .card-text {
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .btn-outline-primary {
+            border-color: #2a9d8f;
+            color: #2a9d8f;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #2a9d8f;
+            color: white;
+        }
+    </style>
+
+    <div class="container">
+
+        <!-- Welcome Hero Banner -->
+        <div class="hero-section text-center">
+            <div class="content">
+                <h1 class="display-4 fw-bold">Welcome to StrayCare 🐾</h1>
+                <p class="lead">Giving hope, health, and homes to street animals.</p>
+            </div>
+        </div>
 
         <!-- Treated Animals Section -->
-        <h2 class="mb-4 text-center text-success">Recently Treated Animals</h2>
+        <h2 class="text-center section-heading text-success">Recently Treated Animals</h2>
 
         <% if (animals.length===0) { %>
             <p class="text-center text-muted">No treated animals to display yet.</p>
             <% } else { %>
-                <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
                     <% animals.forEach(function(animal) { %>
                         <div class="col">
-                            <div class="card h-100 shadow-sm border-success">
+                            <div class="card h-100 shadow border-success">
                                 <img src="<%= animal.afterPhotoUrl %>" class="card-img-top" alt="Treated Animal"
                                     style="height: 200px; object-fit: cover;">
                                 <div class="card-body">
                                     <h5 class="card-title text-center">
                                         <%= animal.adoptable ? "Adopt Me!" : "Treated & Healthy" %>
                                     </h5>
-                                    <p class="card-text text-muted">
+                                    <p class="card-text">
                                         <%= animal.healthNotes %>
                                     </p>
                                 </div>
                                 <% if (animal.adoptable) { %>
-                                    <div class="card-footer text-center">
-                                        <a href="/adoption" class="btn btn-outline-primary">View for Adoption</a>
+                                    <div class="card-footer text-center bg-transparent border-top-0">
+                                        <a href="/adoption" class="btn btn-outline-primary btn-sm">View for Adoption</a>
                                     </div>
                                     <% } %>
                             </div>
@@ -38,20 +105,19 @@
 
                     <!-- Ads Section -->
                     <hr class="my-5">
-
-                    <h2 class="text-center mb-4 text-warning">Sponsored Pet Shops 🛍️</h2>
+                    <h2 class="text-center section-heading text-warning">Sponsored Pet Shops 🛍️</h2>
 
                     <% if (ads.length===0) { %>
                         <p class="text-center text-muted">No ads to show right now.</p>
                         <% } else { %>
-                            <div class="row row-cols-1 row-cols-md-3 g-4">
+                            <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
                                 <% ads.forEach(function(ad) { %>
                                     <div class="col">
                                         <div class="card h-100 shadow-sm border-0">
                                             <a href="<%= ad.link %>" target="_blank">
                                                 <img src="<%= ad.logoUrl %>" class="card-img-top"
                                                     alt="<%= ad.shopName %> Logo"
-                                                    style="height: 200px; object-fit: cover;">
+                                                    style="height: 200px; object-fit: contain; background-color: #fff; padding: 10px;">
                                             </a>
                                             <div class="card-body text-center">
                                                 <h5 class="card-title">

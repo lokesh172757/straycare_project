@@ -4,37 +4,70 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+    <style>
+        body {
+            background: linear-gradient(to right, #e8f5e9, #f1f8e9);
+        }
+
+        .card {
+            border: none;
+            border-radius: 1rem;
+        }
+
+        .card-img-top {
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
+
+        #map {
+            border-radius: 1rem;
+        }
+    </style>
+
     <div class="container mt-5">
-        <div class="text-center mb-4">
-            <h2>📍 Report Details</h2>
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-success">📍 Report Details</h2>
+            <p class="text-muted">Full information about the reported animal</p>
         </div>
 
-        <!-- Report Card -->
-        <div class="card shadow-sm mb-4">
-            <img src="<%= report.photoUrl %>" class="card-img-top rounded-top" style="height: 300px; object-fit: cover;"
-                alt="Reported Animal">
-            <div class="card-body">
-                <p><strong>Description:</strong>
-                    <%= report.description || "No description" %>
-                </p>
-                <p><strong>Status:</strong>
-                    <span class="badge bg-<%= report.status === 'Open' ? 'warning text-dark' : 'success' %>">
-                        <%= report.status %>
-                    </span>
-                </p>
-                <p><strong>Donation Intent:</strong> ₹<%= report.donationIntent || 0 %>
-                </p>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Report Card -->
+                <div class="card shadow-lg mb-5 bg-white">
+                    <img src="<%= report.photoUrl %>" class="card-img-top" style="height: 300px; object-fit: cover;"
+                        alt="Reported Animal">
+                    <div class="card-body">
+                        <h5 class="card-title">🐶 Description</h5>
+                        <p class="card-text">
+                            <%= report.description || "No description provided." %>
+                        </p>
+
+                        <hr>
+
+                        <p><strong>Status:</strong>
+                            <span class="badge 
+                            <%= report.status === 'OPEN' ? 'bg-warning text-dark' : 
+                                report.status === 'IN_PROGRESS' ? 'bg-info text-dark' : 
+                                report.status === 'TREATED' ? 'bg-success' : 'bg-secondary' %>">
+                                <%= report.status.replace("_", " " ) %>
+                            </span>
+                        </p>
+
+                        <p><strong>Donation Intent:</strong> ₹<%= report.donationIntent || 0 %>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Map Section -->
+                <div class="mb-4">
+                    <h5 class="mb-3">🗺️ Reported Location</h5>
+                    <div id="map" class="shadow border" style="height: 300px; width: 100%;"></div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="/ngo/reports" class="btn btn-outline-success px-4">← Back to Reports</a>
+                </div>
             </div>
-        </div>
-
-        <!-- Map Section -->
-        <div class="mb-4">
-            <h5>📌 Reported Location</h5>
-            <div id="map" class="rounded shadow-sm border" style="height: 300px; width: 100%;"></div>
-        </div>
-
-        <div class="text-center">
-            <a href="/ngo/reports" class="btn btn-secondary px-4">← Back to Reports</a>
         </div>
     </div>
 

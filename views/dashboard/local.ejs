@@ -1,12 +1,48 @@
 <%- include('../partials/header') %>
 
+    <style>
+        body {
+            background: linear-gradient(to right, #e3f2fd, #fffde7);
+        }
+
+        h2,
+        h4 {
+            font-weight: bold;
+        }
+
+        .card-header {
+            background: linear-gradient(45deg, #42a5f5, #66bb6a);
+            color: white;
+        }
+
+        .list-group-item {
+            background-color: #f1f8e9;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .list-group-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            background-color: #dcedc8;
+        }
+
+        .img-fluid {
+            border: 2px solid #aed581;
+        }
+
+        .text-muted {
+            font-style: italic;
+            color: #757575 !important;
+        }
+    </style>
+
     <div class="container mt-5">
         <div class="text-center mb-4">
             <h2>👤 Local User Dashboard</h2>
         </div>
 
         <div class="card mb-5 shadow-sm">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header">
                 <h4 class="mb-0">🐾 Your Reported Animals</h4>
             </div>
             <div class="card-body">
@@ -23,8 +59,8 @@
                                         <%= report.description || "N/A" %>
                                     </p>
                                     <% if (report.photoUrl) { %>
-                                        <img src="<%= report.photoUrl %>" alt="Animal Photo" class="img-fluid rounded"
-                                            style="max-height: 200px;">
+                                        <img src="<%= report.photoUrl %>" alt="Animal Photo"
+                                            class="img-fluid rounded mt-2" style="max-height: 200px;">
                                         <% } %>
                                 </div>
                                 <% }) %>

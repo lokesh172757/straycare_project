@@ -1,16 +1,85 @@
 <%- include("../partials/header") %>
 
+    <style>
+        body {
+            background: linear-gradient(to right, #e8f0fe, #fcefee);
+        }
+
+        .form-container {
+            background: #ffffffdd;
+            border-radius: 20px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            font-weight: 800;
+            color: #2c3e50;
+        }
+
+        label.form-label {
+            font-weight: 600;
+            color: #37474f;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 0.15rem rgba(76, 175, 80, 0.25);
+            border-color: #4caf50;
+        }
+
+        button.btn-success {
+            font-size: 1.1rem;
+            padding: 10px 30px;
+            font-weight: bold;
+        }
+
+        .form-check-label {
+            color: #388e3c;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge-status {
+            background-color: #00c853;
+            color: white;
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 12px;
+        }
+    </style>
+
     <div class="container mt-5">
         <div class="text-center mb-4">
             <h2>💊 Treat Animal</h2>
+            <span class="badge-status">📋 Report Status: Pending Treatment</span>
         </div>
 
         <form action="/ngo/treat/<%= report._id %>" method="POST" enctype="multipart/form-data"
-            class="row g-4 shadow p-4 rounded bg-light">
+            class="row g-4 form-container">
+
             <!-- Report Description (Read-only) -->
             <div class="col-12">
-                <label class="form-label fw-bold">Report Description</label>
-                <div class="form-control bg-white" readonly>
+                <label class="form-label">Report Description</label>
+                <div class="form-control bg-white">
                     <%= report.description %>
                 </div>
             </div>
@@ -18,7 +87,9 @@
             <!-- After Treatment Photo Upload -->
             <div class="col-12">
                 <label for="afterPhoto" class="form-label">Upload After Treatment Image</label>
-                <input type="file" name="afterPhoto" id="afterPhoto" class="form-control" accept="image/*" required>
+                <input type="file" name="afterPhoto" id="afterPhoto" class="form-control" accept="image/*" required
+                    onchange="previewImage(event)">
+                <img id="preview" class="image-preview" style="display: none;" />
             </div>
 
             <!-- Health Notes -->
@@ -30,9 +101,9 @@
 
             <!-- Adoptable Checkbox -->
             <div class="col-md-6">
-                <div class="form-check">
+                <div class="form-check mt-2">
                     <input class="form-check-input" type="checkbox" name="adoptable" id="adoptable">
-                    <label class="form-check-label fw-semibold" for="adoptable">
+                    <label class="form-check-label" for="adoptable">
                         Mark as Adoptable
                     </label>
                 </div>
@@ -46,9 +117,24 @@
 
             <!-- Submit Button -->
             <div class="col-12 text-center">
-                <button type="submit" class="btn btn-success px-4">✅ Mark as Treated</button>
+                <button type="submit" class="btn btn-success">✅ Mark as Treated</button>
             </div>
         </form>
     </div>
+
+    <script>
+        function previewImage(event) {
+            const input = event.target;
+            const preview = document.getElementById('preview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 
     <%- include("../partials/footer") %>

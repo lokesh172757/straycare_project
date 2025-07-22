@@ -1,50 +1,116 @@
 <%- include("../partials/header") %>
 
+    <style>
+        body {
+            background: linear-gradient(135deg, #fefcea, #f1da36);
+            background-image: url('https://www.transparenttextures.com/patterns/white-wall.png');
+            background-repeat: repeat;
+        }
+
+        .premium-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(6px);
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+        }
+
+        h2 {
+            font-family: 'Segoe UI', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .btn-success {
+            background-color: #ff9900;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #cc7a00;
+        }
+
+        .btn-outline-primary {
+            border-color: #007bff;
+            color: #007bff;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .table thead {
+            background-color: #ffeaa7;
+            color: #2d3436;
+        }
+
+        .form-label {
+            color: #2d3436;
+        }
+
+        .form-control {
+            border-radius: 10px;
+        }
+
+        .btn-danger {
+            border-radius: 8px;
+        }
+
+        .btn {
+            transition: all 0.3s ease-in-out;
+        }
+    </style>
+
     <div class="container py-5">
 
         <!-- Page Title -->
-        <h2 class="mb-4 text-center text-warning fw-bold">
-            📢 Manage Ads&nbsp;<small class="text-muted">(Pet‑Shop Sponsors)</small>
-        </h2>
+        <div class="text-center mb-5">
+            <h2 class="text-warning fw-bold">
+                ✨ Premium Sponsored Ads
+            </h2>
+            <p class="text-muted">Boost visibility with our partner pet shops</p>
+        </div>
 
-        <!-- Add‑Ad Form -->
-        <form action="/ads" method="POST" class="mb-5">
-            <div class="row gy-3 gx-3 align-items-end">
+        <div class="premium-card mb-5">
+            <!-- Add‑Ad Form -->
+            <form action="/ads" method="POST">
+                <div class="row gy-3 gx-3 align-items-end">
 
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Shop Name</label>
-                    <input type="text" name="shopName" class="form-control" placeholder="Shop Name" required>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Logo URL</label>
-                    <input type="text" name="logoUrl" class="form-control" placeholder="Logo URL" required>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Destination Link</label>
-                    <input type="text" name="link" class="form-control" placeholder="https://example.com" required>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label fw-semibold">Ad&nbsp;Duration</label>
-                    <div class="d-flex gap-2">
-                        <input type="date" name="startsOn" class="form-control" required>
-                        <input type="date" name="endsOn" class="form-control" required>
-                        <button class="btn btn-success">Add</button>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Shop Name</label>
+                        <input type="text" name="shopName" class="form-control" placeholder="Shop Name" required>
                     </div>
-                </div>
 
-            </div>
-        </form>
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Logo URL</label>
+                        <input type="text" name="logoUrl" class="form-control" placeholder="Logo URL" required>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Destination Link</label>
+                        <input type="text" name="link" class="form-control" placeholder="https://example.com" required>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold">Ad Duration</label>
+                        <div class="d-flex gap-2">
+                            <input type="date" name="startsOn" class="form-control" required>
+                            <input type="date" name="endsOn" class="form-control" required>
+                            <button class="btn btn-success">Add</button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
 
         <!-- Existing Ads Table -->
         <% if (ads.length===0) { %>
-            <p class="text-center text-muted">No ads available yet.</p>
+            <div class="text-center text-muted">No ads available yet.</div>
             <% } else { %>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped align-middle shadow-sm">
-                        <thead class="table-warning text-center">
+                <div class="premium-card table-responsive">
+                    <table class="table table-bordered table-striped align-middle">
+                        <thead class="text-center">
                             <tr>
                                 <th>Shop</th>
                                 <th>Logo</th>

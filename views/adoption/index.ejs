@@ -1,27 +1,73 @@
 <%- include("../partials/header") %>
 
+    <style>
+        body {
+            background: linear-gradient(135deg, #f0fff0 0%, #e0ffe0 100%);
+        }
+
+        .section-title {
+            background: linear-gradient(to right, #56ab2f, #a8e063);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-radius: 20px;
+            overflow: hidden;
+            background: #ffffff;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-footer {
+            background-color: #f8f9fa;
+        }
+
+        .btn-outline-success {
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: 500;
+        }
+
+        .no-animals {
+            background-color: #fce4ec;
+            color: #c2185b;
+            border-radius: 10px;
+            padding: 20px;
+            font-weight: bold;
+        }
+
+        .card-body {
+            background: rgba(240, 255, 240, 0.5);
+        }
+    </style>
+
     <div class="container py-5">
 
         <!-- Section Title -->
-        <h2 class="mb-5 text-center text-success fw-bold">Animals Available for Adoption 🐶🐱</h2>
+        <h2 class="mb-5 text-center fw-bold section-title">Animals Available for Adoption 🐶🐱</h2>
 
         <% if (animals.length===0) { %>
-            <p class="text-center text-muted">No animals are currently available for adoption.</p>
+            <p class="text-center no-animals">No animals are currently available for adoption.</p>
             <% } else { %>
                 <div class="row row-cols-1 row-cols-md-3 g-4">
                     <% animals.forEach(animal=> { %>
                         <div class="col">
-                            <div class="card h-100 shadow-sm border-primary">
+                            <div class="card h-100 shadow border-0">
                                 <img src="<%= animal.afterPhotoUrl %>" class="card-img-top" alt="Adoptable Animal"
                                     style="height: 250px; object-fit: cover;">
                                 <div class="card-body">
-                                    <h5 class="card-title text-primary">Fee: ₹<%= animal.adoptionFee %>
+                                    <h5 class="card-title text-success fw-bold">Fee: ₹<%= animal.adoptionFee %>
                                     </h5>
                                     <p class="card-text text-muted">
                                         <%= animal.healthNotes.substring(0, 100) %>...
                                     </p>
                                 </div>
-                                <div class="card-footer bg-white text-center">
+                                <div class="card-footer text-center">
                                     <a href="/adoption/<%= animal._id %>" class="btn btn-outline-success">View
                                         Details</a>
                                 </div>

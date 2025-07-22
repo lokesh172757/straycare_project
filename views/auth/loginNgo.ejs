@@ -1,30 +1,94 @@
 <%- include("../partials/header") %>
 
-    <div class="container d-flex justify-content-center align-items-center mt-5" style="min-height: 70vh;">
-        <div class="card shadow p-4" style="width: 100%; max-width: 500px;">
+    <style>
+        body {
+            background-color: #e0f7fa;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23b2dfdb' fill-opacity='0.4'%3E%3Ccircle cx='2' cy='2' r='2'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: repeat;
+            min-height: 100vh;
+        }
 
+        .login-card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #37474f;
+        }
+
+        .form-control:focus {
+            border-color: #26a69a;
+            box-shadow: 0 0 0 0.2rem rgba(38, 166, 154, 0.25);
+        }
+
+        .btn-success {
+            background-color: #26a69a;
+            border-color: #26a69a;
+            font-weight: bold;
+            transition: 0.2s ease-in-out;
+        }
+
+        .btn-success:hover {
+            background-color: #00796b;
+            border-color: #00796b;
+            transform: scale(1.02);
+        }
+
+        .card-title {
+            color: #00796b;
+            font-weight: bold;
+        }
+
+        .card-footer-text {
+            color: #607d8b;
+        }
+
+        .card-footer-text a {
+            color: #00796b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .card-footer-text a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <div class="container d-flex justify-content-center align-items-center mt-5" style="min-height: 75vh;">
+        <div class="login-card" style="width: 100%; max-width: 500px;">
             <!-- Title -->
-            <h3 class="text-center mb-4 text-primary fw-bold">Login (NGO)</h3>
+            <h3 class="text-center mb-4 card-title">👤 Login (NGO)</h3>
 
             <!-- Login Form -->
             <form action="/auth/login/ngo" method="POST">
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Email</label>
-                    <input name="email" type="email" class="form-control" placeholder="ngo@example.org" required>
+                    <label class="form-label">Email</label>
+                    <input name="email" type="email" class="form-control shadow-sm" placeholder="ngo@example.org"
+                        required>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Password</label>
-                    <input name="password" type="password" class="form-control" placeholder="********" required>
+                    <label class="form-label">Password</label>
+                    <input name="password" type="password" class="form-control shadow-sm" placeholder="********"
+                        required>
                 </div>
 
                 <div class="d-grid gap-2">
-                    <button class="btn btn-success">Login</button>
+                    <button class="btn btn-success shadow-sm">Login</button>
                 </div>
             </form>
 
             <!-- Register Prompt -->
-            <p class="mt-3 text-center">
+            <p class="mt-4 text-center card-footer-text">
                 NGO not registered?
                 <a href="/auth/register/ngo">Register your NGO</a>
             </p>

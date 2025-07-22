@@ -2,7 +2,8 @@
 
     <div class="container mt-5">
         <div class="text-center mb-4">
-            <h2>📋 Open Animal Reports</h2>
+            <h2 class="fw-bold text-danger border-bottom border-3 pb-2 mb-2">📋 Open Animal Reports</h2>
+            <p class="text-secondary fw-semibold fst-italic fs-5">Monitor and manage all activities in one place</p>
         </div>
 
         <% if (reports.length===0) { %>
@@ -10,33 +11,36 @@
                 No open reports found.
             </div>
             <% } else { %>
-                <div class="table-responsive shadow-sm">
-                    <table class="table table-bordered table-hover align-middle text-center">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Image</th>
-                                <th>Description</th>
-                                <th>Location (Map)</th>
-                                <th>Actions</th>
+                <div class="table-responsive shadow rounded-4 border">
+                    <table class="table table-striped table-hover table-bordered align-middle text-center mb-0">
+                        <thead class="table-dark text-light">
+                            <tr class="align-middle">
+                                <th scope="col">📷 Image</th>
+                                <th scope="col">📝 Description</th>
+                                <th scope="col">📍 Location (Map)</th>
+                                <th scope="col">⚙️ Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="table-group-divider">
                             <% reports.forEach(r=> { %>
-                                <tr>
+                                <tr class="bg-white">
                                     <!-- Animal Image -->
                                     <td>
-                                        <img src="<%= r.photoUrl %>" class="img-thumbnail rounded"
+                                        <img src="<%= r.photoUrl %>" class="img-thumbnail rounded shadow-sm"
                                             style="width: 120px; height: auto;" alt="Animal Photo">
                                     </td>
 
                                     <!-- Description -->
-                                    <td class="text-start">
-                                        <%= r.description || "No description" %>
+                                    <td class="text-start text-break px-3">
+                                        <span class="fw-medium text-secondary">
+                                            <%= r.description || "No description" %>
+                                        </span>
                                     </td>
 
                                     <!-- Embedded OpenStreetMap -->
                                     <td style="width: 250px;">
-                                        <div class="ratio ratio-4x3 rounded overflow-hidden border">
+                                        <div
+                                            class="ratio ratio-4x3 rounded overflow-hidden border border-2 border-primary">
                                             <iframe loading="lazy" allowfullscreen style="border:0"
                                                 src="https://www.openstreetmap.org/export/embed.html?bbox=<%= r.location.coordinates[0] - 0.001 %>,<%= r.location.coordinates[1] - 0.001 %>,<%= r.location.coordinates[0] + 0.001 %>,<%= r.location.coordinates[1] + 0.001 %>&layer=mapnik&marker=<%= r.location.coordinates[1] %>,<%= r.location.coordinates[0] %>">
                                             </iframe>
@@ -45,16 +49,20 @@
 
                                     <!-- Action Buttons -->
                                     <td>
-                                        <a href="/report/<%= r._id %>" class="btn btn-outline-info btn-sm mb-2 w-100">🔍
-                                            View</a>
-                                        <a href="/ngo/treat/<%= r._id %>"
-                                            class="btn btn-outline-success btn-sm w-100">💊 Treat</a>
+                                        <a href="/report/<%= r._id %>"
+                                            class="btn btn-outline-primary btn-sm mb-2 w-100">
+                                            🔍 View Details
+                                        </a>
+                                        <a href="/ngo/treat/<%= r._id %>" class="btn btn-success btn-sm w-100">
+                                            💊 Mark as Treated
+                                        </a>
                                     </td>
                                 </tr>
                                 <% }); %>
                         </tbody>
                     </table>
                 </div>
+
                 <% } %>
     </div>
 
