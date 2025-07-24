@@ -1,42 +1,508 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include("../partials/header") %>
 
-<head>
-    <title>Assign Volunteer</title>
-</head>
+    <style>
+        :root {
+            --primary-green: #2a9d8f;
+            --dark-green: #1b4332;
+            --light-green: #e6f5e9;
+            --warm-yellow: #f4a261;
+            --soft-orange: #e76f51;
+            --cream: #fffbe7;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, var(--primary-green), #52b788);
+            --gradient-hero: linear-gradient(135deg, rgba(26, 67, 50, 0.9), rgba(42, 157, 143, 0.8));
+            --gradient-background: linear-gradient(135deg, #e6f5e9 0%, #fffbe7 50%, #f0f9f5 100%);
+            --gradient-volunteer: linear-gradient(135deg, #8b5cf6, #a78bfa);
+        }
 
-<body>
-    <h1>Assign Volunteer to Report</h1>
+        * {
+            box-sizing: border-box;
+        }
 
-    <form action="/volunteers/assign" method="POST">
-        <label for="reportId">Select Report:</label>
-        <select name="reportId" required>
-            <% reports.forEach(r=> { %>
-                <option value="<%= r._id %>">
-                    <%= r.description %> | <%= r.status %> | <%= r.createdAt.toDateString() %>
-                </option>
-                <% }) %>
-        </select>
+        body {
+            background: var(--gradient-background);
+            background-attachment: fixed;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-        <br><br>
+        /* Animated Background Patterns */
+        .svg-pattern {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.1;
+            pointer-events: none;
+            animation: float 12s ease-in-out infinite;
+        }
 
-        <label for="volunteerName">Volunteer Name:</label>
-        <input type="text" name="volunteerName" required>
+        .svg-top-left {
+            top: -50px;
+            left: -50px;
+            width: 350px;
+            animation-delay: 0s;
+        }
 
-        <br><br>
+        .svg-bottom-right {
+            bottom: -50px;
+            right: -50px;
+            width: 400px;
+            animation-delay: 6s;
+        }
 
-        <label for="volunteerPhone">Volunteer Phone:</label>
-        <input type="text" name="volunteerPhone" required>
+        /* Enhanced Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
 
-        <br><br>
+        .page-title {
+            font-weight: 800;
+            font-size: clamp(2.2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+            background: var(--gradient-volunteer);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+        }
 
-        <label for="notes">Notes:</label>
-        <textarea name="notes"></textarea>
+        .page-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: var(--gradient-volunteer);
+            border-radius: 2px;
+            animation: expand 0.8s ease-out;
+        }
 
-        <br><br>
+        .page-subtitle {
+            color: #6b7280;
+            font-size: 1.2rem;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-        <button type="submit">Assign Volunteer</button>
-    </form>
-</body>
+        /* Enhanced Form Container */
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--shadow-heavy);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-</html>
+        .form-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-volunteer);
+            border-radius: 24px 24px 0 0;
+        }
+
+        .form-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 80px rgba(139, 92, 246, 0.15);
+        }
+
+        /* Form Header */
+        .form-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .form-title {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--dark-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-description {
+            color: #6b7280;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* Enhanced Form Elements */
+        .form-group {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid rgba(139, 92, 246, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            width: 100%;
+        }
+
+        .form-control:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
+        /* Enhanced Select Dropdown */
+        .form-select {
+            border: 2px solid rgba(139, 92, 246, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .form-select:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            outline: none;
+        }
+
+        .form-select option {
+            padding: 0.75rem;
+            background: white;
+            color: #2c3e50;
+        }
+
+        /* Enhanced Textarea */
+        .form-textarea {
+            border: 2px solid rgba(139, 92, 246, 0.1);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .form-textarea:focus {
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            outline: none;
+        }
+
+        /* Enhanced Submit Button */
+        .btn-submit {
+            background: var(--gradient-volunteer);
+            border: none;
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .btn-submit::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+
+        .btn-submit:active {
+            transform: translateY(-1px);
+        }
+
+        /* Form Icons */
+        .form-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #8b5cf6;
+            opacity: 0.6;
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        /* Report Card in Select */
+        .report-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+        }
+
+        .report-description {
+            font-weight: 600;
+            color: var(--dark-green);
+        }
+
+        .report-meta {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        /* Animations */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0px, 0px) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(30px, -30px) rotate(120deg);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+        }
+
+        @keyframes expand {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 120px;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Form Animation */
+        .form-container {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .form-group {
+            animation: slideIn 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .form-group:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .form-group:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .form-group:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        .form-group:nth-child(6) {
+            animation-delay: 0.5s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .page-title {
+                font-size: 2.2rem;
+            }
+
+            .page-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .form-title {
+                font-size: 1.6rem;
+            }
+        }
+
+        /* Container Enhancement */
+        .container {
+            max-width: 700px;
+            padding: 2rem 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Background SVG Patterns */
+        .svg-pattern svg {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+
+    <!-- Enhanced Background SVG Patterns -->
+    <svg class="svg-pattern svg-top-left" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path fill="url(#gradientVolunteer1)"
+            d="M44.8,-72.2C59.1,-61.5,72.6,-50.3,77.6,-36.5C82.5,-22.6,78.9,-6.2,72.6,7.5C66.3,21.2,57.2,32.3,47.1,45.3C36.9,58.4,25.6,73.3,10.2,77.2C-5.2,81.1,-24.7,74.1,-40.3,63.3C-55.9,52.5,-67.5,38,-75.6,21.6C-83.8,5.2,-88.5,-13,-81.4,-27.9C-74.4,-42.9,-55.5,-54.7,-38.2,-64.9C-20.9,-75.2,-10.4,-83.8,2.2,-87.3C14.8,-90.9,29.5,-89.1,44.8,-72.2Z"
+            transform="translate(100 100)" />
+        <defs>
+            <linearGradient id="gradientVolunteer1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:0.3" />
+                <stop offset="100%" style="stop-color:#a78bfa;stop-opacity:0.1" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <svg class="svg-pattern svg-bottom-right" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path fill="url(#gradientVolunteer2)"
+            d="M49.3,-66.4C64.4,-56.5,76.6,-42.3,78.3,-26.5C79.9,-10.7,71,6.6,62.5,22.6C54,38.5,45.8,53,33.8,61.7C21.8,70.4,5.9,73.2,-8.6,74.6C-23,76.1,-36.1,76.2,-48.5,69.6C-60.8,62.9,-72.3,49.5,-75.6,35C-78.8,20.6,-73.9,5.1,-67.7,-9.1C-61.5,-23.3,-54,-36.2,-43.7,-46.5C-33.3,-56.8,-20.1,-64.5,-5.2,-66.8C9.8,-69.1,19.6,-66.2,49.3,-66.4Z"
+            transform="translate(100 100)" />
+        <defs>
+            <linearGradient id="gradientVolunteer2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#2a9d8f;stop-opacity:0.2" />
+                <stop offset="100%" style="stop-color:#52b788;stop-opacity:0.1" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+        <!-- Enhanced Page Header -->
+        <div class="w-100">
+            <div class="page-header">
+                <h1 class="page-title">👥 Assign Volunteer</h1>
+                <p class="page-subtitle">Connect dedicated volunteers with animals in need of care and support</p>
+            </div>
+
+            <!-- Enhanced Form Container -->
+            <div class="form-container">
+                <div class="form-header">
+                    <h2 class="form-title">🤝 Volunteer Assignment</h2>
+                    <p class="form-description">Select a report and assign a qualified volunteer to provide care</p>
+                </div>
+
+                <form action="/volunteers/assign" method="POST">
+                    <div class="form-group">
+                        <label class="form-label" for="reportId">📋 Select Report</label>
+                        <select name="reportId" id="reportId" class="form-select" required>
+                            <option value="" disabled selected>Choose a report to assign...</option>
+                            <% reports.forEach(r=> { %>
+                                <option value="<%= r._id %>">
+                                    📝 <%= r.description %> | 🔄 <%= r.status %> | 📅 <%= r.createdAt.toDateString() %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="volunteerName">👤 Volunteer Name</label>
+                        <input type="text" name="volunteerName" id="volunteerName" class="form-control"
+                            placeholder="Enter volunteer's full name" required>
+                        <div class="form-icon">👤</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="volunteerPhone">📱 Volunteer Phone</label>
+                        <input type="text" name="volunteerPhone" id="volunteerPhone" class="form-control"
+                            placeholder="+91 98765 43210" required>
+                        <div class="form-icon">📱</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="notes">📝 Assignment Notes</label>
+                        <textarea name="notes" id="notes" class="form-textarea"
+                            placeholder="Add any special instructions, care requirements, or important notes for the volunteer..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn-submit">
+                            <span>✨ Assign Volunteer</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <%- include("../partials/footer") %>

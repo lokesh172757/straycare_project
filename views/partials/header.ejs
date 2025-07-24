@@ -7,56 +7,434 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <style>
+        :root {
+            --primary-green: #2a9d8f;
+            --dark-green: #1b4332;
+            --light-green: #e6f5e9;
+            --warm-yellow: #f4a261;
+            --soft-orange: #e76f51;
+            --cream: #fffbe7;
+            --gradient-primary: linear-gradient(135deg, var(--primary-green), #52b788);
+            --gradient-hero: linear-gradient(135deg, rgba(26, 67, 50, 0.95), rgba(42, 157, 143, 0.9));
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        /* Enhanced Navigation */
         .navbar-custom {
-            background: linear-gradient(to right, #1e3c72, #2a5298);
+            background: var(--gradient-hero);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 16px 0;
+            box-shadow: var(--shadow-medium);
+            position: relative;
+            overflow: visible;
+            /* Changed from hidden to visible */
+            z-index: 1050;
+            /* Increased z-index */
         }
 
-        .navbar-custom .nav-link {
-            color: #e2e2e2;
-            transition: color 0.3s, background-color 0.3s, transform 0.2s;
+        .navbar-custom::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            animation: shimmer 3s infinite;
         }
 
-        .navbar-custom .nav-link:hover {
-            color: #ffffff;
-            background-color: rgba(255, 255, 255, 0.1);
+        /* Brand Enhancement */
+        .navbar-brand {
+            font-size: 1.8rem !important;
+            font-weight: 800 !important;
+            color: #fff !important;
+            text-decoration: none;
+            position: relative;
+            background: linear-gradient(45deg, #ffffff, #f0f9f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover {
             transform: scale(1.05);
-            border-radius: 5px;
+            filter: drop-shadow(0 4px 15px rgba(255, 255, 255, 0.3));
         }
 
+        .navbar-brand::after {
+            content: "🐾";
+            position: absolute;
+            right: -30px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+            animation: bounce 2s infinite;
+        }
+
+        /* Navigation Links */
+        .nav-link {
+            color: rgba(255, 255, 255, 0.9) !important;
+            font-weight: 500 !important;
+            padding: 12px 20px !important;
+            border-radius: 25px !important;
+            margin: 0 4px !important;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none !important;
+        }
+
+        .nav-link::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-link:hover {
+            color: #ffffff !important;
+            background: rgba(255, 255, 255, 0.15) !important;
+            transform: translateY(-2px) scale(1.05) !important;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        /* Special Report Button */
         .report-btn {
-            background-color: #ffc107 !important;
-            color: #212529 !important;
-            font-weight: bold;
-            padding: 6px 12px;
-            border-radius: 5px;
-            transition: transform 0.3s ease;
+            background: linear-gradient(45deg, var(--warm-yellow), var(--soft-orange)) !important;
+            color: #fff !important;
+            font-weight: 700 !important;
+            padding: 12px 24px !important;
+            border-radius: 25px !important;
+            box-shadow: 0 4px 15px rgba(244, 162, 97, 0.4) !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .report-btn::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.3s ease;
         }
 
         .report-btn:hover {
-            background-color: #ffca2c !important;
-            transform: scale(1.08);
-            color: #000 !important;
-        }
-
-        .nav-highlight {
-            color: #f8f9fa;
-            font-weight: 500;
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
+            transform: translateY(-3px) scale(1.08) !important;
+            box-shadow: 0 8px 30px rgba(244, 162, 97, 0.6) !important;
             color: #fff !important;
+        }
+
+        .report-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* User Greeting */
+        .user-greeting {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff !important;
+            padding: 8px 16px !important;
+            border-radius: 20px !important;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            pointer-events: none;
+            /* Prevents clicking on greeting */
+        }
+
+        /* Logout Link */
+        .logout-link {
+            color: #ffcccb !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .logout-link:hover {
+            color: #ff6b6b !important;
+            background: rgba(255, 107, 107, 0.1) !important;
+        }
+
+        /* Enhanced Dropdown Functionality */
+        .dropdown {
+            position: relative;
+            z-index: 1060;
+            /* Higher z-index for dropdown container */
+        }
+
+        .dropdown-toggle {
+            cursor: pointer !important;
+            user-select: none;
+            position: relative;
+            z-index: 1061;
+        }
+
+        /* Fix dropdown toggle arrow rotation */
+        .dropdown-toggle::after {
+            margin-left: 8px !important;
+            transition: transform 0.3s ease !important;
+            border: none !important;
+            content: "▼" !important;
+            font-size: 0.7rem !important;
+            vertical-align: middle !important;
+        }
+
+        .dropdown-toggle[aria-expanded="true"]::after {
+            transform: rotate(180deg) !important;
+        }
+
+        /* Dropdown Menu Enhancements */
+        .dropdown-menu {
+            background: rgba(255, 255, 255, 0.98) !important;
+            backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 16px !important;
+            box-shadow: var(--shadow-medium) !important;
+            padding: 12px 0 !important;
+            margin-top: 8px !important;
+            min-width: 200px !important;
+            z-index: 1070 !important;
+            /* Highest z-index for dropdown menu */
+            position: absolute !important;
+            top: 100% !important;
+            left: auto !important;
+            right: 0 !important;
+            transform: none !important;
+        }
+
+        /* Ensure dropdown menu shows above everything */
+        .dropdown-menu.show {
+            z-index: 1070 !important;
+            position: absolute !important;
+            will-change: transform !important;
+        }
+
+        .dropdown-item {
+            padding: 12px 20px !important;
+            font-weight: 500 !important;
+            color: var(--dark-green) !important;
+            transition: all 0.3s ease !important;
+            text-decoration: none !important;
+            display: block !important;
+            border: none !important;
+            background: none !important;
+            width: 100% !important;
+            text-align: left !important;
+        }
+
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background: var(--gradient-primary) !important;
+            color: white !important;
+            transform: translateX(4px) !important;
+        }
+
+        /* Flash Messages Enhancement */
+        .alert {
+            border: none !important;
+            border-radius: 16px !important;
+            padding: 20px 24px !important;
+            font-weight: 500 !important;
+            box-shadow: var(--shadow-light) !important;
+            backdrop-filter: blur(10px);
+            margin-bottom: 24px !important;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, rgba(42, 157, 143, 0.15), rgba(82, 183, 136, 0.15)) !important;
+            color: var(--dark-green) !important;
+            border-left: 4px solid var(--primary-green) !important;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, rgba(231, 111, 81, 0.15), rgba(244, 162, 97, 0.15)) !important;
+            color: #8b2635 !important;
+            border-left: 4px solid var(--soft-orange) !important;
+        }
+
+        .btn-close {
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+        }
+
+        /* Animations */
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+
+            50% {
+                left: 0%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(-50%);
+            }
+
+            40% {
+                transform: translateY(-60%);
+            }
+
+            60% {
+                transform: translateY(-55%);
+            }
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 991px) {
+            .navbar-custom {
+                padding: 16px 0;
+            }
+
+            .navbar-brand {
+                font-size: 1.5rem !important;
+            }
+
+            .navbar-brand::after {
+                right: -25px;
+                font-size: 1rem;
+            }
+
+            .nav-link {
+                margin: 4px 0 !important;
+                text-align: center;
+            }
+
+            .report-btn {
+                margin: 8px 0 !important;
+            }
+
+            .dropdown-menu {
+                border-radius: 12px;
+                margin-top: 4px !important;
+                position: static !important;
+                float: none !important;
+                width: auto !important;
+                margin-top: 0 !important;
+                background-color: rgba(255, 255, 255, 0.95) !important;
+                border: none !important;
+                box-shadow: none !important;
+                backdrop-filter: none !important;
+            }
+
+            .dropdown-item {
+                padding: 8px 20px !important;
+            }
+        }
+
+        /* Navbar Toggler Enhancement */
+        .navbar-toggler {
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
+            border-radius: 8px !important;
+            padding: 8px 12px !important;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-toggler:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5) !important;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.2) !important;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        }
+
+        /* Container Enhancement */
+        .container-fluid {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Flash Message Container */
+        .flash-container {
+            position: relative;
+            z-index: 1040;
+        }
+
+        /* Ensure proper stacking context */
+        .navbar-nav {
+            position: relative;
+            z-index: 1050;
+        }
+
+        /* Fix for dropdown positioning issues */
+        .nav-item.dropdown {
+            position: static !important;
+        }
+
+        @media (min-width: 992px) {
+            .nav-item.dropdown {
+                position: relative !important;
+            }
+        }
+
+        /* Ensure body and main content don't interfere */
+        body {
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Flash messages should be below dropdown */
+        .flash-container {
+            position: relative;
+            z-index: 1040;
         }
     </style>
 </head>
 
 <body>
-    <!-- Navigation Bar -->
+    <!-- Enhanced Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-sm">
         <div class="container-fluid">
             <a class="navbar-brand fw-bold" href="/">StrayCare</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -64,65 +442,68 @@
                 <ul class="navbar-nav ms-auto align-items-center">
 
                     <li class="nav-item">
-                        <a class="nav-link nav-highlight" href="/">Home</a>
+                        <a class="nav-link" href="/">🏠 Home</a>
                     </li>
 
                     <% if (currentUserKind==="LOCAL" ) { %>
                         <li class="nav-item">
-                            <a class="nav-link report-btn" href="/report/new">📢 Report</a>
+                            <a class="nav-link report-btn" href="/report/new">📢 Report Animal</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link nav-highlight" href="/user/dashboard">My Reports</a>
+                            <a class="nav-link" href="/user/dashboard">📋 My Reports</a>
                         </li>
                         <% } %>
 
                             <li class="nav-item">
-                                <a class="nav-link nav-highlight" href="/adoption">Adopt</a>
+                                <a class="nav-link" href="/adoption">💕 Adopt</a>
                             </li>
 
                             <% if (currentUserKind==="NGO" ) { %>
                                 <li class="nav-item">
-                                    <a class="nav-link nav-highlight" href="/ngo/dashboard">NGO Panel</a>
+                                    <a class="nav-link" href="/ngo/dashboard">🏢 NGO Panel</a>
                                 </li>
                                 <% } %>
 
                                     <% if (userName) { %>
                                         <li class="nav-item">
-                                            <span class="nav-link disabled text-light">Hi, <%= userName %> 👋</span>
+                                            <span class="nav-link user-greeting">Hi, <%= userName %> 👋</span>
                                         </li>
                                         <% } %>
 
                                             <% if (!currentUserId) { %>
-                                                <!-- Login Dropdown -->
+                                                <!-- Enhanced Login Dropdown -->
                                                 <li class="nav-item dropdown">
-                                                    <a class="nav-link dropdown-toggle nav-highlight" href="#"
-                                                        role="button" data-bs-toggle="dropdown">
-                                                        Login
+                                                    <a class="nav-link dropdown-toggle" href="#" id="loginDropdown"
+                                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        🔐 Login
                                                     </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="/auth/login/local">User
+                                                    <ul class="dropdown-menu dropdown-menu-end"
+                                                        aria-labelledby="loginDropdown">
+                                                        <li><a class="dropdown-item" href="/auth/login/local">👤 User
                                                                 Login</a></li>
-                                                        <li><a class="dropdown-item" href="/auth/login/ngo">NGO
+                                                        <li><a class="dropdown-item" href="/auth/login/ngo">🏢 NGO
                                                                 Login</a></li>
                                                     </ul>
                                                 </li>
 
-                                                <!-- Register Dropdown -->
+                                                <!-- Enhanced Register Dropdown -->
                                                 <li class="nav-item dropdown">
-                                                    <a class="nav-link dropdown-toggle nav-highlight" href="#"
-                                                        role="button" data-bs-toggle="dropdown">
-                                                        Register
+                                                    <a class="nav-link dropdown-toggle" href="#" id="registerDropdown"
+                                                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        ✨ Register
                                                     </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="/auth/register/local">User
+                                                    <ul class="dropdown-menu dropdown-menu-end"
+                                                        aria-labelledby="registerDropdown">
+                                                        <li><a class="dropdown-item" href="/auth/register/local">👤 User
                                                                 Register</a></li>
-                                                        <li><a class="dropdown-item" href="/auth/register/ngo">NGO
+                                                        <li><a class="dropdown-item" href="/auth/register/ngo">🏢 NGO
                                                                 Register</a></li>
                                                     </ul>
                                                 </li>
                                                 <% } else { %>
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-danger" href="/auth/logout">Logout</a>
+                                                        <a class="nav-link logout-link" href="/auth/logout">🚪
+                                                            Logout</a>
                                                     </li>
                                                     <% } %>
                 </ul>
@@ -130,10 +511,11 @@
         </div>
     </nav>
 
-    <!-- Flash Messages -->
-    <div class="container mt-3">
+    <!-- Enhanced Flash Messages -->
+    <div class="container mt-4 flash-container">
         <% if (success && success.length> 0) { %>
             <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>✅ Success!</strong>
                 <%= success %>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -141,8 +523,73 @@
 
                 <% if (error && error.length> 0) { %>
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong>⚠️ Alert!</strong>
                         <%= error %>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     <% } %>
     </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Additional JavaScript for dropdown functionality -->
+    <script>
+        // Ensure dropdowns work properly and appear above other content
+        document.addEventListener('DOMContentLoaded', function () {
+            // Initialize all dropdowns with proper configuration
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl, {
+                    boundary: 'viewport',
+                    reference: 'toggle'
+                });
+            });
+
+            // Ensure dropdown menus have proper z-index when shown
+            document.querySelectorAll('.dropdown').forEach(function (dropdown) {
+                dropdown.addEventListener('shown.bs.dropdown', function (e) {
+                    const dropdownMenu = this.querySelector('.dropdown-menu');
+                    if (dropdownMenu) {
+                        dropdownMenu.style.zIndex = '1070';
+                        dropdownMenu.style.position = 'absolute';
+                    }
+                });
+            });
+
+            // Add click event listeners to dropdown items to ensure they work
+            document.querySelectorAll('.dropdown-item').forEach(function (item) {
+                item.addEventListener('click', function (e) {
+                    // Let the default behavior proceed (navigation)
+                    window.location.href = this.getAttribute('href');
+                });
+            });
+
+            // Handle mobile dropdown behavior
+            document.querySelectorAll('.dropdown-toggle').forEach(function (toggle) {
+                toggle.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var dropdown = bootstrap.Dropdown.getInstance(this) || new bootstrap.Dropdown(this, {
+                        boundary: 'viewport',
+                        reference: 'toggle'
+                    });
+                    dropdown.toggle();
+                });
+            });
+
+            // Ensure dropdowns close when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!e.target.closest('.dropdown')) {
+                    document.querySelectorAll('.dropdown-menu.show').forEach(function (menu) {
+                        const dropdown = bootstrap.Dropdown.getInstance(menu.previousElementSibling);
+                        if (dropdown) {
+                            dropdown.hide();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

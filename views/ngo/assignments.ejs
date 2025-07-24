@@ -1,58 +1,554 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include("partials/header") %>
 
-<head>
-    <meta charset="UTF-8">
-    <title>Volunteer Assignments</title>
-    <link rel="stylesheet" href="/css/style.css"> <!-- optional if using CSS -->
-</head>
+    <style>
+        :root {
+            --primary-green: #2a9d8f;
+            --dark-green: #1b4332;
+            --light-green: #e6f5e9;
+            --warm-yellow: #f4a261;
+            --soft-orange: #e76f51;
+            --cream: #fffbe7;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, var(--primary-green), #52b788);
+            --gradient-hero: linear-gradient(135deg, rgba(26, 67, 50, 0.9), rgba(42, 157, 143, 0.8));
+            --gradient-background: linear-gradient(135deg, #e6f5e9 0%, #fffbe7 50%, #f0f9f5 100%);
+        }
 
-<body>
-    <h1>Volunteer Assignments</h1>
+        * {
+            box-sizing: border-box;
+        }
 
-    <% if (assignments.length===0) { %>
-        <p>No volunteers have been assigned yet.</p>
-        <% } else { %>
-            <table border="1" cellpadding="8" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>Volunteer Name</th>
-                        <th>Phone</th>
-                        <th>Assigned Report</th>
-                        <th>Status</th>
-                        <th>Notes</th>
-                        <th>Assigned At</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% assignments.forEach(a=> { %>
-                        <tr>
-                            <td>
-                                <%= a.volunteerName %>
-                            </td>
-                            <td>
-                                <%= a.volunteerPhone %>
-                            </td>
-                            <td>
-                                <%= a.reportId?.description || "N/A" %>
-                            </td>
-                            <td>
-                                <%= a.reportId?.status || "N/A" %>
-                            </td>
-                            <td>
-                                <%= a.notes || "—" %>
-                            </td>
-                            <td>
-                                <%= a.assignedAt.toDateString() %>
-                            </td>
-                        </tr>
-                        <% }) %>
-                </tbody>
-            </table>
-            <% } %>
+        body {
+            background: var(--gradient-background);
+            background-attachment: fixed;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            overflow-x: hidden;
+        }
 
-                <br>
-                <a href="/volunteers/assign">➕ Assign Another Volunteer</a>
-</body>
+        /* Enhanced Hero Section */
+        .hero-section {
+            background: url("https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80") center/cover no-repeat;
+            padding: 100px 20px;
+            color: white;
+            border-radius: 24px;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-heavy);
+        }
 
-</html>
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, transparent 20%, rgba(42, 157, 143, 0.1) 21%, rgba(42, 157, 143, 0.1) 34%, transparent 35%, transparent);
+            animation: float 8s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .hero-section::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: var(--gradient-hero);
+            border-radius: 24px;
+            z-index: 1;
+        }
+
+        .hero-section .content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 24px;
+            background: linear-gradient(45deg, #ffffff, #f0f9f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+            text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.95;
+            margin-bottom: 0;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        /* Section Headings */
+        .section-heading {
+            font-weight: 800;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            margin-bottom: 50px;
+            position: relative;
+            display: inline-block;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-heading::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            animation: expand 0.8s ease-out;
+        }
+
+        /* Enhanced Table Container */
+        .table-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+            margin-bottom: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .table-container:hover {
+            box-shadow: var(--shadow-heavy);
+        }
+
+        /* Enhanced Table */
+        .enhanced-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .enhanced-table thead {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .enhanced-table th {
+            padding: 20px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: none;
+            position: relative;
+        }
+
+        .enhanced-table th::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .enhanced-table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(42, 157, 143, 0.1);
+        }
+
+        .enhanced-table tbody tr:hover {
+            background: rgba(42, 157, 143, 0.05);
+            transform: scale(1.01);
+        }
+
+        .enhanced-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .enhanced-table td {
+            padding: 18px 16px;
+            vertical-align: middle;
+            border: none;
+            color: #2c3e50;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background: linear-gradient(45deg, var(--warm-yellow), var(--soft-orange));
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .status-in-progress {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .status-completed {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .status-na {
+            background: #95a5a6;
+            color: white;
+        }
+
+        /* Volunteer name styling */
+        .volunteer-name {
+            font-weight: 600;
+            color: var(--dark-green);
+            position: relative;
+        }
+
+        .volunteer-name::before {
+            content: "👥";
+            margin-right: 8px;
+            font-size: 1rem;
+        }
+
+        /* Phone styling */
+        .phone-number {
+            font-family: 'Courier New', monospace;
+            background: rgba(42, 157, 143, 0.1);
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        /* Report description styling */
+        .report-description {
+            max-width: 250px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #555;
+        }
+
+        /* Notes styling */
+        .notes-cell {
+            font-style: italic;
+            color: #666;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Date styling */
+        .date-cell {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            white-space: nowrap;
+        }
+
+        /* Enhanced Button */
+        .btn-enhanced {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+        }
+
+        .btn-enhanced::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-enhanced:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(42, 157, 143, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-enhanced:hover::before {
+            left: 100%;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 40px;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 24px;
+            opacity: 0.6;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .empty-state-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 12px;
+        }
+
+        .empty-state-text {
+            color: #8b9db7;
+            font-size: 1.1rem;
+            margin-bottom: 0;
+        }
+
+        /* Animations */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0px, 0px) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(30px, -30px) rotate(120deg);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+            }
+
+            to {
+                text-shadow: 0 4px 30px rgba(255, 255, 255, 0.6), 0 0 40px rgba(42, 157, 143, 0.3);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes expand {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 80px;
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Container Enhancements */
+        .container {
+            max-width: 1400px;
+            padding: 0 20px;
+            margin: 0 auto;
+        }
+
+        .action-bar {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .enhanced-table {
+                font-size: 0.9rem;
+            }
+
+            .enhanced-table th,
+            .enhanced-table td {
+                padding: 14px 12px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 80px 20px;
+                margin-bottom: 40px;
+            }
+
+            .table-container {
+                border-radius: 16px;
+                overflow-x: auto;
+            }
+
+            .enhanced-table {
+                min-width: 800px;
+                font-size: 0.85rem;
+            }
+
+            .enhanced-table th,
+            .enhanced-table td {
+                padding: 12px 10px;
+            }
+
+            .section-heading {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
+
+            .btn-enhanced {
+                padding: 14px 24px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .enhanced-table {
+                min-width: 700px;
+            }
+
+            .report-description,
+            .notes-cell {
+                max-width: 150px;
+            }
+        }
+    </style>
+
+    <div class="container">
+        <!-- Enhanced Hero Section -->
+        <div class="hero-section text-center">
+            <div class="content">
+                <h1 class="hero-title">Volunteer Assignments 👥</h1>
+                <p class="hero-subtitle">Managing our compassionate volunteers and their rescue missions</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <% if (assignments.length===0) { %>
+            <div class="empty-state">
+                <div class="empty-state-icon">🤝</div>
+                <h3 class="empty-state-title">No Volunteer Assignments Yet</h3>
+                <p class="empty-state-text">No volunteers have been assigned yet. Start building your rescue team!</p>
+            </div>
+            <% } else { %>
+                <div class="table-container">
+                    <table class="enhanced-table">
+                        <thead>
+                            <tr>
+                                <th>Volunteer Name</th>
+                                <th>Phone</th>
+                                <th>Assigned Report</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                                <th>Assigned At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% assignments.forEach(a=> { %>
+                                <tr>
+                                    <td>
+                                        <div class="volunteer-name">
+                                            <%= a.volunteerName %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="phone-number">
+                                            <%= a.volunteerPhone %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="report-description" title="<%= a.reportId?.description || 'N/A' %>">
+                                            <%= a.reportId?.description || "N/A" %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <% let status=a.reportId?.status || "N/A" ; let statusClass="status-na" ; if
+                                            (status.toLowerCase().includes("pending")) statusClass="status-pending" ;
+                                            else if (status.toLowerCase().includes("progress"))
+                                            statusClass="status-in-progress" ; else if
+                                            (status.toLowerCase().includes("completed")) statusClass="status-completed"
+                                            ; %>
+                                            <span class="status-badge <%= statusClass %>">
+                                                <%= status %>
+                                            </span>
+                                    </td>
+                                    <td>
+                                        <div class="notes-cell" title="<%= a.notes || '—' %>">
+                                            <%= a.notes || "—" %>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="date-cell">
+                                            <%= a.assignedAt.toDateString() %>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+                <% } %>
+
+                    <!-- Action Bar -->
+                    <div class="action-bar">
+                        <a href="/volunteers/assign" class="btn-enhanced">
+                            <span>➕</span>
+                            <span>Assign Another Volunteer</span>
+                        </a>
+                    </div>
+    </div>
+
+    <%- include("partials/footer") %>

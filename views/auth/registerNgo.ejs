@@ -1,129 +1,421 @@
 <%- include("../partials/header") %>
 
     <style>
+        :root {
+            --primary-green: #2a9d8f;
+            --dark-green: #1b4332;
+            --light-green: #e6f5e9;
+            --warm-yellow: #f4a261;
+            --soft-orange: #e76f51;
+            --cream: #fffbe7;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, var(--primary-green), #52b788);
+            --gradient-hero: linear-gradient(135deg, rgba(26, 67, 50, 0.9), rgba(42, 157, 143, 0.8));
+            --gradient-background: linear-gradient(135deg, #e6f5e9 0%, #fffbe7 50%, #f0f9f5 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            background: var(--gradient-background);
+            background-attachment: fixed;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background Patterns */
+        .svg-pattern {
+            position: absolute;
+            z-index: 0;
+            opacity: 0.1;
+            pointer-events: none;
+            animation: float 12s ease-in-out infinite;
+        }
+
+        .svg-top-left {
+            top: -50px;
+            left: -50px;
+            width: 350px;
+            animation-delay: 0s;
+        }
+
+        .svg-bottom-right {
+            bottom: -50px;
+            right: -50px;
+            width: 400px;
+            animation-delay: 6s;
+        }
+
+        .svg-middle {
+            top: 50%;
+            left: 20%;
+            width: 200px;
+            animation-delay: 3s;
+            opacity: 0.05;
+        }
+
+        /* Enhanced Form Container */
+        .form-overlay {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--shadow-heavy);
+            z-index: 1;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
         }
 
-        .svg-pattern {
+        .form-overlay::before {
+            content: "";
             position: absolute;
-            z-index: 0;
-            opacity: 0.2;
-            pointer-events: none;
-        }
-
-        .svg-top-left {
             top: 0;
             left: 0;
-            width: 300px;
-        }
-
-        .svg-bottom-right {
-            bottom: 0;
             right: 0;
-            width: 350px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 24px 24px 0 0;
         }
 
-        .overlay {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 2.5rem;
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
-            z-index: 1;
-            transition: transform 0.3s;
+        .form-overlay:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 80px rgba(42, 157, 143, 0.15);
         }
 
-        .overlay:hover {
-            transform: translateY(-5px);
+        /* Enhanced Title */
+        .form-title {
+            font-weight: 800;
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            margin-bottom: 0.5rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
         }
 
+        .form-subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        /* Enhanced Form Elements */
         .form-label {
             font-weight: 600;
-            color: #1e3a8a;
+            color: var(--dark-green);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            display: block;
         }
 
         .form-control {
-            border-radius: 10px;
+            border: 2px solid rgba(42, 157, 143, 0.1);
+            border-radius: 12px;
+            padding: 0.875rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
         }
 
-        .btn-primary {
-            background: linear-gradient(90deg, #1e88e5, #42a5f5);
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
+        /* Enhanced Button */
+        .btn-enhanced {
+            background: var(--gradient-primary);
             border: none;
-            font-weight: bold;
-            border-radius: 10px;
+            color: white;
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
         }
 
-        .btn-primary:hover {
-            background: linear-gradient(90deg, #1565c0, #1e88e5);
+        .btn-enhanced::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
 
-        .card-title {
-            color: #0d47a1;
-            font-weight: bold;
-            font-size: 1.8rem;
+        .btn-enhanced:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(42, 157, 143, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-enhanced:hover::before {
+            left: 100%;
+        }
+
+        .btn-enhanced:active {
+            transform: translateY(0);
+        }
+
+        /* Form Group Styling */
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group:last-of-type {
+            margin-bottom: 2rem;
+        }
+
+        /* Input Icons */
+        .input-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-green);
+            opacity: 0.6;
+            font-size: 1.1rem;
+        }
+
+        /* Animations */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0px, 0px) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(30px, -30px) rotate(120deg);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Form Animation */
+        .form-overlay {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .form-group {
+            animation: slideIn 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .form-group:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .form-group:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .form-group:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .form-group:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        .form-group:nth-child(6) {
+            animation-delay: 0.5s;
+        }
+
+        .form-group:nth-child(7) {
+            animation-delay: 0.6s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-overlay {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .form-title {
+                font-size: 1.8rem;
+            }
+
+            .form-subtitle {
+                font-size: 1rem;
+            }
+        }
+
+        /* Container Enhancement */
+        .container {
+            max-width: 600px;
+            padding: 2rem 1rem;
+        }
+
+        /* Success/Error States */
+        .form-control.is-valid {
+            border-color: #10b981;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2310b981' d='m2.3 6.73.8-.77-.8-.77.77-.8.77.8.77-.8.8.77-.8.77.8.77-.8.8-.77-.8-.77.8zm1.77-4.77L1.75 4.27l.77.77 1.27-1.27L6.27 1.5 7 2.27 3.27 6z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+
+        .form-control.is-invalid {
+            border-color: #ef4444;
         }
     </style>
 
-    <!-- Background SVG Patterns -->
+    <!-- Enhanced Background SVG Patterns -->
     <svg class="svg-pattern svg-top-left" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#90caf9"
+        <path fill="url(#gradient1)"
             d="M44.8,-72.2C59.1,-61.5,72.6,-50.3,77.6,-36.5C82.5,-22.6,78.9,-6.2,72.6,7.5C66.3,21.2,57.2,32.3,47.1,45.3C36.9,58.4,25.6,73.3,10.2,77.2C-5.2,81.1,-24.7,74.1,-40.3,63.3C-55.9,52.5,-67.5,38,-75.6,21.6C-83.8,5.2,-88.5,-13,-81.4,-27.9C-74.4,-42.9,-55.5,-54.7,-38.2,-64.9C-20.9,-75.2,-10.4,-83.8,2.2,-87.3C14.8,-90.9,29.5,-89.1,44.8,-72.2Z"
             transform="translate(100 100)" />
+        <defs>
+            <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#2a9d8f;stop-opacity:0.3" />
+                <stop offset="100%" style="stop-color:#52b788;stop-opacity:0.1" />
+            </linearGradient>
+        </defs>
     </svg>
 
     <svg class="svg-pattern svg-bottom-right" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#64b5f6"
+        <path fill="url(#gradient2)"
             d="M49.3,-66.4C64.4,-56.5,76.6,-42.3,78.3,-26.5C79.9,-10.7,71,6.6,62.5,22.6C54,38.5,45.8,53,33.8,61.7C21.8,70.4,5.9,73.2,-8.6,74.6C-23,76.1,-36.1,76.2,-48.5,69.6C-60.8,62.9,-72.3,49.5,-75.6,35C-78.8,20.6,-73.9,5.1,-67.7,-9.1C-61.5,-23.3,-54,-36.2,-43.7,-46.5C-33.3,-56.8,-20.1,-64.5,-5.2,-66.8C9.8,-69.1,19.6,-66.2,49.3,-66.4Z"
             transform="translate(100 100)" />
+        <defs>
+            <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#f4a261;stop-opacity:0.2" />
+                <stop offset="100%" style="stop-color:#e76f51;stop-opacity:0.1" />
+            </linearGradient>
+        </defs>
     </svg>
 
-    <!-- Form Container -->
-    <div class="container d-flex justify-content-center align-items-center mt-5"
-        style="min-height: 85vh; position: relative; z-index: 1;">
-        <div class="overlay text-center" style="width: 100%; max-width: 520px;">
+    <svg class="svg-pattern svg-middle" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <path fill="url(#gradient3)"
+            d="M37.8,-65.5C48.4,-58.2,55.7,-44.5,59.8,-30.1C63.9,-15.7,64.8,-0.7,61.9,12.8C59,26.3,52.3,38.2,43.2,47.8C34.1,57.4,22.6,64.7,9.4,67.2C-3.8,69.7,-18.7,67.4,-30.9,61.1C-43.1,54.8,-52.6,44.5,-58.4,32.4C-64.2,20.3,-66.3,6.4,-64.8,-6.8C-63.3,-20,-58.2,-32.5,-49.8,-41.8C-41.4,-51.1,-29.7,-57.2,-17.2,-62.5C-4.7,-67.8,8.6,-72.3,22.3,-71.2C36,-70.1,50.1,-63.4,37.8,-65.5Z"
+            transform="translate(100 100)" />
+        <defs>
+            <linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#2a9d8f;stop-opacity:0.15" />
+                <stop offset="100%" style="stop-color:#1b4332;stop-opacity:0.05" />
+            </linearGradient>
+        </defs>
+    </svg>
 
-            <!-- Title -->
-            <h3 class="mb-4 card-title">Register (NGO)</h3>
+    <!-- Enhanced Form Container -->
+    <div class="container d-flex justify-content-center align-items-center"
+        style="min-height: 90vh; position: relative; z-index: 1;">
+        <div class="form-overlay text-center" style="width: 100%; max-width: 520px;">
 
-            <!-- NGO Registration Form -->
+            <!-- Enhanced Title -->
+            <h3 class="form-title">NGO Registration 🏢</h3>
+            <p class="form-subtitle">Join our mission to help street animals in need</p>
+
+            <!-- Enhanced NGO Registration Form -->
             <form action="/auth/register/ngo" method="POST">
-                <div class="mb-3 text-start">
-                    <label class="form-label">NGO Name</label>
-                    <input name="name" class="form-control" placeholder="Organization Name" required>
+                <div class="form-group text-start">
+                    <label class="form-label">🏢 NGO Name</label>
+                    <input name="name" class="form-control" placeholder="Your Organization Name" required>
                 </div>
 
-                <div class="mb-3 text-start">
-                    <label class="form-label">Email</label>
-                    <input name="email" type="email" class="form-control" placeholder="ngo@example.com" required>
+                <div class="form-group text-start">
+                    <label class="form-label">📧 Email Address</label>
+                    <input name="email" type="email" class="form-control" placeholder="contact@yourngo.org" required>
                 </div>
 
-                <div class="mb-3 text-start">
-                    <label class="form-label">Phone</label>
-                    <input name="phone" class="form-control" placeholder="1234567890" required>
+                <div class="form-group text-start">
+                    <label class="form-label">📱 Phone Number</label>
+                    <input name="phone" class="form-control" placeholder="+91 98765 43210" required>
                 </div>
 
-                <div class="mb-3 text-start">
-                    <label class="form-label">Address</label>
-                    <input name="address" class="form-control" placeholder="Complete Address" required>
+                <div class="form-group text-start">
+                    <label class="form-label">📍 Complete Address</label>
+                    <input name="address" class="form-control" placeholder="Street, Area, Landmark" required>
                 </div>
 
-                <div class="mb-3 text-start">
-                    <label class="form-label">City</label>
-                    <input name="city" class="form-control" placeholder="City Name" required>
+                <div class="form-group text-start">
+                    <label class="form-label">🏙️ City</label>
+                    <input name="city" class="form-control" placeholder="Your City Name" required>
                 </div>
 
-                <div class="mb-4 text-start">
-                    <label class="form-label">Password</label>
-                    <input name="password" type="password" class="form-control" placeholder="********" required>
+                <div class="form-group text-start">
+                    <label class="form-label">🔒 Password</label>
+                    <input name="password" type="password" class="form-control" placeholder="Create a strong password"
+                        required>
                 </div>
 
                 <div class="d-grid">
-                    <button class="btn btn-primary">Register</button>
+                    <button type="submit" class="btn-enhanced">
+                        <span>✨ Register NGO</span>
+                    </button>
                 </div>
             </form>
+
+            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(42, 157, 143, 0.1);">
+                <p style="color: #6b7280; font-size: 0.9rem;">
+                    Already have an account?
+                    <a href="/auth/login" style="color: var(--primary-green); text-decoration: none; font-weight: 600;">
+                        Sign in here
+                    </a>
+                </p>
+            </div>
         </div>
     </div>
 

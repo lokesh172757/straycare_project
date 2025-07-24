@@ -1,22 +1,350 @@
 <%- include("../partials/header") %>
 
     <style>
+        :root {
+            --primary-green: #2a9d8f;
+            --dark-green: #1b4332;
+            --light-green: #e6f5e9;
+            --warm-yellow: #f4a261;
+            --soft-orange: #e76f51;
+            --cream: #fffbe7;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, var(--primary-green), #52b788);
+            --gradient-hero: linear-gradient(135deg, rgba(26, 67, 50, 0.9), rgba(42, 157, 143, 0.8));
+            --gradient-background: linear-gradient(135deg, #e6f5e9 0%, #fffbe7 50%, #f0f9f5 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            background: linear-gradient(to right, #e8f0fe, #fcefee);
+            background: var(--gradient-background);
+            background-attachment: fixed;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            overflow-x: hidden;
+            min-height: 100vh;
         }
 
+        /* Enhanced Header Section */
+        .page-header {
+            background: var(--gradient-primary);
+            border-radius: 24px;
+            padding: 60px 40px;
+            margin-bottom: 40px;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .page-header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, transparent 20%, rgba(255, 255, 255, 0.1) 21%, rgba(255, 255, 255, 0.1) 34%, transparent 35%, transparent);
+            animation: float 8s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        .page-header .content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .page-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(45deg, #ffffff, #f0f9f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 12px 24px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        /* Enhanced Form Container */
         .form-container {
-            background: #ffffffdd;
-            border-radius: 20px;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            animation: fadeIn 1s ease-in-out;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: var(--shadow-medium);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.8s ease-out;
         }
 
-        @keyframes fadeIn {
+        .form-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 24px 24px 0 0;
+        }
+
+        /* Enhanced Form Elements */
+        .form-label {
+            font-weight: 700;
+            color: var(--dark-green);
+            margin-bottom: 8px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-control {
+            border: 2px solid rgba(42, 157, 143, 0.1);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.1);
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .form-control:hover {
+            border-color: rgba(42, 157, 143, 0.3);
+        }
+
+        /* Read-only field styling */
+        .form-control.readonly {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            color: #495057;
+            border-color: rgba(42, 157, 143, 0.2);
+            font-style: italic;
+        }
+
+        /* Enhanced File Upload */
+        .file-upload-wrapper {
+            position: relative;
+            overflow: hidden;
+            border: 2px dashed var(--primary-green);
+            border-radius: 16px;
+            background: linear-gradient(135deg, rgba(42, 157, 143, 0.05), rgba(82, 183, 136, 0.05));
+            padding: 40px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload-wrapper:hover {
+            border-color: var(--dark-green);
+            background: linear-gradient(135deg, rgba(42, 157, 143, 0.1), rgba(82, 183, 136, 0.1));
+            transform: translateY(-2px);
+        }
+
+        .file-upload-wrapper.has-file {
+            border-style: solid;
+            background: linear-gradient(135deg, rgba(42, 157, 143, 0.1), rgba(82, 183, 136, 0.1));
+        }
+
+        .file-upload-text {
+            font-size: 1.1rem;
+            color: var(--primary-green);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-hint {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .file-input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* Image Preview */
+        .image-preview {
+            max-width: 100%;
+            max-height: 300px;
+            height: auto;
+            margin-top: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-medium);
+            border: 3px solid white;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Enhanced Checkbox */
+        .form-check {
+            background: rgba(42, 157, 143, 0.05);
+            border-radius: 12px;
+            padding: 16px 20px;
+            border: 1px solid rgba(42, 157, 143, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .form-check:hover {
+            background: rgba(42, 157, 143, 0.1);
+            border-color: rgba(42, 157, 143, 0.2);
+        }
+
+        .form-check-input {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-green);
+            border-radius: 6px;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-green);
+            border-color: var(--primary-green);
+        }
+
+        .form-check-label {
+            font-weight: 600;
+            color: var(--dark-green);
+            font-size: 1rem;
+            margin-left: 8px;
+        }
+
+        /* Enhanced Submit Button */
+        .btn-enhanced {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(42, 157, 143, 0.3);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border: 0;
+        }
+
+        .btn-enhanced::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-enhanced:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(42, 157, 143, 0.4);
+            color: white;
+        }
+
+        .btn-enhanced:hover::before {
+            left: 100%;
+        }
+
+        .btn-enhanced:active {
+            transform: translateY(-1px);
+        }
+
+        /* Section Dividers */
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Animations */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0px, 0px) rotate(0deg);
+            }
+
+            33% {
+                transform: translate(30px, -30px) rotate(120deg);
+            }
+
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg);
+            }
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+            }
+
+            to {
+                text-shadow: 0 4px 30px rgba(255, 255, 255, 0.6), 0 0 40px rgba(42, 157, 143, 0.3);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes slideInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
 
             to {
@@ -25,99 +353,134 @@
             }
         }
 
-        h2 {
-            font-weight: 800;
-            color: #2c3e50;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
-        label.form-label {
-            font-weight: 600;
-            color: #37474f;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 40px 20px;
+                margin-bottom: 30px;
+            }
+
+            .form-container {
+                padding: 30px 20px;
+            }
+
+            .file-upload-wrapper {
+                padding: 30px 15px;
+            }
         }
 
-        .form-control:focus {
-            box-shadow: 0 0 0 0.15rem rgba(76, 175, 80, 0.25);
-            border-color: #4caf50;
-        }
-
-        button.btn-success {
-            font-size: 1.1rem;
-            padding: 10px 30px;
-            font-weight: bold;
-        }
-
-        .form-check-label {
-            color: #388e3c;
-        }
-
-        .image-preview {
-            max-width: 100%;
-            height: auto;
-            margin-top: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        .badge-status {
-            background-color: #00c853;
-            color: white;
-            font-size: 0.9rem;
-            padding: 5px 10px;
-            border-radius: 12px;
+        /* Container Enhancements */
+        .container {
+            max-width: 800px;
+            padding: 0 20px;
         }
     </style>
 
     <div class="container mt-5">
-        <div class="text-center mb-4">
-            <h2>💊 Treat Animal</h2>
-            <span class="badge-status">📋 Report Status: Pending Treatment</span>
+        <!-- Enhanced Header -->
+        <div class="page-header">
+            <div class="content">
+                <h1 class="page-title">💊 Treat Animal</h1>
+                <div class="status-badge">
+                    <span>📋</span>
+                    <span>Report Status: Pending Treatment</span>
+                </div>
+            </div>
         </div>
 
-        <form action="/ngo/treat/<%= report._id %>" method="POST" enctype="multipart/form-data"
-            class="row g-4 form-container">
+        <!-- Enhanced Form -->
+        <form action="/ngo/treat/<%= report._id %>" method="POST" enctype="multipart/form-data" class="form-container">
 
-            <!-- Report Description (Read-only) -->
-            <div class="col-12">
-                <label class="form-label">Report Description</label>
-                <div class="form-control bg-white">
+            <!-- Report Description Section -->
+            <div class="section">
+                <div class="section-title">
+                    <span>📝</span>
+                    <span>Original Report Details</span>
+                </div>
+                <label class="form-label">
+                    <span>📄</span>
+                    Report Description
+                </label>
+                <div class="form-control readonly">
                     <%= report.description %>
                 </div>
             </div>
 
-            <!-- After Treatment Photo Upload -->
-            <div class="col-12">
-                <label for="afterPhoto" class="form-label">Upload After Treatment Image</label>
-                <input type="file" name="afterPhoto" id="afterPhoto" class="form-control" accept="image/*" required
-                    onchange="previewImage(event)">
+            <!-- Treatment Documentation Section -->
+            <div class="section">
+                <div class="section-title">
+                    <span>📸</span>
+                    <span>Treatment Documentation</span>
+                </div>
+                <label for="afterPhoto" class="form-label">
+                    <span>🖼️</span>
+                    Upload After Treatment Image
+                </label>
+                <div class="file-upload-wrapper" id="fileUploadWrapper">
+                    <div class="file-upload-text">📷 Click to upload treatment photo</div>
+                    <div class="file-upload-hint">Drag and drop or click to select image (JPG, PNG, GIF)</div>
+                    <input type="file" name="afterPhoto" id="afterPhoto" class="file-input" accept="image/*" required
+                        onchange="previewImage(event)">
+                </div>
                 <img id="preview" class="image-preview" style="display: none;" />
             </div>
 
-            <!-- Health Notes -->
-            <div class="col-12">
-                <label for="healthNotes" class="form-label">Health Notes</label>
-                <textarea name="healthNotes" id="healthNotes" class="form-control" rows="3"
-                    placeholder="Describe health condition, treatment given, etc."></textarea>
+            <!-- Health Information Section -->
+            <div class="section">
+                <div class="section-title">
+                    <span>🏥</span>
+                    <span>Health Information</span>
+                </div>
+                <label for="healthNotes" class="form-label">
+                    <span>📋</span>
+                    Health Notes & Treatment Details
+                </label>
+                <textarea name="healthNotes" id="healthNotes" class="form-control" rows="4"
+                    placeholder="Describe the animal's health condition, treatment provided, medications given, recovery status, etc."></textarea>
             </div>
 
-            <!-- Adoptable Checkbox -->
-            <div class="col-md-6">
-                <div class="form-check mt-2">
-                    <input class="form-check-input" type="checkbox" name="adoptable" id="adoptable">
-                    <label class="form-check-label" for="adoptable">
-                        Mark as Adoptable
-                    </label>
+            <!-- Adoption Information Section -->
+            <div class="section">
+                <div class="section-title">
+                    <span>🏠</span>
+                    <span>Adoption Information</span>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="adoptable" id="adoptable">
+                            <label class="form-check-label" for="adoptable">
+                                💕 Mark this animal as available for adoption
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="adoptionFee" class="form-label">
+                            <span>💰</span>
+                            Adoption Fee (₹)
+                        </label>
+                        <input type="number" name="adoptionFee" class="form-control" id="adoptionFee" min="0" value="0"
+                            placeholder="0">
+                    </div>
                 </div>
             </div>
 
-            <!-- Adoption Fee -->
-            <div class="col-md-6">
-                <label for="adoptionFee" class="form-label">Adoption Fee (₹)</label>
-                <input type="number" name="adoptionFee" class="form-control" id="adoptionFee" min="0" value="0">
-            </div>
-
-            <!-- Submit Button -->
-            <div class="col-12 text-center">
-                <button type="submit" class="btn btn-success">✅ Mark as Treated</button>
+            <!-- Submit Section -->
+            <div class="text-center mt-4">
+                <button type="submit" class="btn-enhanced">
+                    <span>✅</span>
+                    <span>Mark as Successfully Treated</span>
+                </button>
             </div>
         </form>
     </div>
@@ -126,13 +489,65 @@
         function previewImage(event) {
             const input = event.target;
             const preview = document.getElementById('preview');
+            const wrapper = document.getElementById('fileUploadWrapper');
+
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function (e) {
                     preview.src = e.target.result;
                     preview.style.display = 'block';
+                    wrapper.classList.add('has-file');
+
+                    // Update upload text
+                    const uploadText = wrapper.querySelector('.file-upload-text');
+                    const uploadHint = wrapper.querySelector('.file-upload-hint');
+                    uploadText.textContent = '✅ Image selected successfully!';
+                    uploadHint.textContent = 'Click to change image';
                 };
                 reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Add drag and drop functionality
+        const fileUploadWrapper = document.getElementById('fileUploadWrapper');
+        const fileInput = document.getElementById('afterPhoto');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileUploadWrapper.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            fileUploadWrapper.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            fileUploadWrapper.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            fileUploadWrapper.style.borderColor = '#1b4332';
+            fileUploadWrapper.style.backgroundColor = 'rgba(42, 157, 143, 0.15)';
+        }
+
+        function unhighlight(e) {
+            fileUploadWrapper.style.borderColor = '#2a9d8f';
+            fileUploadWrapper.style.backgroundColor = '';
+        }
+
+        fileUploadWrapper.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+
+            if (files.length > 0) {
+                fileInput.files = files;
+                previewImage({ target: fileInput });
             }
         }
     </script>

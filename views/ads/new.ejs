@@ -1,153 +1,482 @@
 <%- include("../partials/header") %>
 
     <style>
+        :root {
+            --primary-green: #2a9d8f;
+            --dark-green: #1b4332;
+            --light-green: #e6f5e9;
+            --warm-yellow: #f4a261;
+            --soft-orange: #e76f51;
+            --cream: #fffbe7;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, var(--primary-green), #52b788);
+            --gradient-hero: linear-gradient(135deg, rgba(26, 67, 50, 0.9), rgba(42, 157, 143, 0.8));
+            --gradient-background: linear-gradient(135deg, #e6f5e9 0%, #fffbe7 50%, #f0f9f5 100%);
+            --gradient-ads: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+        }
+
         body {
-            background: linear-gradient(135deg, #fefcea, #f1da36);
-            background-image: url('https://www.transparenttextures.com/patterns/white-wall.png');
-            background-repeat: repeat;
+            background: #004e92;
+            background-attachment: fixed;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            overflow-x: hidden;
         }
 
+        /* Enhanced Header Section */
+        .ads-header {
+            background: var(--gradient-ads);
+            padding: 60px 20px;
+            border-radius: 24px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .ads-header::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M8 24h4v12h-4V24zm20 0h4v12h-4V24zm20 0h4v12h-4V24z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: float 15s linear infinite;
+            z-index: 0;
+        }
+
+        .ads-header .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .ads-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(45deg, var(--dark-green), var(--primary-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .ads-subtitle {
+            font-size: 1.2rem;
+            color: var(--dark-green);
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        /* Premium Card Enhancement */
         .premium-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(6px);
-            border-radius: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            box-shadow: var(--shadow-medium);
+            padding: 40px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
 
-        h2 {
-            font-family: 'Segoe UI', sans-serif;
-            letter-spacing: 1px;
+        .premium-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 24px 24px 0 0;
         }
 
-        .btn-success {
-            background-color: #ff9900;
-            border: none;
+        .premium-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-heavy);
         }
 
-        .btn-success:hover {
-            background-color: #cc7a00;
-        }
-
-        .btn-outline-primary {
-            border-color: #007bff;
-            color: #007bff;
-        }
-
-        .btn-outline-primary:hover {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .table thead {
-            background-color: #ffeaa7;
-            color: #2d3436;
-        }
-
+        /* Enhanced Form Styling */
         .form-label {
-            color: #2d3436;
+            color: var(--dark-green);
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label::before {
+            content: "✨";
+            font-size: 0.8rem;
         }
 
         .form-control {
-            border-radius: 10px;
+            border: 2px solid rgba(42, 157, 143, 0.1);
+            border-radius: 16px;
+            padding: 12px 18px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
         }
 
-        .btn-danger {
-            border-radius: 8px;
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 4px rgba(42, 157, 143, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            transform: translateY(-2px);
         }
 
-        .btn {
-            transition: all 0.3s ease-in-out;
+        .form-control::placeholder {
+            color: #8b9db7;
+            font-weight: 400;
+        }
+
+        /* Enhanced Buttons */
+        .btn-enhanced {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 20px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-enhanced::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-enhanced:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(42, 157, 143, 0.4);
+            color: white;
+        }
+
+        .btn-enhanced:hover::before {
+            left: 100%;
+        }
+
+        .btn-warning-enhanced {
+            background: linear-gradient(135deg, var(--warm-yellow), var(--soft-orange));
+            box-shadow: 0 4px 15px rgba(244, 162, 97, 0.3);
+        }
+
+        .btn-warning-enhanced:hover {
+            box-shadow: 0 8px 25px rgba(244, 162, 97, 0.4);
+        }
+
+        .btn-danger-enhanced {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        .btn-danger-enhanced:hover {
+            box-shadow: 0 8px 25px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-outline-enhanced {
+            background: transparent;
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-enhanced:hover {
+            background: var(--primary-green);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
+        }
+
+        /* Enhanced Table */
+        .table-enhanced {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-light);
+            border: none;
+        }
+
+        .table-enhanced thead {
+            background: var(--gradient-ads);
+            color: var(--dark-green);
+        }
+
+        .table-enhanced thead th {
+            border: none;
+            padding: 20px 16px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        .table-enhanced tbody tr {
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .table-enhanced tbody tr:hover {
+            background: rgba(42, 157, 143, 0.05);
+            transform: scale(1.01);
+        }
+
+        .table-enhanced tbody td {
+            padding: 20px 16px;
+            border: none;
+            vertical-align: middle;
+        }
+
+        .table-enhanced tbody tr:not(:last-child) td {
+            border-bottom: 1px solid rgba(42, 157, 143, 0.1);
+        }
+
+        /* Logo Styling */
+        .logo-preview {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px;
+        }
+
+        .logo-preview:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #8b9db7;
+            font-size: 1.2rem;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 2px dashed rgba(42, 157, 143, 0.2);
+        }
+
+        .empty-state::before {
+            content: "📢";
+            display: block;
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        /* Date Badge */
+        .date-badge {
+            background: rgba(42, 157, 143, 0.1);
+            color: var(--dark-green);
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: 1px solid rgba(42, 157, 143, 0.2);
+        }
+
+        /* Form Enhancement */
+        .form-row {
+            background: rgba(255, 255, 255, 0.5);
+            padding: 24px;
+            border-radius: 16px;
+            margin-bottom: 20px;
+        }
+
+        /* Animations */
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateX(0px);
+            }
+
+            50% {
+                transform: translateX(20px);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .premium-card {
+                padding: 24px;
+            }
+
+            .ads-header {
+                padding: 40px 20px;
+            }
+
+            .table-responsive {
+                border-radius: 16px;
+            }
+
+            .form-control {
+                margin-bottom: 16px;
+            }
+        }
+
+        /* Container Enhancement */
+        .container {
+            max-width: 1200px;
+            padding: 0 20px;
         }
     </style>
 
     <div class="container py-5">
 
-        <!-- Page Title -->
-        <div class="text-center mb-5">
-            <h2 class="text-warning fw-bold">
-                ✨ Premium Sponsored Ads
-            </h2>
-            <p class="text-muted">Boost visibility with our partner pet shops</p>
+        <!-- Enhanced Header Section -->
+        <div class="ads-header">
+            <div class="content">
+                <h2 class="ads-title">✨ Premium Sponsored Ads</h2>
+                <p class="ads-subtitle">Boost visibility with our partner pet shops and reach more animal lovers</p>
+            </div>
         </div>
 
-        <div class="premium-card mb-5">
-            <!-- Add‑Ad Form -->
+        <!-- Enhanced Add-Ad Form -->
+        <div class="premium-card">
             <form action="/ads" method="POST">
-                <div class="row gy-3 gx-3 align-items-end">
+                <div class="form-row">
+                    <div class="row gy-4 gx-4 align-items-end">
 
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">Shop Name</label>
-                        <input type="text" name="shopName" class="form-control" placeholder="Shop Name" required>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">Logo URL</label>
-                        <input type="text" name="logoUrl" class="form-control" placeholder="Logo URL" required>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">Destination Link</label>
-                        <input type="text" name="link" class="form-control" placeholder="https://example.com" required>
-                    </div>
-
-                    <div class="col-md-3">
-                        <label class="form-label fw-semibold">Ad Duration</label>
-                        <div class="d-flex gap-2">
-                            <input type="date" name="startsOn" class="form-control" required>
-                            <input type="date" name="endsOn" class="form-control" required>
-                            <button class="btn btn-success">Add</button>
+                        <div class="col-md-3">
+                            <label class="form-label">Shop Name</label>
+                            <input type="text" name="shopName" class="form-control" placeholder="Amazing Pet Shop"
+                                required>
                         </div>
-                    </div>
 
+                        <div class="col-md-3">
+                            <label class="form-label">Logo URL</label>
+                            <input type="text" name="logoUrl" class="form-control"
+                                placeholder="https://example.com/logo.png" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Destination Link</label>
+                            <input type="text" name="link" class="form-control" placeholder="https://petshop.com"
+                                required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Ad Duration</label>
+                            <div class="d-flex gap-2 flex-column flex-md-row">
+                                <input type="date" name="startsOn" class="form-control" required>
+                                <input type="date" name="endsOn" class="form-control" required>
+                                <button class="btn btn-enhanced btn-warning-enhanced">
+                                    <span>🚀 Add Ad</span>
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </form>
         </div>
 
-        <!-- Existing Ads Table -->
+        <!-- Enhanced Existing Ads Table -->
         <% if (ads.length===0) { %>
-            <div class="text-center text-muted">No ads available yet.</div>
+            <div class="empty-state">
+                <strong>No sponsored ads available yet</strong><br>
+                <small>Add your first advertisement to get started promoting pet care businesses!</small>
+            </div>
             <% } else { %>
-                <div class="premium-card table-responsive">
-                    <table class="table table-bordered table-striped align-middle">
-                        <thead class="text-center">
-                            <tr>
-                                <th>Shop</th>
-                                <th>Logo</th>
-                                <th>Link</th>
-                                <th>Start</th>
-                                <th>End</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% ads.forEach(ad=> { %>
+                <div class="premium-card">
+                    <div class="table-responsive">
+                        <table class="table table-enhanced align-middle">
+                            <thead class="text-center">
                                 <tr>
-                                    <td>
-                                        <%= ad.shopName %>
-                                    </td>
-                                    <td class="text-center">
-                                        <img src="<%= ad.logoUrl %>" height="50" class="rounded shadow-sm" alt="Logo">
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="<%= ad.link %>" target="_blank"
-                                            class="btn btn-sm btn-outline-primary">Visit</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <%= ad.startsOn ? ad.startsOn.toDateString() : "N/A" %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%= ad.endsOn ? ad.endsOn.toDateString() : "N/A" %>
-                                    </td>
-                                    <td class="text-center">
-                                        <form action="/ads/<%= ad._id %>?_method=DELETE" method="POST" class="d-inline">
-                                            <button class="btn btn-sm btn-danger">Delete</button>
-                                        </form>
-                                    </td>
+                                    <th>🏪 Shop Name</th>
+                                    <th>🖼️ Logo</th>
+                                    <th>🔗 Website</th>
+                                    <th>📅 Start Date</th>
+                                    <th>📅 End Date</th>
+                                    <th>⚡ Actions</th>
                                 </tr>
-                                <% }) %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <% ads.forEach(ad=> { %>
+                                    <tr>
+                                        <td>
+                                            <strong style="color: var(--dark-green);">
+                                                <%= ad.shopName %>
+                                            </strong>
+                                        </td>
+                                        <td class="text-center">
+                                            <img src="<%= ad.logoUrl %>" class="logo-preview"
+                                                alt="<%= ad.shopName %> Logo">
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="<%= ad.link %>" target="_blank"
+                                                class="btn btn-sm btn-outline-enhanced">
+                                                🌐 Visit Shop
+                                            </a>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="date-badge">
+                                                <%= ad.startsOn ? ad.startsOn.toDateString() : "N/A" %>
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="date-badge">
+                                                <%= ad.endsOn ? ad.endsOn.toDateString() : "N/A" %>
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <form action="/ads/<%= ad._id %>?_method=DELETE" method="POST"
+                                                class="d-inline">
+                                                <button class="btn btn-sm btn-enhanced btn-danger-enhanced"
+                                                    onclick="return confirm('Are you sure you want to delete this ad?')">
+                                                    🗑️ Remove
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <% } %>
 
