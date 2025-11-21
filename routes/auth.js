@@ -30,7 +30,7 @@ router.post("/register/local", async (req, res) => {
 
     loginUser(req, user, "LOCAL");
     req.flash("success", "Registered and logged in successfully!");
-    res.redirect("/user/dashboard");
+    res.redirect("/");   // ⬅ GO DIRECTLY TO HOME
 });
 
 // NGO registration handler
@@ -41,7 +41,7 @@ router.post("/register/ngo", async (req, res) => {
 
     loginUser(req, user, "NGO");
     req.flash("success", "NGO registered and logged in!");
-    res.redirect("/ngo/reports");
+    res.redirect("/");   // ⬅ GO DIRECTLY TO HOME
 });
 
 // ===== LOGIN ROUTES =====
@@ -68,7 +68,7 @@ router.post("/login/local", async (req, res) => {
 
     loginUser(req, user, "LOCAL");
     req.flash("success", `Welcome back, ${user.name}!`);
-    res.redirect("/user/dashboard");
+    res.redirect("/");   // ⬅ GO DIRECTLY TO HOME
 });
 
 // NGO login handler
@@ -83,7 +83,7 @@ router.post("/login/ngo", async (req, res) => {
 
     loginUser(req, user, "NGO");
     req.flash("success", `Welcome, ${user.name}!`);
-    res.redirect("/ngo/reports");
+    res.redirect("/");   // ⬅ GO DIRECTLY TO HOME
 });
 
 // ===== LOGOUT =====
