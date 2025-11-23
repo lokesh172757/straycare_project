@@ -92,14 +92,25 @@ app.use(dashboardRoutes);
 // Home route
 app.get('/', async (req, res) => {
     try {
-        const animals = await TreatedAnimal.find({});
+        let animals = await TreatedAnimal.find({});
         const ads = await Ad.find({});
+
+        // List of fallback images
+        const fallbackImages = ["demo1.png", "demo2.png", "demo3.png"];
+
+        // Assign fallback to each animal
+        animals = animals.map((animal, index) => {
+            animal.fallbackImage = fallbackImages[index % fallbackImages.length];
+            return animal;
+        });
+
         res.render('home', { animals, ads });
     } catch (err) {
         console.error('Home route error:', err);
         res.status(500).send('Something went wrong.');
     }
 });
+
 
 // Start server
 const PORT = process.env.PORT || 8080;
