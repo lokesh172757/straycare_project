@@ -455,7 +455,13 @@
                         <div class="col">
                             <div class="adoption-card">
                                 <div class="position-relative">
-                                    <img src="<%= animal.beforeReportId.photoUrl %>" class="card-image w-100" alt="Animal">
+                                    <img 
+                                    src="<%= animal.afterPhotoUrl %>" 
+                                    onerror="this.onerror=null; this.src='/images/<%= animal.fallbackImage %>';"
+                                    class="card-image w-100" 
+                                    alt="Animal"
+
+                                />
                                     <div class="adoption-badge">
                                         💕 Available Now
                                     </div>

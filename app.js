@@ -89,6 +89,7 @@ app.use('/auth', authRoutes);
 app.use('/ngo', isLoggedIn, isNGO, ngoRoutes);
 app.use(dashboardRoutes);
 
+
 // Home route
 app.get('/', async (req, res) => {
     try {
