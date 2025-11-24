@@ -7,7 +7,7 @@ const multer = require("multer");
 const upload = multer({ storage }); // 🔄 Use Cloudinary storage
 
 // GET: Show report form (local user)
-router.get("/new", isLoggedIn, isLocalUser, (req, res) => {
+router.get("/new", isLoggedIn, isLocalUser, (req, res) =>{
     res.render("report"); // views/report.ejs
 });
 
