@@ -35,12 +35,12 @@ router.post("/", async (req, res) => {
         res.redirect("/adoption");
     } catch (err) {
         console.error(err);
-        res.status(500).send("Failed to mark adoptable");
+        res.status(500).send("Failed to mark adoptable") ;
     }
 });
 
 // ✅ NEW: GET /adoption/:id — View one adoptable animal's details
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req, res) =>{
     const { id } = req.params;
     try {
         const animal = await TreatedAnimal.findById(id).populate("beforeReportId");
