@@ -475,10 +475,11 @@
                                     <tr>
                                         <td class="text-center">
                                             <% if (r.animalId) { %>
-                                                <img src="<%= r.animalId.afterPhotoUrl %>" 
-                                                onerror="this.onerror=null; this.src='/images/<%= animal.fallbackImage %
-                                                alt="Animal for adoption"
+                                                <img src="<%= r.animalId.afterPhotoUrl %>"
+                                                    onerror="this.onerror=null; this.src='/images/fallback.jpg'"
+                                                    alt="Animal for adoption"
                                                     class="animal-thumbnail">
+
                                                 <div class="adoption-fee">₹<%= r.animalId.adoptionFee %>
                                                 </div>
                                                 <% } else { %>
