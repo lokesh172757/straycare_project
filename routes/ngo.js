@@ -4,7 +4,7 @@ const { Report, TreatedAnimal, AdoptionRequest } = require("../models");
 const upload = require("../middleware/upload");
 
 // NGO Dashboard (Overview)
-router.get("/dashboard", async (req, res) => {
+router.get("/dashboard", async (req, res) =>{
     const totalReports = await Report.countDocuments({});
     const openReports = await Report.countDocuments({ status: "OPEN" });
     const treatedAnimals = await TreatedAnimal.countDocuments({});

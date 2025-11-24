@@ -27,7 +27,7 @@ StrayCare solves this with a centralized digital rescue system that:
 🛠️ Tech Stack
 Frontend
 
-HTML5, CSS3, JavaScript
+HTML5, CSS3, JavaScript, tyescript
 
 EJS Templates
 
@@ -57,6 +57,8 @@ Auto-location capture or manual location input
 Highly detailed reporting form
 
 Case assigned to nearest NGO/volunteer
+
+donation module
 
 🛟 2. Volunteer / NGO Portal
 
