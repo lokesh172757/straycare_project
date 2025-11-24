@@ -416,7 +416,13 @@
                     <% animals.forEach(function(animal) { %>
                         <div class="col">
                             <div class="enhanced-card h-100">
-                                <img src="<%= animal.afterPhotoUrl %>" class="card-image w-100" alt="Treated Animal">
+                                <img 
+                                    src="<%= animal.afterPhotoUrl %>" 
+                                    onerror="this.onerror=null; this.src='/images/<%= animal.fallbackImage %>';"
+                                    class="card-image w-100" 
+                                    alt="Treated Animal"
+                                />
+
                                 <div class="card-content">
                                     <% if (animal.adoptable) { %>
                                         <span class="adoptable-badge">🏠 Available for Adoption!</span>
@@ -428,7 +434,8 @@
                                                         : "Successfully Treated" %>
                                                 </h5>
                                                 <p class="card-text-enhanced">
-                                                    <%= animal.healthNotes %>
+                                                    Fully treated and recovering beautifully
+                                                    <!-- <%= animal.healthNotes %> -->
                                                 </p>
                                                 <% if (animal.adoptable) { %>
                                                     <a href="/adoption" class="btn-enhanced">

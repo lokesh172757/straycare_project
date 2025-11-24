@@ -63,7 +63,13 @@
                     <div class="footer-links">
                         <a href="/privacy" class="footer-link">Privacy Policy</a>
                         <a href="/terms" class="footer-link">Terms of Service</a>
-                        <a href="/contact" class="footer-link">Contact Us</a>
+                        <div class="footer-contact">
+                            <a href="/contact" class="footer-link">Contact Us</a>
+                            <div class="phone">
+                                <i class="fa fa-phone"></i> +91 9876543210
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -82,6 +88,18 @@
 </footer>
 
 <style>
+        .footer-contact {
+        display: flex;
+        flex-direction: column;
+        align-items: center;   /* Keep Contact Us and phone aligned */
+        gap: 4px;
+    }
+
+    .footer-contact .phone {
+        font-size: 14px;
+        color: #fff;
+    }
+
     /* Enhanced Footer Styles */
     .enhanced-footer {
         position: relative;
