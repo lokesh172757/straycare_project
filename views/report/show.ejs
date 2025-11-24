@@ -4,52 +4,542 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-    <div class="container mt-5">
-        <div class="text-center mb-4">
-            <h2>📍 Report Details</h2>
-        </div>
+    <style>
+        :root {
+            --primary-green: #2a9d8f;
+            --dark-green: #1b4332;
+            --light-green: #e6f5e9;
+            --warm-yellow: #f4a261;
+            --soft-orange: #e76f51;
+            --cream: #fffbe7;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, var(--primary-green), #52b788);
+            --gradient-hero: linear-gradient(135deg, rgba(26, 67, 50, 0.9), rgba(42, 157, 143, 0.8));
+            --gradient-background: linear-gradient(135deg, #e6f5e9 0%, #fffbe7 50%, #f0f9f5 100%);
+        }
 
-        <!-- Report Card -->
-        <div class="card shadow-sm mb-4">
-            <img src="<%= report.photoUrl %>" class="card-img-top rounded-top" style="height: 300px; object-fit: cover;"
-                alt="Reported Animal">
-            <div class="card-body">
-                <p><strong>Description:</strong>
-                    <%= report.description || "No description" %>
-                </p>
-                <p><strong>Status:</strong>
-                    <span class="badge bg-<%= report.status === 'Open' ? 'warning text-dark' : 'success' %>">
-                        <%= report.status %>
-                    </span>
-                </p>
-                <p><strong>Donation Intent:</strong> ₹<%= report.donationIntent || 0 %>
-                </p>
+        body {
+            background: var(--gradient-background);
+            background-attachment: fixed;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            overflow-x: hidden;
+        }
+
+        .page-container {
+            min-height: 100vh;
+            padding: 60px 0;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .page-title {
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            animation: expand 0.8s ease-out;
+        }
+
+        .page-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            font-weight: 300;
+            margin: 0;
+        }
+
+        /* Enhanced Report Card */
+        .report-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-medium);
+            margin-bottom: 50px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+
+        .report-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient-primary);
+            border-radius: 24px 24px 0 0;
+            z-index: 1;
+        }
+
+        .report-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .report-image {
+            height: 350px;
+            width: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .report-card:hover .report-image {
+            transform: scale(1.05);
+        }
+
+        .report-content {
+            padding: 40px;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .description-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(42, 157, 143, 0.05);
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-green);
+        }
+
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-green), transparent);
+            border: none;
+            margin: 30px 0;
+        }
+
+        /* Enhanced Status and Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .info-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 25px;
+            border-radius: 16px;
+            border: 1px solid rgba(42, 157, 143, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-light);
+        }
+
+        .info-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .info-label {
+            font-weight: 700;
+            color: var(--dark-green);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* Enhanced Status Badges */
+        .status-badge {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-open {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            color: #856404;
+        }
+
+        .status-in-progress {
+            background: linear-gradient(135deg, #cff4fc, #74c0fc);
+            color: #055160;
+        }
+
+        .status-treated {
+            background: linear-gradient(135deg, #d1e7dd, #52b788);
+            color: #0f5132;
+        }
+
+        .status-closed {
+            background: linear-gradient(135deg, #f8d7da, #dc3545);
+            color: #721c24;
+        }
+
+        .donation-amount {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--warm-yellow);
+            text-shadow: 0 2px 4px rgba(244, 162, 97, 0.3);
+        }
+
+        /* Enhanced Map Section */
+        .map-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-medium);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--warm-yellow), var(--soft-orange));
+            border-radius: 24px 24px 0 0;
+        }
+
+        .map-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #map {
+            border-radius: 16px;
+            box-shadow: var(--shadow-light);
+            border: 2px solid rgba(42, 157, 143, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        #map:hover {
+            box-shadow: var(--shadow-medium);
+            border-color: rgba(42, 157, 143, 0.3);
+        }
+
+        /* Enhanced Back Button */
+        .back-button {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(15px);
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
+            padding: 14px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .back-button::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .back-button:hover {
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+            text-decoration: none;
+        }
+
+        .back-button:hover::before {
+            left: 0;
+        }
+
+        /* Animations */
+        @keyframes expand {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 120px;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-container {
+                padding: 40px 0;
+            }
+
+            .report-content {
+                padding: 30px 25px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .map-section {
+                padding: 25px 20px;
+                margin: 0 20px 40px;
+            }
+
+            #map {
+                height: 250px !important;
+            }
+
+            .back-button {
+                padding: 12px 25px;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .report-image {
+                height: 250px;
+            }
+
+            .info-card {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+
+    <div class="page-container">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header fade-in-up">
+                <h1 class="page-title">📍 Report Details</h1>
+                <p class="page-subtitle">Complete information about the reported animal case</p>
             </div>
-        </div>
 
-        <!-- Map Section -->
-        <div class="mb-4">
-            <h5>📌 Reported Location</h5>
-            <div id="map" class="rounded shadow-sm border" style="height: 300px; width: 100%;"></div>
-        </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <!-- Enhanced Report Card -->
+                    <div class="report-card fade-in-up">
+                        <img src="<%= report.photoUrl %>" class="report-image" alt="Reported Animal">
+                        <div class="report-content">
+                            <h3 class="section-title">
+                                <span>🐶</span> Animal Description
+                            </h3>
+                            <div class="description-text">
+                                <%= report.description || "No detailed description was provided for this report." %>
+                            </div>
 
-        <div class="text-center">
-            <a href="/ngo/reports" class="btn btn-secondary px-4">← Back to Reports</a>
+                            <hr class="divider">
+
+                            <div class="info-grid">
+                                <div class="info-card">
+                                    <div class="info-label">
+                                        <span>📊</span> Current Status
+                                    </div>
+                                    <div class="info-value">
+                                        <span class="status-badge 
+                                            <%= report.status === 'OPEN' ? 'status-open' : 
+                                                report.status === 'IN_PROGRESS' ? 'status-in-progress' : 
+                                                report.status === 'TREATED' ? 'status-treated' : 'status-closed' %>">
+                                            <span>
+                                                <%= report.status==='OPEN' ? '🟡' : report.status==='IN_PROGRESS' ? '🔵'
+                                                    : report.status==='TREATED' ? '🟢' : '⚫' %>
+                                            </span>
+                                            <%= report.status.replace("_", " " ) %>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="info-card">
+                                    <div class="info-label">
+                                        <span>💰</span> Donation Pledge
+                                    </div>
+                                    <div class="info-value">
+                                        <span class="donation-amount">₹<%= report.donationIntent || 0 %></span>
+                                        <% if (report.donationIntent> 0) { %>
+                                            <small class="text-muted d-block">Committed by reporter</small>
+                                            <% } else { %>
+                                                <small class="text-muted d-block">No donation pledged</small>
+                                                <% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Map Section -->
+                    <div class="map-section fade-in-up">
+                        <h3 class="map-title">
+                            <span>🗺️</span> Incident Location
+                        </h3>
+                        <div id="map" style="height: 350px; width: 100%;"></div>
+                    </div>
+
+                    <!-- Back Button -->
+                    <div class="text-center fade-in-up">
+                        <a href="/ngo/reports" class="back-button">
+                            <span>←</span>
+                            <span>Back to All Reports</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Leaflet Map Script -->
+    <!-- Enhanced Leaflet Map Script -->
     <script>
-        const lat = <%= report.location.coordinates[1] %>;
-        const lng = <%= report.location.coordinates[0] %>;
+        document.addEventListener('DOMContentLoaded', function () {
+            const lat = <%= report.location.coordinates[1] %>;
+            const lng = <%= report.location.coordinates[0] %>;
 
-        const map = L.map('map').setView([lat, lng], 14);
+            // Initialize map with custom styling
+            const map = L.map('map', {
+                zoomControl: true,
+                scrollWheelZoom: true,
+                doubleClickZoom: true,
+                boxZoom: true,
+                keyboard: true,
+                dragging: true,
+                touchZoom: true
+            }).setView([lat, lng], 15);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+            // Add tile layer with enhanced styling
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19,
+                minZoom: 10
+            }).addTo(map);
 
-        L.marker([lat, lng]).addTo(map).bindPopup('Reported location').openPopup();
+            // Create custom marker icon
+            const customIcon = L.divIcon({
+                html: '<div style="background: linear-gradient(135deg, #f4a261, #e76f51); width: 30px; height: 30px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 16px;">🚨</div>',
+                className: 'custom-div-icon',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15],
+                popupAnchor: [0, -15]
+            });
+
+            // Add marker with custom popup
+            const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+
+            marker.bindPopup(`
+                <div style="font-family: 'Inter', sans-serif; padding: 10px; text-align: center;">
+                    <h6 style="color: #1b4332; margin-bottom: 8px; font-weight: 700;">📍 Report Location</h6>
+                    <p style="margin: 0; color: #666; font-size: 0.9rem;">Animal was found at this location</p>
+                    <div style="margin-top: 8px; padding: 6px 12px; background: linear-gradient(135deg, #e6f5e9, #f0f9f5); border-radius: 15px; font-size: 0.8rem; color: #2a9d8f; font-weight: 600;">
+                        Status: <%= report.status.replace("_", " ") %>
+                    </div>
+                </div>
+            `).openPopup();
+
+            // Add click event for map interaction
+            map.on('click', function (e) {
+                console.log('Map clicked at coordinates:', e.latlng);
+            });
+
+            // Smooth zoom to marker after map loads
+            setTimeout(() => {
+                map.flyTo([lat, lng], 16, {
+                    animate: true,
+                    duration: 1.5
+                });
+            }, 1000);
+        });
     </script>
 
     <%- include("../partials/footer") %>

@@ -1,29 +1,87 @@
 <%- include("../partials/header") %>
 
-    <div class="container py-5">
+    <style>
+        body {
+            background: linear-gradient(to right, #f0f2f5, #dfe9f3);
+        }
+
+        .premium-container {
+            padding: 60px 20px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            margin: auto;
+        }
+
+        .premium-title {
+            font-size: 2.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .premium-img {
+            max-height: 350px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .premium-label {
+            font-weight: 600;
+            color: #17a2b8;
+        }
+
+        .premium-divider {
+            border-top: 2px dashed #ccc;
+            margin: 30px 0;
+        }
+
+        .btn-premium {
+            background-color: #ff8c00;
+            color: #fff;
+            font-size: 1.1rem;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: 0.3s ease-in-out;
+        }
+
+        .btn-premium:hover {
+            background-color: #e67e22;
+            transform: scale(1.03);
+        }
+
+        .text-muted small {
+            font-size: 0.9rem;
+        }
+    </style>
+
+    <div class="container premium-container">
 
         <!-- Title -->
-        <h2 class="mb-4 text-center text-primary fw-bold">Adopt Me! 🐾</h2>
+        <h2 class="text-center premium-title mb-4">Adopt Me! 🐶</h2>
 
         <!-- Animal Image -->
         <div class="text-center mb-4">
-            <img src="<%= animal.afterPhotoUrl %>" class="img-fluid rounded shadow" style="max-height: 300px;"
-                alt="Animal Image">
+            <img src="<%= animal.afterPhotoUrl %>" class="img-fluid premium-img" alt="Animal Image">
         </div>
 
-        <!-- Health & Fee Info -->
+        <!-- Health Notes and Fee -->
         <div class="mb-4">
-            <p><strong class="text-success">Health Notes:</strong>
+            <p><span class="premium-label">Health Notes:</span>
                 <%= animal.healthNotes %>
             </p>
-            <p><strong class="text-success">Adoption Fee:</strong> ₹<%= animal.adoptionFee %>
+            <p><span class="premium-label">Adoption Fee:</span> ₹<%= animal.adoptionFee %>
             </p>
         </div>
 
+        <!-- Divider -->
+        <div class="premium-divider"></div>
+
         <!-- Rescue Info -->
-        <hr>
         <h4 class="text-secondary fw-semibold mb-3">Rescue Report Info</h4>
-        <p><strong class="text-muted">Found at:</strong>
+        <p><span class="text-muted">Found at:</span>
             [<%= animal.beforeReportId.location.coordinates[1] %>,
                 <%= animal.beforeReportId.location.coordinates[0] %>]
         </p>
@@ -31,11 +89,10 @@
             <%= animal.beforeReportId.description %>
         </p>
 
-        <!-- Contact/Adopt Button -->
-        <div class="text-center mt-4">
-            <a href="/adopt/<%= animal._id %>/contact" class="btn btn-lg btn-success shadow-sm">I'm Interested 💚</a>
+        <!-- Adopt Button -->
+        <div class="text-center mt-5">
+            <a href="/adopt/<%= animal._id %>/contact" class="btn btn-premium">I'm Interested 💚</a>
         </div>
-
     </div>
 
     <%- include("../partials/footer") %>

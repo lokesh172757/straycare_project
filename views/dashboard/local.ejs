@@ -1,30 +1,416 @@
 <%- include('../partials/header') %>
 
-    <div class="container mt-5">
-        <div class="text-center mb-4">
-            <h2>👤 Local User Dashboard</h2>
+    <style>
+        :root {
+            --primary-green: #2a9d8f;
+            --dark-green: #1b4332;
+            --light-green: #e6f5e9;
+            --warm-yellow: #f4a261;
+            --soft-orange: #e76f51;
+            --cream: #fffbe7;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, var(--primary-green), #52b788);
+            --gradient-hero: linear-gradient(135deg, rgba(26, 67, 50, 0.9), rgba(42, 157, 143, 0.8));
+            --gradient-background: linear-gradient(135deg, #e6f5e9 0%, #fffbe7 50%, #f0f9f5 100%);
+            --gradient-adoption: linear-gradient(135deg, var(--warm-yellow), var(--soft-orange));
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--gradient-background);
+            background-attachment: fixed;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Dashboard Header */
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .dashboard-title {
+            font-weight: 800;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+        }
+
+        .dashboard-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            animation: expand 0.8s ease-out;
+        }
+
+        .dashboard-subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* Enhanced Card Styling */
+        .enhanced-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow-light);
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .enhanced-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .enhanced-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .enhanced-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Card Headers */
+        .card-header-enhanced {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1.5rem 2rem;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header-enhanced::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .card-header-adoption {
+            background: var(--gradient-adoption);
+            color: white;
+            padding: 1.5rem 2rem;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header-adoption::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .card-title-enhanced {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Card Body */
+        .card-body-enhanced {
+            padding: 2rem;
+        }
+
+        /* Enhanced List Items */
+        .list-group-enhanced {
+            border: none;
+        }
+
+        .list-item-enhanced {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(42, 157, 143, 0.1);
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .list-item-enhanced::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .list-item-enhanced:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-medium);
+            background: rgba(255, 255, 255, 0.95);
+            border-color: var(--primary-green);
+        }
+
+        .list-item-enhanced:hover::before {
+            transform: scaleY(1);
+        }
+
+        /* Enhanced Text Styling */
+        .item-label {
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-right: 0.5rem;
+        }
+
+        .item-content {
+            color: #4b5563;
+            font-weight: 400;
+        }
+
+        .item-row {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .item-row:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background: linear-gradient(45deg, #fbbf24, #f59e0b);
+            color: white;
+        }
+
+        .status-treated {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .status-adopted {
+            background: var(--gradient-adoption);
+            color: white;
+        }
+
+        /* Enhanced Image Styling */
+        .animal-image {
+            border-radius: 12px;
+            border: 3px solid var(--light-green);
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+            max-height: 200px;
+            object-fit: cover;
+            margin-top: 1rem;
+        }
+
+        .animal-image:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #8b9db7;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .empty-state::before {
+            content: "🐾";
+            display: block;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-adoption::before {
+            content: "🏠";
+        }
+
+        /* Animations */
+        @keyframes expand {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 80px;
+            }
+        }
+
+        @keyframes shimmer {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) rotate(0deg);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: translate(-30%, -30%) rotate(180deg);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animation Delays */
+        .enhanced-card:nth-child(2) {
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+
+        .enhanced-card:nth-child(3) {
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .list-item-enhanced {
+            animation: fadeInUp 0.4s ease-out both;
+        }
+
+        .list-item-enhanced:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .list-item-enhanced:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .list-item-enhanced:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                padding: 1rem 0;
+                margin-bottom: 2rem;
+            }
+
+            .card-body-enhanced {
+                padding: 1.5rem;
+            }
+
+            .list-item-enhanced {
+                padding: 1rem;
+            }
+
+            .dashboard-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Container Enhancement */
+        .container {
+            max-width: 1000px;
+            padding: 2rem 1rem;
+        }
+    </style>
+
+    <div class="container mt-4">
+        <!-- Enhanced Dashboard Header -->
+        <div class="dashboard-header">
+            <h2 class="dashboard-title">👤 Local User Dashboard</h2>
+            <p class="dashboard-subtitle">Track your reports and adoption requests</p>
         </div>
 
-        <div class="card mb-5 shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">🐾 Your Reported Animals</h4>
+        <!-- Enhanced Reported Animals Card -->
+        <div class="enhanced-card">
+            <div class="card-header-enhanced">
+                <h4 class="card-title-enhanced">🐾 Your Reported Animals</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body-enhanced">
                 <% if (myReports.length===0) { %>
-                    <p class="text-muted">No reports found.</p>
+                    <div class="empty-state">
+                        No reports found. Help us by reporting animals in need!
+                    </div>
                     <% } else { %>
-                        <div class="list-group">
+                        <div class="list-group-enhanced">
                             <% myReports.forEach(report=> { %>
-                                <div class="list-group-item list-group-item-action mb-3 rounded shadow-sm">
-                                    <p class="mb-1"><strong>Status:</strong>
-                                        <%= report.status %>
-                                    </p>
-                                    <p class="mb-1"><strong>Description:</strong>
-                                        <%= report.description || "N/A" %>
-                                    </p>
+                                <div class="list-item-enhanced">
+                                    <div class="item-row">
+                                        <span class="item-label">Status:</span>
+                                        <span class="status-badge status-<%= report.status.toLowerCase() %>">
+                                            <%= report.status %>
+                                        </span>
+                                    </div>
+                                    <div class="item-row">
+                                        <span class="item-label">Description:</span>
+                                        <span class="item-content">
+                                            <%= report.description || "No description provided" %>
+                                        </span>
+                                    </div>
                                     <% if (report.photoUrl) { %>
-                                        <img src="<%= report.photoUrl %>" alt="Animal Photo" class="img-fluid rounded"
-                                            style="max-height: 200px;">
+                                        <div class="item-row">
+                                            <img src="<%= report.photoUrl %>" alt="Reported Animal"
+                                                class="animal-image img-fluid">
+                                        </div>
                                         <% } %>
                                 </div>
                                 <% }) %>
@@ -33,23 +419,32 @@
             </div>
         </div>
 
-        <div class="card shadow-sm">
-            <div class="card-header bg-success text-white">
-                <h4 class="mb-0">🏠 Your Adoption Requests</h4>
+        <!-- Enhanced Adoption Requests Card -->
+        <div class="enhanced-card">
+            <div class="card-header-adoption">
+                <h4 class="card-title-enhanced">🏠 Your Adoption Requests</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body-enhanced">
                 <% if (myAdoptionRequests.length===0) { %>
-                    <p class="text-muted">No adoption requests found.</p>
+                    <div class="empty-state empty-state-adoption">
+                        No adoption requests found. Consider giving a loving home to an animal in need!
+                    </div>
                     <% } else { %>
-                        <div class="list-group">
+                        <div class="list-group-enhanced">
                             <% myAdoptionRequests.forEach(req=> { %>
-                                <div class="list-group-item list-group-item-action mb-3 rounded shadow-sm">
-                                    <p class="mb-1"><strong>Message:</strong>
-                                        <%= req.message %>
-                                    </p>
-                                    <p class="mb-1"><strong>Request Date:</strong>
-                                        <%= req.createdAt.toDateString() %>
-                                    </p>
+                                <div class="list-item-enhanced">
+                                    <div class="item-row">
+                                        <span class="item-label">💌 Message:</span>
+                                        <span class="item-content">
+                                            <%= req.message %>
+                                        </span>
+                                    </div>
+                                    <div class="item-row">
+                                        <span class="item-label">📅 Request Date:</span>
+                                        <span class="item-content">
+                                            <%= req.createdAt.toDateString() %>
+                                        </span>
+                                    </div>
                                 </div>
                                 <% }) %>
                         </div>

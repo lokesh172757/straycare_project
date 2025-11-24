@@ -1,32 +1,573 @@
 <%- include('../partials/header') %>
 
-    <div class="container mt-5">
-        <div class="text-center mb-4">
-            <h2>🏥 NGO Dashboard</h2>
+    <style>
+        :root {
+            --primary-green: #2a9d8f;
+            --dark-green: #1b4332;
+            --light-green: #e6f5e9;
+            --warm-yellow: #f4a261;
+            --soft-orange: #e76f51;
+            --cream: #fffbe7;
+            --info-blue: #3b82f6;
+            --success-green: #10b981;
+            --warning-orange: #f59e0b;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, var(--primary-green), #52b788);
+            --gradient-info: linear-gradient(135deg, var(--info-blue), #60a5fa);
+            --gradient-success: linear-gradient(135deg, var(--success-green), #34d399);
+            --gradient-warning: linear-gradient(135deg, var(--warning-orange), var(--warm-yellow));
+            --gradient-background: linear-gradient(135deg, #e6f5e9 0%, #fffbe7 50%, #f0f9f5 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--gradient-background);
+            background-attachment: fixed;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            overflow-x: hidden;
+        }
+
+        /* Enhanced Dashboard Header */
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .dashboard-title {
+            font-weight: 800;
+            font-size: clamp(2.2rem, 4vw, 3rem);
+            margin-bottom: 1rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+        }
+
+        .dashboard-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            animation: expand 0.8s ease-out;
+        }
+
+        .dashboard-subtitle {
+            color: #6b7280;
+            font-size: 1.2rem;
+            font-weight: 400;
+        }
+
+        /* Enhanced Card Styling */
+        .enhanced-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow-light);
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+
+        .enhanced-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .enhanced-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .enhanced-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        /* Card Header Variants */
+        .card-header-info {
+            background: var(--gradient-info);
+            color: white;
+            padding: 1.5rem 2rem;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header-info::before,
+        .card-header-success::before,
+        .card-header-warning::before,
+        .card-header-primary::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .card-header-success {
+            background: var(--gradient-success);
+            color: white;
+            padding: 1.5rem 2rem;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header-warning {
+            background: var(--gradient-warning);
+            color: white;
+            padding: 1.5rem 2rem;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header-primary {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 1.5rem 2rem;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enhanced-card.info::before {
+            background: var(--gradient-info);
+        }
+
+        .enhanced-card.success::before {
+            background: var(--gradient-success);
+        }
+
+        .enhanced-card.warning::before {
+            background: var(--gradient-warning);
+        }
+
+        .enhanced-card.primary::before {
+            background: var(--gradient-primary);
+        }
+
+        .card-title-enhanced {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Card Body */
+        .card-body-enhanced {
+            padding: 2rem;
+        }
+
+        /* Enhanced List Items */
+        .list-item-enhanced {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(42, 157, 143, 0.1);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .list-item-enhanced::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .list-item-enhanced:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-medium);
+            background: rgba(255, 255, 255, 0.95);
+            border-color: var(--primary-green);
+        }
+
+        .list-item-enhanced:hover::before {
+            transform: scaleY(1);
+        }
+
+        /* Enhanced Text Styling */
+        .item-label {
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-right: 0.5rem;
+        }
+
+        .item-content {
+            color: #4b5563;
+            font-weight: 400;
+        }
+
+        .item-row {
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .item-row:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Enhanced Images */
+        .animal-image {
+            border-radius: 12px;
+            border: 3px solid var(--light-green);
+            box-shadow: var(--shadow-light);
+            transition: all 0.3s ease;
+            max-height: 200px;
+            object-fit: cover;
+            margin-top: 1rem;
+        }
+
+        .animal-image:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-medium);
+        }
+
+        /* Enhanced Form Styling */
+        .enhanced-form {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(42, 157, 143, 0.1);
+        }
+
+        .form-control-enhanced {
+            border: 2px solid rgba(42, 157, 143, 0.1);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-control-enhanced:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
+            background: rgba(255, 255, 255, 1);
+            outline: none;
+        }
+
+        /* Enhanced Buttons */
+        .btn-enhanced {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(42, 157, 143, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-enhanced::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-enhanced:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(42, 157, 143, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-enhanced:hover::before {
+            left: 100%;
+        }
+
+        .btn-danger-enhanced {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-danger-enhanced:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+            color: white;
+        }
+
+        /* Enhanced Table */
+        .table-enhanced {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            overflow: hidden;
+            border: none;
+            box-shadow: var(--shadow-light);
+        }
+
+        .table-enhanced thead th {
+            background: var(--gradient-primary);
+            color: white;
+            font-weight: 600;
+            border: none;
+            padding: 1rem;
+        }
+
+        .table-enhanced tbody td {
+            padding: 1rem;
+            border: none;
+            border-bottom: 1px solid rgba(42, 157, 143, 0.1);
+            vertical-align: middle;
+        }
+
+        .table-enhanced tbody tr:hover {
+            background: rgba(42, 157, 143, 0.05);
+        }
+
+        .table-enhanced tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ad-logo {
+            border-radius: 8px;
+            border: 2px solid var(--light-green);
+            transition: transform 0.3s ease;
+        }
+
+        .ad-logo:hover {
+            transform: scale(1.1);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #8b9db7;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .empty-state::before {
+            display: block;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-reports::before {
+            content: "📋";
+        }
+
+        .empty-treated::before {
+            content: "💉";
+        }
+
+        .empty-adoption::before {
+            content: "📬";
+        }
+
+        .empty-ads::before {
+            content: "📢";
+        }
+
+        /* Animations */
+        @keyframes expand {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100px;
+            }
+        }
+
+        @keyframes shimmer {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) rotate(0deg);
+                opacity: 0.3;
+            }
+
+            50% {
+                transform: translate(-30%, -30%) rotate(180deg);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Animation Delays */
+        .enhanced-card:nth-child(2) {
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+
+        .enhanced-card:nth-child(3) {
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        .enhanced-card:nth-child(4) {
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .enhanced-card:nth-child(5) {
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .list-item-enhanced {
+            animation: fadeInUp 0.4s ease-out both;
+        }
+
+        .list-item-enhanced:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .list-item-enhanced:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .list-item-enhanced:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                padding: 1rem 0;
+                margin-bottom: 2rem;
+            }
+
+            .card-body-enhanced {
+                padding: 1.5rem;
+            }
+
+            .list-item-enhanced {
+                padding: 1rem;
+            }
+
+            .enhanced-form {
+                padding: 1rem;
+            }
+
+            .dashboard-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* Container Enhancement */
+        .container {
+            max-width: 1200px;
+            padding: 2rem 1rem;
+        }
+    </style>
+
+    <div class="container mt-4">
+        <!-- Enhanced Dashboard Header -->
+        <div class="dashboard-header">
+            <h2 class="dashboard-title">🏥 NGO Dashboard</h2>
+            <p class="dashboard-subtitle">Manage reports, treatments, and community support</p>
         </div>
 
         <!-- =================== All Reports =================== -->
-        <div class="card mb-5 shadow-sm">
-            <div class="card-header bg-info text-white">
-                <h4 class="mb-0">📋 All Reports</h4>
+        <div class="enhanced-card info">
+            <div class="card-header-info">
+                <h4 class="card-title-enhanced">📋 All Reports</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body-enhanced">
                 <% if (allReports.length===0) { %>
-                    <p class="text-muted">No reports available.</p>
+                    <div class="empty-state empty-reports">
+                        No reports available yet. Reports will appear here when submitted.
+                    </div>
                     <% } else { %>
-                        <div class="list-group">
+                        <div class="list-group-enhanced">
                             <% allReports.forEach(report=> { %>
-                                <div class="list-group-item mb-3 rounded shadow-sm">
-                                    <p><strong>Reported By:</strong>
-                                        <%= report.userId?.name || "Unknown" %>
-                                    </p>
-                                    <p><strong>Status:</strong>
-                                        <%= report.status %>
-                                    </p>
-                                    <% if (report.photoUrl) { %>
-                                        <img src="<%= report.photoUrl %>" alt="Report Photo" class="img-fluid rounded"
-                                            style="max-height: 200px;">
+                                <div class="list-item-enhanced">
+                                    <div class="item-row">
+                                        <span class="item-label">👤 Reported By:</span>
+                                        <span class="item-content">
+                                            <%= report.userId?.name || "Unknown User" %>
+                                        </span>
+                                    </div>
+                                    <div class="item-row">
+                                        <span class="item-label">📊 Status:</span>
+                                        <span class="item-content">
+                                            <%= report.status %>
+                                        </span>
+                                    </div>
+                                    <% if (report.description) { %>
+                                        <div class="item-row">
+                                            <span class="item-label">📝 Description:</span>
+                                            <span class="item-content">
+                                                <%= report.description %>
+                                            </span>
+                                        </div>
                                         <% } %>
+                                            <% if (report.photoUrl) { %>
+                                                <div class="item-row">
+                                                    <img src="<%= report.photoUrl %>" alt="Report Photo"
+                                                        class="animal-image img-fluid">
+                                                </div>
+                                                <% } %>
                                 </div>
                                 <% }) %>
                         </div>
@@ -35,26 +576,42 @@
         </div>
 
         <!-- =================== Treated Animals =================== -->
-        <div class="card mb-5 shadow-sm">
-            <div class="card-header bg-success text-white">
-                <h4 class="mb-0">💉 Treated Animals</h4>
+        <div class="enhanced-card success">
+            <div class="card-header-success">
+                <h4 class="card-title-enhanced">💉 Treated Animals</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body-enhanced">
                 <% if (treatedAnimals.length===0) { %>
-                    <p class="text-muted">No treated animals.</p>
+                    <div class="empty-state empty-treated">
+                        No treated animals recorded yet. Add treatment records here.
+                    </div>
                     <% } else { %>
-                        <div class="list-group">
+                        <div class="list-group-enhanced">
                             <% treatedAnimals.forEach(animal=> { %>
-                                <div class="list-group-item mb-3 rounded shadow-sm">
-                                    <p><strong>From Report:</strong>
-                                        <%= animal.beforeReportId.description || "N/A" %>
-                                    </p>
-                                    <p><strong>Health Notes:</strong>
-                                        <%= animal.healthNotes || "N/A" %>
-                                    </p>
+                                <div class="list-item-enhanced">
+                                    <div class="item-row">
+                                        <span class="item-label">📋 Original Report:</span>
+                                        <span class="item-content">
+                                            <%= animal.beforeReportId.description || "No description available" %>
+                                        </span>
+                                    </div>
+                                    <div class="item-row">
+                                        <span class="item-label">🏥 Health Notes:</span>
+                                        <span class="item-content">
+                                            <%= animal.healthNotes || "No health notes provided" %>
+                                        </span>
+                                    </div>
+                                    <div class="item-row">
+                                        <span class="item-label">🏠 Adoption Status:</span>
+                                        <span class="item-content">
+                                            <%= animal.adoptable ? "Available for Adoption" : "Not Available" %>
+                                        </span>
+                                    </div>
                                     <% if (animal.afterPhotoUrl) { %>
-                                        <img src="<%= animal.afterPhotoUrl %>" alt="After Treatment Photo"
-                                            class="img-fluid rounded" style="max-height: 200px;">
+                                        <div class="item-row">
+                                            <img src="<%= animal.afterPhotoUrl %>" alt="After Treatment Photo"
+                                                class="animal-image img-fluid">
+                                        </div>
                                         <% } %>
                                 </div>
                                 <% }) %>
@@ -64,26 +621,43 @@
         </div>
 
         <!-- =================== Adoption Requests =================== -->
-        <div class="card mb-5 shadow-sm">
-            <div class="card-header bg-warning text-dark">
-                <h4 class="mb-0">📬 Adoption Requests</h4>
+        <div class="enhanced-card warning">
+            <div class="card-header-warning">
+                <h4 class="card-title-enhanced">📬 Adoption Requests</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body-enhanced">
                 <% if (adoptionRequests.length===0) { %>
-                    <p class="text-muted">No requests received.</p>
+                    <div class="empty-state empty-adoption">
+                        No adoption requests received yet. Requests will appear here.
+                    </div>
                     <% } else { %>
-                        <div class="list-group">
+                        <div class="list-group-enhanced">
                             <% adoptionRequests.forEach(req=> { %>
-                                <div class="list-group-item mb-3 rounded shadow-sm">
-                                    <p><strong>From:</strong>
-                                        <%= req.name %> (<%= req.phone %>)
-                                    </p>
-                                    <p><strong>Message:</strong>
-                                        <%= req.message %>
-                                    </p>
-                                    <p><strong>Animal ID:</strong>
-                                        <%= req.animalId?._id || "N/A" %>
-                                    </p>
+                                <div class="list-item-enhanced">
+                                    <div class="item-row">
+                                        <span class="item-label">👤 Adopter:</span>
+                                        <span class="item-content">
+                                            <%= req.name %>
+                                        </span>
+                                    </div>
+                                    <div class="item-row">
+                                        <span class="item-label">📱 Phone:</span>
+                                        <span class="item-content">
+                                            <%= req.phone %>
+                                        </span>
+                                    </div>
+                                    <div class="item-row">
+                                        <span class="item-label">💌 Message:</span>
+                                        <span class="item-content">
+                                            <%= req.message %>
+                                        </span>
+                                    </div>
+                                    <div class="item-row">
+                                        <span class="item-label">🐾 Animal ID:</span>
+                                        <span class="item-content">
+                                            <%= req.animalId?._id || "ID not available" %>
+                                        </span>
+                                    </div>
                                 </div>
                                 <% }) %>
                         </div>
@@ -92,51 +666,76 @@
         </div>
 
         <!-- =================== Manage Ads =================== -->
-        <div class="card shadow-sm">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0">📢 Manage Ads</h4>
+        <div class="enhanced-card primary">
+            <div class="card-header-primary">
+                <h4 class="card-title-enhanced">📢 Manage Advertisements</h4>
             </div>
-            <div class="card-body">
-                <form action="/ads" method="POST" class="mb-4">
-                    <div class="row g-3">
-                        <div class="col-md-3">
-                            <input type="text" name="shopName" class="form-control" placeholder="Shop Name" required>
+            <div class="card-body-enhanced">
+                <!-- Add New Ad Form -->
+                <div class="enhanced-form">
+                    <h5 style="color: var(--dark-green); margin-bottom: 1rem; font-weight: 600;">✨ Add New Advertisement
+                    </h5>
+                    <form action="/ads" method="POST">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <input type="text" name="shopName" class="form-control form-control-enhanced"
+                                    placeholder="🏪 Shop Name" required>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" name="logoUrl" class="form-control form-control-enhanced"
+                                    placeholder="🖼️ Logo URL" required>
+                            </div>
+                            <div class="col-md-12">
+                                <input type="text" name="link" class="form-control form-control-enhanced"
+                                    placeholder="🔗 Advertisement Link" required>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="date" name="startsOn" class="form-control form-control-enhanced"
+                                    title="Start Date" required>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="date" name="endsOn" class="form-control form-control-enhanced"
+                                    title="End Date" required>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="submit" class="btn-enhanced w-100">
+                                    <span>➕ Add Advertisement</span>
+                                </button>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <input type="text" name="logoUrl" class="form-control" placeholder="Logo URL" required>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="text" name="link" class="form-control" placeholder="Ad Link" required>
-                        </div>
-                        <div class="col-md-3 d-flex gap-2">
-                            <input type="date" name="startsOn" class="form-control" required>
-                            <input type="date" name="endsOn" class="form-control" required>
-                            <button class="btn btn-success">Add Ad</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
 
+                <!-- Existing Ads -->
                 <% if (ads && ads.length> 0) { %>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover align-middle">
-                            <thead class="table-light">
+                    <div style="overflow-x: auto;">
+                        <table class="table table-enhanced">
+                            <thead>
                                 <tr>
-                                    <th>Shop</th>
-                                    <th>Logo</th>
-                                    <th>Link</th>
-                                    <th>Start</th>
-                                    <th>End</th>
-                                    <th>Action</th>
+                                    <th>🏪 Shop</th>
+                                    <th>🖼️ Logo</th>
+                                    <th>🔗 Link</th>
+                                    <th>📅 Start Date</th>
+                                    <th>📅 End Date</th>
+                                    <th>⚙️ Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <% ads.forEach(ad=> { %>
                                     <tr>
+                                        <td><strong>
+                                                <%= ad.shopName %>
+                                            </strong></td>
                                         <td>
-                                            <%= ad.shopName %>
+                                            <img src="<%= ad.logoUrl %>" alt="<%= ad.shopName %> Logo" height="40"
+                                                class="ad-logo">
                                         </td>
-                                        <td><img src="<%= ad.logoUrl %>" alt="Ad Logo" height="50" class="rounded"></td>
-                                        <td><a href="<%= ad.link %>" target="_blank">Visit</a></td>
+                                        <td>
+                                            <a href="<%= ad.link %>" target="_blank"
+                                                style="color: var(--primary-green); text-decoration: none; font-weight: 600;">
+                                                Visit Site
+                                            </a>
+                                        </td>
                                         <td>
                                             <%= ad.startsOn.toDateString() %>
                                         </td>
@@ -144,8 +743,12 @@
                                             <%= ad.endsOn.toDateString() %>
                                         </td>
                                         <td>
-                                            <form action="/ads/<%= ad._id %>?_method=DELETE" method="POST">
-                                                <button class="btn btn-sm btn-danger">Delete</button>
+                                            <form action="/ads/<%= ad._id %>?_method=DELETE" method="POST"
+                                                style="display: inline;">
+                                                <button type="submit" class="btn-danger-enhanced"
+                                                    onclick="return confirm('Are you sure you want to delete this ad?')">
+                                                    🗑️ Delete
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
@@ -154,7 +757,9 @@
                         </table>
                     </div>
                     <% } else { %>
-                        <p class="text-muted">No ads found.</p>
+                        <div class="empty-state empty-ads">
+                            No advertisements found. Add your first ad using the form above.
+                        </div>
                         <% } %>
             </div>
         </div>

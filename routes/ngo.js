@@ -18,24 +18,24 @@ router.get("/dashboard", async (req, res) => {
     });
 });
 
-//  GET all open reports
+// GET all open reports
 router.get("/reports", async (req, res) => {
     const reports = await Report.find({ status: "OPEN" });
     res.render("ngo/openReports", { reports });
 });
 
-//  GET form to mark animal as treated
+// GET form to mark animal as treated
 router.get("/treat/:id", async (req, res) => {
     const report = await Report.findById(req.params.id);
     res.render("ngo/treatForm", { report });
 });
 
-// POST: Mark animal as treated (with image upload)
+// POST: Mark animal as treated (with Cloudinary image upload)
 router.post("/treat/:id", upload.single("afterPhoto"), async (req, res) => {
     const { healthNotes, adoptable, adoptionFee } = req.body;
     const reportId = req.params.id;
 
-    const afterPhotoUrl = "/uploads/" + req.file.filename;
+    const afterPhotoUrl = req.file?.path || ""; // Cloudinary URL
 
     const treatedAnimal = await TreatedAnimal.create({
         beforeReportId: reportId,
@@ -53,7 +53,7 @@ router.post("/treat/:id", upload.single("afterPhoto"), async (req, res) => {
     res.redirect("/ngo/reports");
 });
 
-//  NEW: View all adoption requests
+// View all adoption requests
 router.get("/adoptions", async (req, res) => {
     const requests = await AdoptionRequest.find({})
         .populate("animalId")
@@ -62,13 +62,13 @@ router.get("/adoptions", async (req, res) => {
     res.render("ngo/adoptions", { requests });
 });
 
-//  DELETE: Remove an adoption request
+// DELETE: Remove an adoption request
 router.delete("/adoptions/:id", async (req, res) => {
     await AdoptionRequest.findByIdAndDelete(req.params.id);
     res.redirect("/ngo/adoptions");
 });
 
-//  View all treated animals
+// View all treated animals
 router.get("/treated", async (req, res) => {
     try {
         const treatedAnimals = await TreatedAnimal.find().sort({ createdAt: -1 });

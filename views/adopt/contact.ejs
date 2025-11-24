@@ -1,49 +1,443 @@
 <%- include("../partials/header") %>
 
-    <div class="container py-5">
+    <style>
+        :root {
+            --primary-green: #2a9d8f;
+            --dark-green: #1b4332;
+            --light-green: #e6f5e9;
+            --warm-yellow: #f4a261;
+            --soft-orange: #e76f51;
+            --cream: #fffbe7;
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --gradient-primary: linear-gradient(135deg, var(--primary-green), #52b788);
+            --gradient-hero: linear-gradient(135deg, rgba(26, 67, 50, 0.9), rgba(42, 157, 143, 0.8));
+            --gradient-background: linear-gradient(135deg, #e6f5e9 0%, #fffbe7 50%, #f0f9f5 100%);
+        }
 
-        <!-- Page Heading -->
-        <h2 class="text-center text-success mb-4 fw-bold">Interested in Adopting? 🐾</h2>
+        body {
+            background: var(--gradient-background);
+            background-attachment: fixed;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            color: #2c3e50;
+            overflow-x: hidden;
+        }
 
-        <!-- Animal Preview -->
-        <div class="text-center mb-4">
-            <img src="<%= animal.afterPhotoUrl %>" class="img-fluid rounded shadow" style="max-height: 300px;"
-                alt="Animal">
+        .page-container {
+            min-height: 100vh;
+            padding: 60px 0;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .page-title {
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            animation: expand 0.8s ease-out;
+        }
+
+        /* Animal Preview Section */
+        .animal-preview {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: var(--shadow-medium);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .animal-preview::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient-primary);
+            border-radius: 24px 24px 0 0;
+        }
+
+        .animal-image {
+            max-height: 350px;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: var(--shadow-light);
+            transition: transform 0.4s ease;
+            margin-bottom: 30px;
+        }
+
+        .animal-image:hover {
+            transform: scale(1.02);
+        }
+
+        .animal-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .detail-card {
+            background: rgba(42, 157, 143, 0.05);
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 4px solid var(--primary-green);
+            transition: all 0.3s ease;
+        }
+
+        .detail-card:hover {
+            transform: translateX(5px);
+            background: rgba(42, 157, 143, 0.08);
+        }
+
+        .detail-label {
+            font-weight: 700;
+            color: var(--dark-green);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detail-value {
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .adoption-fee {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--warm-yellow);
+        }
+
+        /* Enhanced Form Container */
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 45px;
+            border-radius: 24px;
+            box-shadow: var(--shadow-medium);
+            max-width: 700px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .form-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--warm-yellow), var(--soft-orange));
+            border-radius: 24px 24px 0 0;
+        }
+
+        .form-container:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .form-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .form-title::after {
+            content: "💝";
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            animation: bounce 2s infinite;
+        }
+
+        /* Enhanced Form Elements */
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-green);
+            margin-bottom: 8px;
+            display: block;
+            font-size: 1rem;
+        }
+
+        .form-control {
+            border: 2px solid #e8f4f8;
+            border-radius: 12px;
+            padding: 15px 18px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.1);
+            background: rgba(255, 255, 255, 0.95);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #aaa;
+            font-style: italic;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Enhanced Submit Button */
+        .btn-submit {
+            background: linear-gradient(135deg, var(--warm-yellow), var(--soft-orange));
+            border: none;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(244, 162, 97, 0.4);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 auto;
+        }
+
+        .btn-submit::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(244, 162, 97, 0.5);
+            filter: brightness(110%);
+        }
+
+        .btn-submit:hover::before {
+            left: 100%;
+        }
+
+        .btn-submit:active {
+            transform: translateY(-1px);
+        }
+
+        /* Animations */
+        @keyframes expand {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100px;
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(-50%);
+            }
+
+            40% {
+                transform: translateY(-60%);
+            }
+
+            60% {
+                transform: translateY(-55%);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-container {
+                padding: 40px 0;
+            }
+
+            .animal-preview {
+                padding: 30px 20px;
+                margin-bottom: 40px;
+            }
+
+            .animal-details {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .form-container {
+                padding: 35px 25px;
+                margin: 0 20px;
+            }
+
+            .form-title::after {
+                right: -30px;
+                font-size: 1.2rem;
+            }
+
+            .btn-submit {
+                padding: 14px 30px;
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .animal-image {
+                max-height: 250px;
+            }
+
+            .form-container {
+                padding: 25px 20px;
+            }
+
+            .detail-card {
+                padding: 15px;
+            }
+        }
+    </style>
+
+    <div class="page-container">
+        <div class="container">
+            <!-- Page Header -->
+            <div class="page-header fade-in-up">
+                <h1 class="page-title">Interested in Adopting? 🐾</h1>
+            </div>
+
+            <!-- Animal Preview Section -->
+            <div class="animal-preview fade-in-up">
+                <div class="text-center">
+                    <img src="<%= animal.afterPhotoUrl %>" class="animal-image" alt="Adoptable Animal">
+                </div>
+
+                <div class="animal-details">
+                    <div class="detail-card">
+                        <div class="detail-label">
+                            <span>🏥</span> Health Notes
+                        </div>
+                        <div class="detail-value">
+                            <%= animal.healthNotes %>
+                        </div>
+                    </div>
+
+                    <div class="detail-card">
+                        <div class="detail-label">
+                            <span>💰</span> Adoption Fee
+                        </div>
+                        <div class="detail-value adoption-fee">₹<%= animal.adoptionFee %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Adoption Interest Form -->
+            <div class="form-container fade-in-up">
+                <h2 class="form-title">Express Your Interest</h2>
+
+                <form action="/adopt/<%= animal._id %>/contact" method="POST">
+                    <div class="form-group">
+                        <label for="name" class="form-label">Your Full Name</label>
+                        <input name="name" id="name" type="text" class="form-control"
+                            placeholder="Enter your complete name" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Contact Phone Number</label>
+                        <input name="phone" id="phone" type="tel" class="form-control"
+                            placeholder="Enter your mobile number" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message" class="form-label">Why do you want to adopt? (Optional)</label>
+                        <textarea name="message" id="message" class="form-control"
+                            placeholder="Tell us about yourself and why you'd like to provide a loving home..."></textarea>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn-submit">
+                            <span>Submit Interest</span>
+                            <span>🐕</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <div class="mb-4 text-center">
-            <p><strong class="text-primary">Health Notes:</strong>
-                <%= animal.healthNotes %>
-            </p>
-            <p><strong class="text-primary">Adoption Fee:</strong> ₹<%= animal.adoptionFee %>
-            </p>
-        </div>
-
-        <!-- Adoption Interest Form -->
-        <form action="/adopt/<%= animal._id %>/contact" method="POST" class="mx-auto" style="max-width: 600px;">
-
-            <div class="mb-3">
-                <label for="name" class="form-label fw-semibold">Your Name</label>
-                <input name="name" id="name" class="form-control" placeholder="Enter your full name" required />
-            </div>
-
-            <div class="mb-3">
-                <label for="phone" class="form-label fw-semibold">Phone Number</label>
-                <input name="phone" id="phone" class="form-control" placeholder="Enter your contact number" required />
-            </div>
-
-            <div class="mb-3">
-                <label for="message" class="form-label fw-semibold">Message (Optional)</label>
-                <textarea name="message" id="message" class="form-control"
-                    placeholder="Why do you want to adopt?"></textarea>
-            </div>
-
-            <div class="text-center">
-                <button type="submit" class="btn btn-success px-4 py-2 shadow-sm">Submit Interest</button>
-            </div>
-
-        </form>
-
     </div>
 
     <%- include("../partials/footer") %>

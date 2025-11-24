@@ -1,16 +1,8 @@
+// middleware/upload.js
 const multer = require("multer");
-const path = require("path");
+const { storage } = require("./cloudinary");
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, "public/uploads/");
-    },
-    filename: function (req, file, cb) {
-        const uniqueName = Date.now() + path.extname(file.originalname);
-        cb(null, uniqueName);
-    }
-});
-
+// Configure Multer to use Cloudinary storage
 const upload = multer({ storage });
 
 module.exports = upload;

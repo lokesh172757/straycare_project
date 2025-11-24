@@ -1,36 +1,493 @@
 <%- include("../partials/header") %>
 
-    <div class="container py-5">
+    <style>
+        :root {
+            --primary-green: #2a9d8f;
+            --dark-green: #1b4332;
+            --light-green: #e6f5e9;
+            --warm-yellow: #f4a261;
+            --soft-orange: #e76f51;
+            --cream: #fffbe7;
+            --gradient-primary: linear-gradient(135deg, var(--primary-green), #52b788);
+            --gradient-background: linear-gradient(135deg, #f0fff0 0%, #e6f5e9 50%, #fffbe7 100%);
+            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-medium: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --shadow-heavy: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
 
-        <!-- Section Title -->
-        <h2 class="mb-5 text-center text-success fw-bold">Animals Available for Adoption 🐶🐱</h2>
+        body {
+            background: var(--gradient-background);
+            background-attachment: fixed;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+        }
+
+        /* Hero Section */
+        .adoption-hero {
+            background: linear-gradient(135deg, rgba(26, 67, 50, 0.9), rgba(42, 157, 143, 0.8)),
+                url('https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80') center/cover;
+            padding: 100px 0;
+            margin-bottom: 80px;
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .adoption-hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm0 0c0-11.046 8.954-20 20-20s20 8.954 20 20-8.954 20-20 20-20-8.954-20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: pattern-float 20s linear infinite;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            background: linear-gradient(45deg, #ffffff, #f0f9f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        .main-title {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .main-title::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: var(--gradient-primary);
+            border-radius: 2px;
+            animation: expand 0.8s ease-out;
+        }
+
+        /* Enhanced Cards */
+        .adoption-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow-light);
+            position: relative;
+            height: 100%;
+        }
+
+        .adoption-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(45deg, var(--warm-yellow), var(--soft-orange));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .adoption-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: var(--shadow-heavy);
+        }
+
+        .adoption-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-image {
+            height: 280px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+            position: relative;
+        }
+
+        .adoption-card:hover .card-image {
+            transform: scale(1.1);
+        }
+
+        .adoption-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: linear-gradient(45deg, var(--warm-yellow), var(--soft-orange));
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(244, 162, 97, 0.4);
+            animation: pulse-glow 2s infinite;
+            z-index: 3;
+        }
+
+        .card-content {
+            padding: 28px;
+            background: linear-gradient(135deg, rgba(240, 255, 240, 0.6), rgba(255, 255, 255, 0.8));
+        }
+
+        .adoption-fee {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .fee-icon {
+            font-size: 1.2rem;
+            color: var(--warm-yellow);
+        }
+
+        .health-notes {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer-enhanced {
+            background: linear-gradient(135deg, rgba(240, 255, 240, 0.8), rgba(255, 255, 255, 0.9));
+            border-top: 1px solid rgba(42, 157, 143, 0.1);
+            padding: 24px 28px;
+            text-align: center;
+        }
+
+        .btn-adopt {
+            background: var(--gradient-primary);
+            border: none;
+            color: white;
+            padding: 14px 32px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(42, 157, 143, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-adopt::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-adopt:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(42, 157, 143, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-adopt:hover::before {
+            left: 100%;
+        }
+
+        /* Empty State */
+        .no-animals-container {
+            text-align: center;
+            padding: 80px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            box-shadow: var(--shadow-light);
+            margin: 40px auto;
+            max-width: 600px;
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            margin-bottom: 24px;
+            opacity: 0.6;
+            animation: gentle-bounce 3s ease-in-out infinite;
+        }
+
+        .no-animals-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--dark-green);
+            margin-bottom: 16px;
+        }
+
+        .no-animals-text {
+            font-size: 1.1rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .check-back-btn {
+            background: linear-gradient(45deg, var(--primary-green), #52b788);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .check-back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(42, 157, 143, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Animations */
+        @keyframes pattern-float {
+            0% {
+                transform: translateX(0) translateY(0);
+            }
+
+            100% {
+                transform: translateX(-60px) translateY(-60px);
+            }
+        }
+
+        @keyframes expand {
+            from {
+                width: 0;
+            }
+
+            to {
+                width: 100px;
+            }
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                transform: scale(1);
+                box-shadow: 0 4px 15px rgba(244, 162, 97, 0.4);
+            }
+
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 6px 20px rgba(244, 162, 97, 0.6);
+            }
+        }
+
+        @keyframes gentle-bounce {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-10px);
+            }
+
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        /* Statistics Bar */
+        .adoption-stats {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 60px;
+            box-shadow: var(--shadow-light);
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            align-items: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .adoption-hero {
+                padding: 80px 20px;
+                margin-bottom: 60px;
+            }
+
+            .card-content {
+                padding: 24px;
+            }
+
+            .card-footer-enhanced {
+                padding: 20px 24px;
+            }
+
+            .adoption-fee {
+                font-size: 1.5rem;
+            }
+
+            .no-animals-container {
+                padding: 60px 20px;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+    </style>
+
+    <div class="container py-4">
+        <!-- Hero Section -->
+        <div class="adoption-hero text-center">
+            <h1 class="section-title">Find Your Perfect Companion</h1>
+            <p class="hero-subtitle">
+                These beautiful animals are ready to fill your home with love, loyalty, and endless joy.
+                Each one has been carefully treated and is looking for their forever family.
+            </p>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="adoption-stats">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">200+</div>
+                    <div class="stat-label">Happy Adoptions</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Support Available</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Title -->
+        <h2 class="main-title">Animals Available for Adoption 🐶🐱</h2>
 
         <% if (animals.length===0) { %>
-            <p class="text-center text-muted">No animals are currently available for adoption.</p>
+            <div class="no-animals-container">
+                <div class="empty-icon">🐾</div>
+                <h3 class="no-animals-title">No Animals Currently Available</h3>
+                <p class="no-animals-text">
+                    We're working hard to rescue and prepare more animals for adoption.
+                    Check back soon or contact us to be notified when new pets become available!
+                </p>
+                <a href="/" class="check-back-btn">
+                    🏠 Return to Home
+                </a>
+            </div>
             <% } else { %>
-                <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
                     <% animals.forEach(animal=> { %>
                         <div class="col">
-                            <div class="card h-100 shadow-sm border-primary">
-                                <img src="<%= animal.afterPhotoUrl %>" class="card-img-top" alt="Adoptable Animal"
-                                    style="height: 250px; object-fit: cover;">
-                                <div class="card-body">
-                                    <h5 class="card-title text-primary">Fee: ₹<%= animal.adoptionFee %>
-                                    </h5>
-                                    <p class="card-text text-muted">
-                                        <%= animal.healthNotes.substring(0, 100) %>...
+                            <div class="adoption-card">
+                                <div class="position-relative">
+                                    <img 
+                                    src="<%= animal.afterPhotoUrl %>" 
+                                    onerror="this.onerror=null; this.src='/images/<%= animal.fallbackImage %>';"
+                                    class="card-image w-100" 
+                                    alt="Animal"
+
+                                />
+                                    <div class="adoption-badge">
+                                        💕 Available Now
+                                    </div>
+                                </div>
+
+                                <div class="card-content">
+                                    <div class="adoption-fee">
+                                        <span class="fee-icon">💰</span>
+                                        Adoption Fee: ₹<%= animal.adoptionFee %>
+                                    </div>
+                                    <p class="health-notes">
+                                        <%= animal.healthNotes %>
                                     </p>
                                 </div>
-                                <div class="card-footer bg-white text-center">
-                                    <a href="/adoption/<%= animal._id %>" class="btn btn-outline-success">View
-                                        Details</a>
+
+                                <div class="card-footer-enhanced">
+                                    <a href="/adoption/<%= animal._id %>" class="btn-adopt">
+                                        <span>❤️</span>
+                                        View Details & Adopt
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                        <% }) %>
+                        <% }); %>
                 </div>
                 <% } %>
-
     </div>
 
     <%- include("../partials/footer") %>
