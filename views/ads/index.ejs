@@ -1,159 +1,166 @@
 <%- include("../partials/header") %>
 
-    <style>
-        body {
-            background: linear-gradient(to right, #e0eafc, #cfdef3);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+<style>
+    body {
+        background: linear-gradient(to right, #e0eafc, #cfdef3);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        .hero {
-            background: linear-gradient(to right, #000428, #004e92);
-            color: white;
-            padding: 60px 20px;
-            text-align: center;
-            border-bottom: 8px solid #f39c12;
-        }
+    .hero {
+        background: linear-gradient(to right, #000428, #004e92);
+        color: white;
+        padding: 60px 20px;
+        text-align: center;
+        border-bottom: 8px solid #f39c12;
+    }
 
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: bold;
-        }
+    .hero h1 {
+        font-size: 3rem;
+        font-weight: bold;
+    }
 
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.9;
-        }
+    .hero p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+    }
 
-        .card-glass {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            margin-top: -50px;
-            z-index: 1;
-            position: relative;
-        }
+    .card-glass {
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-top: -50px;
+        z-index: 1;
+        position: relative;
+    }
 
-        .table thead {
-            background: linear-gradient(to right, #434343, #000000);
-            color: #fff;
-        }
+    .table thead {
+        background: linear-gradient(to right, #434343, #000000);
+        color: #fff;
+    }
 
-        .table tbody tr:hover {
-            background-color: #f0f8ff;
-        }
+    .table tbody tr:hover {
+        background-color: #f0f8ff;
+    }
 
-        .btn-premium {
-            background-color: #f39c12;
-            color: white;
-            font-weight: bold;
-        }
+    .btn-premium {
+        background-color: #f39c12;
+        color: white;
+        font-weight: bold;
+    }
 
-        .btn-premium:hover {
-            background-color: #d35400;
-            color: white;
-        }
+    .btn-premium:hover {
+        background-color: #d35400;
+        color: white;
+    }
 
-        .logo-img {
-            height: 50px;
-            width: 50px;
-            object-fit: cover;
-            border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-    </style>
+    .logo-img {
+        height: 50px;
+        width: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+</style>
 
-    <div class="hero">
-        <h1>💎 Premium Sponsored Ads</h1>
-        <p>Showcasing trusted local pet brands & sponsors</p>
-    </div>
+<div class="hero">
+    <h1>💎 Premium Sponsored Ads</h1>
+    <p>Showcasing trusted local pet brands & sponsors</p>
+</div>
 
-    <div class="container card-glass">
+<div class="container card-glass">
 
-        <h3 class="text-center mb-4 text-primary">📝 Add New Ad Campaign</h3>
-        <form action="/ads" method="POST">
-            <div class="row gy-3 gx-4 align-items-end">
+    <h3 class="text-center mb-4 text-primary">📝 Add New Ad Campaign</h3>
 
-                <div class="col-md-3">
-                    <label class="form-label">Shop Name</label>
-                    <input type="text" name="shopName" class="form-control" placeholder="Pet Care Hub" required>
-                </div>
+    <form action="/ads" method="POST">
+        <div class="row gy-3 gx-3 align-items-end">
 
-                <div class="col-md-3">
-                    <label class="form-label">Logo URL</label>
-                    <input type="text" name="logoUrl" class="form-control" placeholder="https://..." required>
-                </div>
-
-                <div class="col-md-3">
-                    <label class="form-label">Shop Link</label>
-                    <input type="text" name="link" class="form-control" placeholder="https://..." required>
-                </div>
-
-                <div class="col-md-3 d-flex gap-2">
-                    <div>
-                        <label class="form-label">Start</label>
-                        <input type="date" name="startsOn" class="form-control" required>
-                    </div>
-                    <div>
-                        <label class="form-label">End</label>
-                        <input type="date" name="endsOn" class="form-control" required>
-                    </div>
-                    <div class="d-flex align-items-end">
-                        <button class="btn btn-premium w-100">Add</button>
-                    </div>
-                </div>
-
+            <div class="col-md-2">
+                <label class="form-label">Shop Name</label>
+                <input type="text" name="shopName" class="form-control" placeholder="Pet Care Hub" required>
             </div>
-        </form>
+
+            <div class="col-md-2">
+                <label class="form-label">Logo URL</label>
+                <input type="text" name="logoUrl" class="form-control" placeholder="https://..." required>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Shop Link</label>
+                <input type="text" name="link" class="form-control" placeholder="https://..." required>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Start</label>
+                <input type="date" name="startsOn" class="form-control" required>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">End</label>
+                <input type="date" name="endsOn" class="form-control" required>
+            </div>
+
+            <div class="col-md-2 d-flex align-items-end">
+                <button class="btn btn-premium w-100">Add</button>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+<div class="container mt-5">
+    <% if (ads.length===0) { %>
+        <p class="text-center text-muted">No ads available yet.</p>
+    <% } else { %>
+
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered align-middle shadow-sm rounded">
+            <thead>
+                <tr class="text-center">
+                    <th>Shop</th>
+                    <th>Logo</th>
+                    <th>Link</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% ads.forEach(ad=> { %>
+                <tr>
+                    <td class="fw-bold text-dark">
+                        <%= ad.shopName %>
+                    </td>
+
+                    <td class="text-center">
+                        <img src="<%= ad.logoUrl %>" class="logo-img" alt="Logo">
+                    </td>
+
+                    <td class="text-center">
+                        <a href="<%= ad.link %>" class="btn btn-sm btn-outline-primary" target="_blank">Visit</a>
+                    </td>
+
+                    <td class="text-center">
+                        <%= ad.startsOn ? ad.startsOn.toDateString() : "N/A" %>
+                    </td>
+
+                    <td class="text-center">
+                        <%= ad.endsOn ? ad.endsOn.toDateString() : "N/A" %>
+                    </td>
+
+                    <td class="text-center">
+                        <form action="/ads/<%= ad._id %>?_method=DELETE" method="POST">
+                            <button class="btn btn-sm btn-outline-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }) %>
+            </tbody>
+        </table>
     </div>
 
-    <div class="container mt-5">
-        <% if (ads.length===0) { %>
-            <p class="text-center text-muted">No ads available yet.</p>
-            <% } else { %>
-                <div class="table-responsive mt-4">
-                    <table class="table table-bordered align-middle shadow-sm rounded">
-                        <thead>
-                            <tr class="text-center">
-                                <th>Shop</th>
-                                <th>Logo</th>
-                                <th>Link</th>
-                                <th>Start</th>
-                                <th>End</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% ads.forEach(ad=> { %>
-                                <tr>
-                                    <td class="fw-bold text-dark">
-                                        <%= ad.shopName %>
-                                    </td>
-                                    <td class="text-center">
-                                        <img src="<%= ad.logoUrl %>" class="logo-img" alt="Logo">
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="<%= ad.link %>" class="btn btn-sm btn-outline-primary"
-                                            target="_blank">Visit</a>
-                                    </td>
-                                    <td class="text-center">
-                                        <%= ad.startsOn ? ad.startsOn.toDateString() : "N/A" %>
-                                    </td>
-                                    <td class="text-center">
-                                        <%= ad.endsOn ? ad.endsOn.toDateString() : "N/A" %>
-                                    </td>
-                                    <td class="text-center">
-                                        <form action="/ads/<%= ad._id %>?_method=DELETE" method="POST">
-                                            <button class="btn btn-sm btn-outline-danger">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                <% }) %>
-                        </tbody>
-                    </table>
-                </div>
-                <% } %>
-    </div>
+    <% } %>
+</div>
 
-    <%- include("../partials/footer") %>
+<%- include("../partials/footer") %>
