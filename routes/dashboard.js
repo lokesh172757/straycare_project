@@ -31,7 +31,7 @@ function isNgoUser(req, res, next) {
 }
 
 // =======================
-// LOCAL USER DASHBOARD
+// Local user dashboard
 // =======================
 router.get("/local/dashboard", isLoggedIn, isLocalUser, async (req, res) => {
     try {
@@ -46,7 +46,7 @@ router.get("/local/dashboard", isLoggedIn, isLocalUser, async (req, res) => {
         res.status(500).send("Server Error");
     }
 });
-
+// this is ngo dashboard
 // =======================
 // NGO DASHBOARD
 // =======================
