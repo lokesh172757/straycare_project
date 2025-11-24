@@ -7,8 +7,8 @@ router.get("/", (req, res) => {
     res.render("home"); // change to your homepage view if needed
 });
 
-// ✅ Treated Animals route
-router.get("/treated", async (req, res) => {
+//Treated Animals route
+router.get("/treated", async (req, res) =>{
     try {
         const animals = await TreatedAnimal.find({});
         res.render("treated/index", { animals });
