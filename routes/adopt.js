@@ -3,7 +3,7 @@ const router = express.Router();
 const { TreatedAnimal, AdoptionRequest } = require("../models");
 
 // GET: Show adoption contact form
-router.get("/:id/contact", async (req, res) => {
+router.get("/:id/contact", async (req, res) =>{
     const { id } = req.params;
     const animal = await TreatedAnimal.findById(id);
     if (!animal || !animal.adoptable) {
