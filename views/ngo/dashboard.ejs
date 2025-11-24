@@ -75,21 +75,11 @@
             margin: 0 auto;
         }
 
-        .hero-title {
-            font-size: clamp(2.2rem, 4vw, 3rem);
-            font-weight: 800;
-            margin-bottom: 16px;
-            background: linear-gradient(45deg, #ffffff, #f0f9f5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: glow 2s ease-in-out infinite alternate;
-            text-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
+        .hero-title span:first-child {
+        filter: none !important;
+        color: initial !important;
+        mix-blend-mode: normal !important;
+    }
 
         .hero-subtitle {
             background: rgba(255, 255, 255, 0.15);
@@ -395,8 +385,8 @@
         <div class="hero-section text-center">
             <div class="content">
                 <h1 class="hero-title">
-                    <span>🏥</span>
-                    <span>NGO Dashboard</span>
+                    <span>🤝</span>
+                    <span>Welcome, NGO Team</span>
                 </h1>
                 <div class="hero-subtitle">
                     <strong>Monitor and manage all activities in one place</strong> - Your command center for
